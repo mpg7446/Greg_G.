@@ -8,14 +8,15 @@ public class Item : MonoBehaviour
 {
     [SerializeField] private int score = 1;
 
+    public bool enableCountdown;
     public float countdown;
-    private float countdownLimit;
+    private float countdownLimit = 0;
 
     public bool touching;
     public GameObject player; // this should be used to check if anyone else is touching the item, only the first player to touch the item should pick it up
 
-    public GameObject sliderObj;
-    public Slider slider;
+    public GameObject sliderObj = null;
+    private Slider slider;
 
     public void Start()
     {
@@ -37,9 +38,17 @@ public class Item : MonoBehaviour
     {
         if (collision.CompareTag("Player")) // check to see if interacts with player
         {
-            // set touching score to positive to begin countdown
-            touching = true;
-            player = collision.gameObject;
+            player = collision.gameObject; // point item to currently waiting player
+
+            if (enableCountdown)
+            {
+                // set touching score to positive to begin countdown
+                touching = true;
+            } else
+            {
+                // skip countdown sequence and immediately pickup item - TODO possibly change this to be a part of the players settings??
+                PickupItem();
+            }
         }
     }
 
@@ -52,6 +61,7 @@ public class Item : MonoBehaviour
         }
     }
 
+    // FixedUpdate checks and updates countdown values, as well as applying
     public void FixedUpdate()
     {
         if (touching)
