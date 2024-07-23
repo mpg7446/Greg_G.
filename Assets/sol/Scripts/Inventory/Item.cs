@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -8,12 +9,12 @@ public class Item : MonoBehaviour
 {
     [SerializeField] private int score = 1;
 
-    public bool enableCountdown;
     public float countdown;
     private float countdownLimit = 0;
+    private bool enableCountdown;
 
-    public bool touching;
-    public GameObject player; // this should be used to check if anyone else is touching the item, only the first player to touch the item should pick it up
+    private bool touching;
+    [SerializeField] private List<GameObject> players = new List<GameObject>();
 
     public GameObject sliderObj = null;
     private Slider slider;
@@ -38,16 +39,32 @@ public class Item : MonoBehaviour
     {
         if (collision.CompareTag("Player")) // check to see if interacts with player
         {
-            player = collision.gameObject; // point item to currently waiting player
 
-            if (enableCountdown)
+            players.Add(collision.gameObject);
+
+            if (players.Count == 1)
             {
-                // set touching score to positive to begin countdown
-                touching = true;
-            } else
-            {
-                // skip countdown sequence and immediately pickup item - TODO possibly change this to be a part of the players settings??
-                PickupItem();
+                if (enableCountdown)
+                {
+                    // get player inventory script and copy countdown toggle
+                    PlayerInventory inventory = collision.GetComponent<PlayerInventory>();
+                    enableCountdown = inventory.enablePickupCountdown;
+
+                    if (inventory.HoldingItem()) // if player is already holding an item, remove player from list
+                    {
+                        players.Remove(collision.gameObject);
+                    } 
+                    else // if player isnt holding an item, set touching value and add item to players holding to prevent player from picking up multiple items
+                    {
+                        touching = true;
+                        inventory.IntersectItem(gameObject);
+                    }
+                }
+                else
+                {
+                    // skip countdown sequence and immediately pickup item - TODO possibly change this to be a part of the players settings??
+                    PickupItem();
+                }
             }
         }
     }
@@ -56,8 +73,16 @@ public class Item : MonoBehaviour
     {
         if (collision.CompareTag("Player")) // check to see if interacts with player
         {
-            // set touching score to positive to begin countdown
-            touching = false;
+            // remove touching value if that was the last player leaving
+            if (players.IndexOf(collision.gameObject) == 0 && players.Count == 1)
+            {
+                touching = false;
+
+                collision.GetComponent<PlayerInventory>().LeaveItem();
+            }
+
+            // clear player from players list
+            players.Remove(collision.gameObject);
         }
     }
 
@@ -95,7 +120,7 @@ public class Item : MonoBehaviour
     
     private void PickupItem()
     {
-        player.GetComponent<PlayerInventory>().PickupItem(score);
+        players[0].GetComponent<PlayerInventory>().PickupItem(score);
         Destroy(gameObject);
     }
 }
