@@ -343,10 +343,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   score: 1
-  enableCountdown: 1
   countdown: 125
-  touching: 0
-  player: {fileID: 0}
+  players: []
   sliderObj: {fileID: 0}
 --- !u!1 &67834132
 GameObject:
@@ -1098,10 +1096,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   score: 1
-  enableCountdown: 1
   countdown: 125
-  touching: 0
-  player: {fileID: 0}
+  players: []
   sliderObj: {fileID: 0}
 --- !u!1 &407199303
 GameObject:
@@ -1579,10 +1575,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   score: 1
-  enableCountdown: 0
   countdown: 125
-  touching: 0
-  player: {fileID: 0}
+  players: []
   sliderObj: {fileID: 0}
 --- !u!1 &553113797
 GameObject:
@@ -2306,10 +2300,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   score: 1
-  enableCountdown: 1
   countdown: 125
-  touching: 0
-  player: {fileID: 0}
+  players: []
   sliderObj: {fileID: 0}
 --- !u!4 &821274340
 Transform:
@@ -2784,10 +2776,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   score: 1
-  enableCountdown: 0
   countdown: 125
-  touching: 0
-  player: {fileID: 0}
+  players: []
   sliderObj: {fileID: 0}
 --- !u!1 &1227883817
 GameObject:
@@ -2872,10 +2862,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   score: 1
-  enableCountdown: 0
   countdown: 125
-  touching: 0
-  player: {fileID: 0}
+  players: []
   sliderObj: {fileID: 0}
 --- !u!1 &1307422675
 GameObject:
@@ -2960,10 +2948,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   score: 1
-  enableCountdown: 1
   countdown: 125
-  touching: 0
-  player: {fileID: 0}
+  players: []
   sliderObj: {fileID: 0}
 --- !u!1 &1325757573
 GameObject:
@@ -3086,6 +3072,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemCount: 0
+  enablePickupCountdown: 0
+  item: {fileID: 0}
 --- !u!50 &1325757579
 Rigidbody2D:
   serializedVersion: 4
@@ -4140,10 +4128,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   score: 1
-  enableCountdown: 1
   countdown: 125
-  touching: 0
-  player: {fileID: 0}
+  players: []
   sliderObj: {fileID: 0}
 --- !u!1 &1836338871
 GameObject:
@@ -4228,10 +4214,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   score: 1
-  enableCountdown: 1
   countdown: 125
-  touching: 0
-  player: {fileID: 0}
+  players: []
   sliderObj: {fileID: 0}
 --- !u!1 &1839056619
 GameObject:
@@ -4861,10 +4845,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   score: 1
-  enableCountdown: 0
   countdown: 125
-  touching: 0
-  player: {fileID: 0}
+  players: []
   sliderObj: {fileID: 0}
 --- !u!222 &1142566534464812068
 CanvasRenderer:
