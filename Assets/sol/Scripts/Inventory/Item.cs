@@ -17,7 +17,7 @@ public class Item : MonoBehaviour
     [SerializeField] private List<GameObject> players = new List<GameObject>();
 
     public GameObject sliderObj = null;
-    private Slider slider;
+    private ItemSlider slider;
 
     private GameObject visual;
     private double bobbingOffset;
@@ -32,13 +32,13 @@ public class Item : MonoBehaviour
             sliderObj = transform.Find("Slider").gameObject;
         }
 
-        slider = sliderObj.GetComponent<Slider>();
+        slider = sliderObj.GetComponent<ItemSlider>();
         slider.value = 0;
         slider.maxValue = countdownLimit;
 
         sliderObj.SetActive(false);
 
-        visual = transform.Find("vis").gameObject;
+        visual = transform.Find("Visuals").gameObject;
         bobbingMiddlePoint = visual.transform.localPosition.y;
         bobbingOffset = UnityEngine.Random.Range(0, 10);
     }
