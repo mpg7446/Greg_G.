@@ -16,6 +16,7 @@ public class PlayerMovement : MonoBehaviour
         mv = GetComponent<InputManager>();
     }
 
+    // movement - on physics update
     public void FixedUpdate()
     {
         Vector3 trans = new Vector3(mv.movement.x, mv.movement.y, gameObject.transform.position.z);
