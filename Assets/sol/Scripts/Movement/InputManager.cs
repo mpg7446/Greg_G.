@@ -8,7 +8,7 @@ public class InputManager : MonoBehaviour
 {
     // Create Input Controller Variable
     public static InputController inputController;
-    public Vector2 movement = new Vector2(0, 0);
+    public List<Vector2> movement = new List<Vector2>();
 
     // Start is called before the first frame update
     void Start()
@@ -16,50 +16,58 @@ public class InputManager : MonoBehaviour
         // Instanciate Input Controller
         inputController = new InputController();
 
-        // Jump Button
-        inputController.MasterControls.Jump.performed += JumpPerformerd;
-        inputController.MasterControls.Jump.canceled += JumpCanceled;
-
-        // Attack Button
-        inputController.MasterControls.Attack.performed += AttackPerformerd;
-        inputController.MasterControls.Attack.canceled += AttackCanceled;
+        // action Button
+        inputController.MasterControls.P1_Action.performed += P1ActionPerformed;
+        inputController.MasterControls.P1_Action.canceled += P1ActionCancelled;
 
         // Movement
-        inputController.MasterControls.Movement.performed += MovementPerformed;
-        inputController.MasterControls.Movement.canceled += MovementCanceled;
+        movement.Add(new Vector2(0,0));
+        movement.Add(new Vector2(0,0));
+
+        inputController.MasterControls.P1_Movement.performed += P1MovementPerformed;
+        inputController.MasterControls.P1_Movement.canceled += P1MovementCanceled;
+
+        inputController.MasterControls.P2_Movement.performed += P2MovementPerformed;
+        inputController.MasterControls.P2_Movement.canceled += P2MovementCanceled;
+
 
         inputController.Enable();
     }
 
     // Input Functions
-    void MovementPerformed(InputAction.CallbackContext context)
+    void P1MovementPerformed(InputAction.CallbackContext context)
     {
-        movement = context.ReadValue<Vector2>();
+        movement[0] = context.ReadValue<Vector2>();
     }
-    void MovementCanceled(InputAction.CallbackContext context)
+    void P1MovementCanceled(InputAction.CallbackContext context)
     {
-        movement = Vector2.zero;
-    }
-
-    void JumpPerformerd(InputAction.CallbackContext context)
-    {
-        Debug.Log("jump pressed");
-        if (context.control.device is UnityEngine.InputSystem.XInput.XInputControllerWindows)
-        {
-            Debug.Log("XBOX");
-        }
-    }
-    void JumpCanceled(InputAction.CallbackContext context)
-    {
-        Debug.Log("jump released");
+        movement[0] = Vector2.zero;
     }
 
-    void AttackPerformerd(InputAction.CallbackContext context)
+    void P2MovementPerformed(InputAction.CallbackContext context)
     {
-        Debug.Log("attack pressed");
+        movement[1] = context.ReadValue<Vector2>();
     }
-    void AttackCanceled(InputAction.CallbackContext context)
+    void P2MovementCanceled(InputAction.CallbackContext context)
     {
-        Debug.Log("attack released");
+        movement[1] = Vector2.zero;
+    }
+
+    void P1ActionPerformed(InputAction.CallbackContext context)
+    {
+        Debug.Log("p1 action pressed");
+    }
+    void P1ActionCancelled(InputAction.CallbackContext context)
+    {
+        Debug.Log("p1 action released");
+    }
+
+    void P2ActionPerformed(InputAction.CallbackContext context)
+    {
+        Debug.Log("p2 action pressed");
+    }
+    void P2ActionCancelled(InputAction.CallbackContext context)
+    {
+        Debug.Log("p2 action released");
     }
 }

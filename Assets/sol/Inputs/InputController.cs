@@ -28,16 +28,7 @@ public partial class @InputController: IInputActionCollection2, IDisposable
             ""id"": ""fa81ee12-05ad-458a-81c1-dabb76cdf8d3"",
             ""actions"": [
                 {
-                    ""name"": ""Jump"",
-                    ""type"": ""Button"",
-                    ""id"": ""e804a9bd-5c76-423f-9d58-2c34b462cce6"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Attack"",
+                    ""name"": ""P1_Action"",
                     ""type"": ""Button"",
                     ""id"": ""b3aa4bb7-f0bf-4c82-b667-2f3a93762e25"",
                     ""expectedControlType"": ""Button"",
@@ -46,9 +37,27 @@ public partial class @InputController: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Movement"",
+                    ""name"": ""P1_Movement"",
                     ""type"": ""Value"",
                     ""id"": ""b10cf697-0e47-4144-a745-86dd8fbb8ccf"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""P2_Action"",
+                    ""type"": ""Button"",
+                    ""id"": ""88abe9e8-9ed3-4bbd-a5b6-830ccf7ee646"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""P2_Movement"",
+                    ""type"": ""Value"",
+                    ""id"": ""6cb820d6-326f-451b-84c0-3d9d053e0b12"",
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -58,78 +67,133 @@ public partial class @InputController: IInputActionCollection2, IDisposable
             ""bindings"": [
                 {
                     ""name"": """",
-                    ""id"": ""77d82f9c-8e01-41b3-bc36-22465a35a832"",
+                    ""id"": ""3f790377-feb9-4078-84aa-7df0cb811aa9"",
                     ""path"": ""<Keyboard>/space"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Jump"",
+                    ""action"": ""P1_Action"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
-                    ""id"": ""3f790377-feb9-4078-84aa-7df0cb811aa9"",
-                    ""path"": ""<Mouse>/leftButton"",
+                    ""id"": ""76128c58-03de-44f4-a74e-2cce398d014f"",
+                    ""path"": ""<Keyboard>/ctrl"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Attack"",
+                    ""action"": ""P2_Action"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": ""2D Vector"",
-                    ""id"": ""4ebde14f-65c7-4468-add7-afdef63b8725"",
+                    ""id"": ""55971cbc-577b-46dd-b588-09ad4b4648ac"",
                     ""path"": ""2DVector"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Movement"",
+                    ""action"": ""P2_Movement"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": ""up"",
-                    ""id"": ""99bef81a-934e-48c6-b271-460f43b429a8"",
-                    ""path"": ""<Keyboard>/w"",
+                    ""id"": ""985e3131-8783-43f8-a2f6-d0db3f400489"",
+                    ""path"": ""<Keyboard>/upArrow"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Movement"",
+                    ""action"": ""P2_Movement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
                 {
                     ""name"": ""down"",
-                    ""id"": ""9609d279-d068-4899-820b-20dbf458e1fa"",
-                    ""path"": ""<Keyboard>/s"",
+                    ""id"": ""af7510c2-6cc6-4415-9b87-2802d30d43d6"",
+                    ""path"": ""<Keyboard>/downArrow"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Movement"",
+                    ""action"": ""P2_Movement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
                 {
                     ""name"": ""left"",
-                    ""id"": ""44df2c50-ee6b-4e59-8b9f-c19fc3e5b00a"",
-                    ""path"": ""<Keyboard>/a"",
+                    ""id"": ""dd91c1f1-58b0-4d6d-b97c-0ac434cf32b0"",
+                    ""path"": ""<Keyboard>/leftArrow"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Movement"",
+                    ""action"": ""P2_Movement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
                 {
                     ""name"": ""right"",
-                    ""id"": ""065f0c50-78a6-44e2-a4ff-69857f39814b"",
+                    ""id"": ""24020391-4d4b-4e8b-9286-f19d6823a97d"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""P2_Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""2D Vector"",
+                    ""id"": ""6288d3c2-26d1-46e4-b17a-d072455efb6c"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""P1_Movement"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""17509a17-e8b1-4ebb-bd05-1b4910cc4131"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""P1_Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""3a01e826-5915-4617-b74e-e203d524ccf9"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""P1_Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""1a299902-1b11-487c-9b24-4977af2c2958"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""P1_Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""fa886394-7df9-4f71-9728-f2c8f270f57e"",
                     ""path"": ""<Keyboard>/d"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Movement"",
+                    ""action"": ""P1_Movement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 }
@@ -140,9 +204,10 @@ public partial class @InputController: IInputActionCollection2, IDisposable
 }");
         // MasterControls
         m_MasterControls = asset.FindActionMap("MasterControls", throwIfNotFound: true);
-        m_MasterControls_Jump = m_MasterControls.FindAction("Jump", throwIfNotFound: true);
-        m_MasterControls_Attack = m_MasterControls.FindAction("Attack", throwIfNotFound: true);
-        m_MasterControls_Movement = m_MasterControls.FindAction("Movement", throwIfNotFound: true);
+        m_MasterControls_P1_Action = m_MasterControls.FindAction("P1_Action", throwIfNotFound: true);
+        m_MasterControls_P1_Movement = m_MasterControls.FindAction("P1_Movement", throwIfNotFound: true);
+        m_MasterControls_P2_Action = m_MasterControls.FindAction("P2_Action", throwIfNotFound: true);
+        m_MasterControls_P2_Movement = m_MasterControls.FindAction("P2_Movement", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -204,16 +269,18 @@ public partial class @InputController: IInputActionCollection2, IDisposable
     // MasterControls
     private readonly InputActionMap m_MasterControls;
     private List<IMasterControlsActions> m_MasterControlsActionsCallbackInterfaces = new List<IMasterControlsActions>();
-    private readonly InputAction m_MasterControls_Jump;
-    private readonly InputAction m_MasterControls_Attack;
-    private readonly InputAction m_MasterControls_Movement;
+    private readonly InputAction m_MasterControls_P1_Action;
+    private readonly InputAction m_MasterControls_P1_Movement;
+    private readonly InputAction m_MasterControls_P2_Action;
+    private readonly InputAction m_MasterControls_P2_Movement;
     public struct MasterControlsActions
     {
         private @InputController m_Wrapper;
         public MasterControlsActions(@InputController wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Jump => m_Wrapper.m_MasterControls_Jump;
-        public InputAction @Attack => m_Wrapper.m_MasterControls_Attack;
-        public InputAction @Movement => m_Wrapper.m_MasterControls_Movement;
+        public InputAction @P1_Action => m_Wrapper.m_MasterControls_P1_Action;
+        public InputAction @P1_Movement => m_Wrapper.m_MasterControls_P1_Movement;
+        public InputAction @P2_Action => m_Wrapper.m_MasterControls_P2_Action;
+        public InputAction @P2_Movement => m_Wrapper.m_MasterControls_P2_Movement;
         public InputActionMap Get() { return m_Wrapper.m_MasterControls; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -223,28 +290,34 @@ public partial class @InputController: IInputActionCollection2, IDisposable
         {
             if (instance == null || m_Wrapper.m_MasterControlsActionsCallbackInterfaces.Contains(instance)) return;
             m_Wrapper.m_MasterControlsActionsCallbackInterfaces.Add(instance);
-            @Jump.started += instance.OnJump;
-            @Jump.performed += instance.OnJump;
-            @Jump.canceled += instance.OnJump;
-            @Attack.started += instance.OnAttack;
-            @Attack.performed += instance.OnAttack;
-            @Attack.canceled += instance.OnAttack;
-            @Movement.started += instance.OnMovement;
-            @Movement.performed += instance.OnMovement;
-            @Movement.canceled += instance.OnMovement;
+            @P1_Action.started += instance.OnP1_Action;
+            @P1_Action.performed += instance.OnP1_Action;
+            @P1_Action.canceled += instance.OnP1_Action;
+            @P1_Movement.started += instance.OnP1_Movement;
+            @P1_Movement.performed += instance.OnP1_Movement;
+            @P1_Movement.canceled += instance.OnP1_Movement;
+            @P2_Action.started += instance.OnP2_Action;
+            @P2_Action.performed += instance.OnP2_Action;
+            @P2_Action.canceled += instance.OnP2_Action;
+            @P2_Movement.started += instance.OnP2_Movement;
+            @P2_Movement.performed += instance.OnP2_Movement;
+            @P2_Movement.canceled += instance.OnP2_Movement;
         }
 
         private void UnregisterCallbacks(IMasterControlsActions instance)
         {
-            @Jump.started -= instance.OnJump;
-            @Jump.performed -= instance.OnJump;
-            @Jump.canceled -= instance.OnJump;
-            @Attack.started -= instance.OnAttack;
-            @Attack.performed -= instance.OnAttack;
-            @Attack.canceled -= instance.OnAttack;
-            @Movement.started -= instance.OnMovement;
-            @Movement.performed -= instance.OnMovement;
-            @Movement.canceled -= instance.OnMovement;
+            @P1_Action.started -= instance.OnP1_Action;
+            @P1_Action.performed -= instance.OnP1_Action;
+            @P1_Action.canceled -= instance.OnP1_Action;
+            @P1_Movement.started -= instance.OnP1_Movement;
+            @P1_Movement.performed -= instance.OnP1_Movement;
+            @P1_Movement.canceled -= instance.OnP1_Movement;
+            @P2_Action.started -= instance.OnP2_Action;
+            @P2_Action.performed -= instance.OnP2_Action;
+            @P2_Action.canceled -= instance.OnP2_Action;
+            @P2_Movement.started -= instance.OnP2_Movement;
+            @P2_Movement.performed -= instance.OnP2_Movement;
+            @P2_Movement.canceled -= instance.OnP2_Movement;
         }
 
         public void RemoveCallbacks(IMasterControlsActions instance)
@@ -264,8 +337,9 @@ public partial class @InputController: IInputActionCollection2, IDisposable
     public MasterControlsActions @MasterControls => new MasterControlsActions(this);
     public interface IMasterControlsActions
     {
-        void OnJump(InputAction.CallbackContext context);
-        void OnAttack(InputAction.CallbackContext context);
-        void OnMovement(InputAction.CallbackContext context);
+        void OnP1_Action(InputAction.CallbackContext context);
+        void OnP1_Movement(InputAction.CallbackContext context);
+        void OnP2_Action(InputAction.CallbackContext context);
+        void OnP2_Movement(InputAction.CallbackContext context);
     }
 }
