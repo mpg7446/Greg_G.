@@ -903,7 +903,7 @@ GameObject:
   - component: {fileID: 773806128}
   m_Layer: 0
   m_Name: Test Item (2)
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1126,7 +1126,7 @@ GameObject:
   - component: {fileID: 821274341}
   m_Layer: 0
   m_Name: Test Item
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1245,7 +1245,7 @@ GameObject:
   - component: {fileID: 921001908}
   m_Layer: 0
   m_Name: Test Item (4)
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1720,7 +1720,7 @@ GameObject:
   - component: {fileID: 1114171640}
   m_Layer: 0
   m_Name: Test Item (1)
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1923,7 +1923,7 @@ GameObject:
   - component: {fileID: 1185831409}
   m_Layer: 0
   m_Name: Test Item (5)
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2366,7 +2366,7 @@ GameObject:
   - component: {fileID: 1461838764}
   m_Layer: 0
   m_Name: Test Item (3)
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2736,6 +2736,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enablePickupCountdown: 1
   itemsRunAway: 0
+  maxItems: 0
+  currentItems: 0
 --- !u!4 &1752586282
 Transform:
   m_ObjectHideFlags: 0
@@ -3131,8 +3133,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemCount: 0
-  enablePickupCountdown: 1
-  itemsRunAway: 0
   item: {fileID: 0}
 --- !u!114 &2105582354
 MonoBehaviour:
