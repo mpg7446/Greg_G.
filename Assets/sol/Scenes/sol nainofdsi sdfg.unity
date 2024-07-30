@@ -2167,9 +2167,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 0
-  speed: 25
-  maxSpeed: 125
-  crouchMultiplier: 0.5
+  speed: 40
+  maxSpeed: 300
+  crouchMultiplier: 0.2
   jumpHeight: 4.75
 --- !u!114 &1321192504
 MonoBehaviour:
@@ -3259,9 +3259,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 0
-  speed: 25
-  maxSpeed: 125
-  crouchMultiplier: 0.5
+  speed: 40
+  maxSpeed: 300
+  crouchMultiplier: 0.2
   jumpHeight: 4.75
 --- !u!114 &2105582355
 MonoBehaviour:
