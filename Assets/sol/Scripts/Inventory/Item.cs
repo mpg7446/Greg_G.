@@ -7,26 +7,47 @@ using UnityEngine.UI;
 
 public class Item : MonoBehaviour
 {
+    // score
     [SerializeField] private int score = 1;
 
+    // countdown
     public float countdown;
     private float countdownLimit = 0;
     private bool enableCountdown;
 
+    // players touching item
     private bool touching;
     [SerializeField] private List<GameObject> players = new List<GameObject>();
 
+    // escape from players
+    [SerializeField] private bool runFromPlayers;
+    [SerializeField] private List<GameObject> allPlayers = new List<GameObject>();
+    [SerializeField] private int runDistance;
+    [SerializeField] private int runMultiplier;
+    private bool isReturning;
+    [SerializeField] private float returnTime;
+    private Rigidbody2D rb;
+
+    private Vector3 origin;
+
+    // visuals - slider
     public GameObject sliderObj = null;
     private ItemSlider slider;
 
+    // visuals - object
     private GameObject visual;
     private double bobbingOffset;
     private double bobbingMiddlePoint;
 
     public void Start()
     {
+        rb = GetComponent<Rigidbody2D>();
+        origin = transform.position;
+
+        // set countdown limit
         countdownLimit = countdown;
 
+        // slider object setup
         if (sliderObj == null)
         {
             sliderObj = transform.Find("Slider").gameObject;
@@ -38,9 +59,17 @@ public class Item : MonoBehaviour
 
         sliderObj.SetActive(false);
 
+        // visual bobbing setup
         visual = transform.Find("Visuals").gameObject;
         bobbingMiddlePoint = visual.transform.localPosition.y;
         bobbingOffset = UnityEngine.Random.Range(0, 10);
+
+        // player list setup for escaping players
+        GameObject[] tempObjects = GameObject.FindGameObjectsWithTag("Player");
+        foreach (GameObject player in tempObjects)
+        {
+            allPlayers.Add(player);
+        }
     }
 
     public void OnTriggerEnter2D(Collider2D collision)
@@ -110,6 +139,12 @@ public class Item : MonoBehaviour
         // visual bobbing
         float transformy = (float)(Math.Sin((Time.fixedTime + bobbingOffset) * 2) * 0.1 + bobbingMiddlePoint);
         visual.transform.localPosition = new Vector3(visual.transform.localPosition.x, transformy, visual.transform.localPosition.z);
+
+        // escape from players
+        if (runFromPlayers)
+        {
+            RunFromPlayers();
+        }
     }
 
     private void UpdateHolding(GameObject player)
@@ -143,5 +178,37 @@ public class Item : MonoBehaviour
     {
         players[0].GetComponent<PlayerInventory>().PickupItem(score);
         Destroy(gameObject);
+    }
+
+    private void RunFromPlayers()
+    {
+        foreach (GameObject player in allPlayers)
+        {
+            float distance = Vector3.Distance(transform.position, player.transform.position);
+
+            if (!isReturning && distance < runDistance)
+            {
+                Vector2 angle = (transform.position - player.transform.position)/runMultiplier * distance;
+                //rb.isKinematic = false;
+                rb.velocity += angle;
+            } 
+            else if (!isReturning && distance > runDistance)
+            {
+                rb.velocity = Vector2.Lerp(rb.velocity, Vector2.zero, Time.fixedDeltaTime * 3);
+                if (distance > runDistance * 2)
+                {
+                    isReturning = true;
+                }
+            } 
+
+            if (isReturning)
+            {
+                transform.position = Vector3.Lerp(transform.position, origin, Time.fixedDeltaTime * returnTime);
+                if (Vector3.Distance(transform.position, origin) < 0.1f)
+                {
+                    isReturning = false;
+                }
+            }
+        }
     }
 }

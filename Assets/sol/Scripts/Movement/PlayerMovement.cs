@@ -20,6 +20,10 @@ public class PlayerMovement : MonoBehaviour
     public float crouchMultiplier = 0.2f;
     private float moving = 0;
 
+    public float weight = 50; // TODO add weight to players, weight and speed changes depending on items that have been picked up.
+    // possibly have every player start with (slightly) different weights
+    // when u start moving it applies a slight weight boost, allowing button mashing to overpower someone holding down a movement key
+
     // jump settings
     private bool jumped = false;
     public float jumpHeight = 4.75f;
