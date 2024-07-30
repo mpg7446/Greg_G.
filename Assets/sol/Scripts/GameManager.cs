@@ -4,15 +4,29 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public bool enablePickupCountdown = true;
+    public bool itemsRunAway = false;
+
+    // item counts
+    public int maxItems;
+    public int currentItems;
+
+    // TESTING ONLY!!
+    // DO NOT USE IN FINAL BUILD
+    public void Start()
     {
-        
+        // get item goal number thingy
+        GameObject[] items = GameObject.FindGameObjectsWithTag("Item");
+        maxItems = items.Length;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void PickupItem()
     {
-        
+        currentItems++;
+
+        if (currentItems >= maxItems)
+        {
+            Debug.Log("GAME ENDED GOAL WOOOOHHHH YEAHH BABYYYYYYY");
+        }
     }
 }

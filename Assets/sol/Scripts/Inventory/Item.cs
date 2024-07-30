@@ -10,6 +10,9 @@ public class Item : MonoBehaviour
     // score
     [SerializeField] private int score = 1;
 
+    private Vector3 origin;
+    private GameManager gameManager;
+
     // countdown
     public float countdown;
     private float countdownLimit = 0;
@@ -28,8 +31,6 @@ public class Item : MonoBehaviour
     [SerializeField] private float returnTime;
     private Rigidbody2D rb;
 
-    private Vector3 origin;
-
     // visuals - slider
     public GameObject sliderObj = null;
     private ItemSlider slider;
@@ -43,6 +44,10 @@ public class Item : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         origin = transform.position;
+        gameManager = GameObject.FindWithTag("GameController").GetComponent<GameManager>();
+
+        runFromPlayers = gameManager.itemsRunAway;
+        enableCountdown = gameManager.enablePickupCountdown;
 
         // set countdown limit
         countdownLimit = countdown;
@@ -65,10 +70,13 @@ public class Item : MonoBehaviour
         bobbingOffset = UnityEngine.Random.Range(0, 10);
 
         // player list setup for escaping players
-        GameObject[] tempObjects = GameObject.FindGameObjectsWithTag("Player");
-        foreach (GameObject player in tempObjects)
+        if (runFromPlayers)
         {
-            allPlayers.Add(player);
+            GameObject[] tempObjects = GameObject.FindGameObjectsWithTag("Player");
+            foreach (GameObject player in tempObjects)
+            {
+                allPlayers.Add(player);
+            }
         }
     }
 
@@ -151,7 +159,6 @@ public class Item : MonoBehaviour
     {
         // get player inventory script and copy countdown toggle
         PlayerInventory inventory = player.GetComponent<PlayerInventory>();
-        enableCountdown = inventory.enablePickupCountdown;
 
         if (enableCountdown)
         {
@@ -189,7 +196,6 @@ public class Item : MonoBehaviour
             if (!isReturning && distance < runDistance)
             {
                 Vector2 angle = (transform.position - player.transform.position)/runMultiplier * distance;
-                //rb.isKinematic = false;
                 rb.velocity += angle;
             } 
             else if (!isReturning && distance > runDistance)

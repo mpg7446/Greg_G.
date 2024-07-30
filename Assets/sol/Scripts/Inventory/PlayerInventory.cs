@@ -5,9 +5,14 @@ using UnityEngine;
 public class PlayerInventory : MonoBehaviour
 {
     public int itemCount = 0;
-    public bool enablePickupCountdown = true;
+    private GameManager gameManager;
 
     [SerializeField] private GameObject item;
+
+    public void Start()
+    {
+        gameManager = GameObject.FindWithTag("GameController").GetComponent<GameManager>();
+    }
 
     public void IntersectItem(GameObject item)
     {
@@ -32,5 +37,6 @@ public class PlayerInventory : MonoBehaviour
     public void PickupItem(int amount = 1)
     {
         itemCount += amount;
+        gameManager.currentItems += amount;
     }
 }
