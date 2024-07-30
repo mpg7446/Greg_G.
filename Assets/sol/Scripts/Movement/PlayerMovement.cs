@@ -15,14 +15,14 @@ public class PlayerMovement : MonoBehaviour
     private InputManager mv;
 
     // movement settings
-    public float speed = 1;
-    public float maxSpeed = 10;
-    public float crouchMultiplier = 0.5f;
+    public float speed = 40;
+    public float maxSpeed = 300;
+    public float crouchMultiplier = 0.2f;
     private float moving = 0;
 
     // jump settings
     private bool jumped = false;
-    public float jumpHeight = 200;
+    public float jumpHeight = 4.75f;
 
     public void Start()
     {
@@ -53,11 +53,11 @@ public class PlayerMovement : MonoBehaviour
         } 
         else if (mv.movement[id].x == 0)
         {
-            if (moving < 0)
+            if (moving < -maxSpeed/10)
             {
                 moving += maxSpeed / 10;
             }
-            else if (moving > 0)
+            else if (moving > maxSpeed/10)
             {
                 moving -= maxSpeed / 10;
             } else
