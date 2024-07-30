@@ -16,6 +16,7 @@ public class PlayerMovement : MonoBehaviour
 
     // movement settings
     public float speed = 1;
+    public float maxSpeed = 10;
     public float crouchMultiplier = 0.5f;
     private float moving = 0;
 
@@ -37,20 +38,43 @@ public class PlayerMovement : MonoBehaviour
     // movement - on physics update
     public void FixedUpdate()
     {
-        // start acceleration
-        if (mv.movement[id].x != 0 && moving < 10)
+        // start acceleration - TODO change to apply motion input onto movement vector
+        // movement vector always tries to return to zero motion
+        if (mv.movement[id].x != 0)
         {
-            moving += .5f;
-        } else if (mv.movement[id].x == 0)
+            moving += speed * mv.movement[id].x;
+            if (moving > maxSpeed)
+            {
+                moving = maxSpeed;
+            } else if (moving < -maxSpeed)
+            {
+                moving = -maxSpeed;
+            }
+        } 
+        else if (mv.movement[id].x == 0)
         {
-            moving = 0;
+            if (moving < 0)
+            {
+                moving += maxSpeed / 10;
+            }
+            else if (moving > 0)
+            {
+                moving -= maxSpeed / 10;
+            } else
+            {
+                moving = 0;
+            }
         }
-        float finalSpeed = speed * moving;
+        float finalSpeed = moving;
 
         // crouch
         if (mv.movement[id].y < 0)
         {
-            transform.localScale = new Vector3(1, 0.5f, 1);
+            if (transform.localScale == new Vector3(1, 1, 1))
+            {
+                transform.localScale = new Vector3(1, 0.5f, 1);
+                transform.position = new Vector3(transform.position.x, transform.position.y - (GetComponent<BoxCollider2D>().size.y/4), 0);
+            }
             finalSpeed *= crouchMultiplier;
         } else
         {
@@ -67,14 +91,14 @@ public class PlayerMovement : MonoBehaviour
             jumped = false;
         }
 
-        Vector2 trans = new Vector3(mv.movement[id].x * finalSpeed * Time.fixedDeltaTime, rb.velocity.y);
+        Vector2 trans = new Vector3(finalSpeed * Time.fixedDeltaTime, rb.velocity.y);
         rb.velocity = trans;
     }
 
     void Jump()
     {
         jumped = true;
-        rb.AddForce(Vector2.up * jumpHeight);
+        rb.AddForce(Vector2.up * jumpHeight * 100);
     }
     void Crouch()
     {
