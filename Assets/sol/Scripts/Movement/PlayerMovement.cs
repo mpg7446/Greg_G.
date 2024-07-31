@@ -130,12 +130,12 @@ public class PlayerMovement : MonoBehaviour
 
             if (stackParent == null && transform.position.y > otherPlayer.transform.position.y + (GetComponent<BoxCollider2D>().size.y / 1.1)) // collision is below player and players height
             {
-                Debug.Log("Player " + id + "entered stack from above");
+                Debug.Log("Player " + id + " entered stack from above");
                 EnterStackAbove(otherPlayer);
             } 
             else if (stackChild == null && transform.position.y < otherPlayer.transform.position.y - (GetComponent<BoxCollider2D>().size.y / 1.1)) // collision is above player and players height
             {
-                Debug.Log("Player " + id + "entered stack from below");
+                Debug.Log("Player " + id + " entered stack from below");
                 EnterStackBelow(otherPlayer);
             }
         }
