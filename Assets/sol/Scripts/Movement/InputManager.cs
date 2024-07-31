@@ -9,6 +9,7 @@ public class InputManager : MonoBehaviour
     // Create Input Controller Variable
     public static InputController inputController;
     public List<Vector2> movement = new List<Vector2>();
+    public List<bool> action = new List<bool>();
 
     // Start is called before the first frame update
     void Start()
@@ -17,8 +18,14 @@ public class InputManager : MonoBehaviour
         inputController = new InputController();
 
         // action Button
+        action.Add(false);
+        action.Add(false);
+
         inputController.MasterControls.P1_Action.performed += P1ActionPerformed;
         inputController.MasterControls.P1_Action.canceled += P1ActionCancelled;
+
+        inputController.MasterControls.P2_Action.performed += P2ActionPerformed;
+        inputController.MasterControls.P2_Action.canceled += P2ActionCancelled;
 
         // Movement
         movement.Add(new Vector2(0,0));
@@ -35,6 +42,7 @@ public class InputManager : MonoBehaviour
     }
 
     // Input Functions
+    // Player 1 Movement
     void P1MovementPerformed(InputAction.CallbackContext context)
     {
         movement[0] = context.ReadValue<Vector2>();
@@ -43,7 +51,7 @@ public class InputManager : MonoBehaviour
     {
         movement[0] = Vector2.zero;
     }
-
+    // Player 2 Movement
     void P2MovementPerformed(InputAction.CallbackContext context)
     {
         movement[1] = context.ReadValue<Vector2>();
@@ -53,21 +61,22 @@ public class InputManager : MonoBehaviour
         movement[1] = Vector2.zero;
     }
 
+    // Player 1 Action
     void P1ActionPerformed(InputAction.CallbackContext context)
     {
-        Debug.Log("p1 action pressed");
+        action[0] = true;
     }
     void P1ActionCancelled(InputAction.CallbackContext context)
     {
-        Debug.Log("p1 action released");
+        action[0] = false;
     }
-
+    // Player 2 Action
     void P2ActionPerformed(InputAction.CallbackContext context)
     {
-        Debug.Log("p2 action pressed");
+        action[1] = true;
     }
     void P2ActionCancelled(InputAction.CallbackContext context)
     {
-        Debug.Log("p2 action released");
+        action[1] = false;
     }
 }

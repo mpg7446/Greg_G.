@@ -2832,7 +2832,8 @@ MonoBehaviour:
   weight: 100
   weightMultiplier: 5
   burstMultiplier: 2
-  burstTimer: 10
+  burstTimer: 3
+  canBurst: 0
   jumpHeight: 4.75
 --- !u!114 &1618863775
 MonoBehaviour:
@@ -3415,6 +3416,7 @@ MonoBehaviour:
   weightMultiplier: 5
   burstMultiplier: 2
   burstTimer: 10
+  canBurst: 0
   jumpHeight: 4.75
 --- !u!114 &2105582355
 MonoBehaviour:

@@ -20,14 +20,20 @@ public class PlayerMovement : MonoBehaviour
     public float crouchMultiplier = 0.2f;
     private float moving = 0;
 
-    [SerializeField] private float weight = 100; // TODO add weight to players, weight and speed changes depending on items that have been picked up.
-    // possibly have every player start with (slightly) different weights
-    // when u start moving it applies a slight weight boost, allowing button mashing to overpower someone holding down a movement key
+    // player stacking
+    private bool inStack;
+    public GameObject stackParent;
+    public GameObject stackChild;
+
+    // player weight
+    [SerializeField] private float weight = 100; 
     [SerializeField] private float weightMultiplier = 2;
+    // player weight burst
     [SerializeField] private float burstMultiplier = 1.1f;
     [SerializeField] private int burstTimer = 5;
     private int burstMax;
-    private bool burst = false;
+    private bool bursting = false;
+    private bool canBurst = false;
 
     // jump settings
     private bool jumped = false;
@@ -67,14 +73,14 @@ public class PlayerMovement : MonoBehaviour
             if (burstTimer > 0)
             {
                 burstTimer--;
-                burst = true;
+                bursting = true;
             }
             else
             {
-                burst = false;
+                bursting = false;
             }
         } 
-        else if (mv.movement[id].x == 0)
+        else
         {
             // deceleration
             if (moving < -maxSpeed/10)
@@ -90,27 +96,15 @@ public class PlayerMovement : MonoBehaviour
             }
 
             // cancel weight burst
-            burst = false;
+            bursting = false;
             burstTimer = burstMax;
         }
         
         // update speed and burst mulitpliers
-        float finalSpeed = moving;
-        UpdateWeight(burst, burstMultiplier);
+        float finalSpeed = moving * GetWeightMultiplier(bursting, burstMultiplier);
 
         // crouch
-        if (mv.movement[id].y < 0)
-        {
-            if (transform.localScale == new Vector3(1, 1, 1))
-            {
-                transform.localScale = new Vector3(1, 0.5f, 1);
-                transform.position = new Vector3(transform.position.x, transform.position.y - (GetComponent<BoxCollider2D>().size.y/4), 0);
-            }
-            finalSpeed *= crouchMultiplier;
-        } else
-        {
-            transform.localScale = new Vector3(1, 1, 1);
-        }
+        finalSpeed *= Crouch();
 
         // jump
         if (!jumped && mv.movement[id].y > 0 && rb.velocity.y == 0)
@@ -125,31 +119,128 @@ public class PlayerMovement : MonoBehaviour
         Vector2 trans = new Vector3(finalSpeed * Time.fixedDeltaTime, rb.velocity.y);
         rb.velocity = trans;
     }
+    public void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player")) // colliding with player
+        {
+            // enable weight bursting
+            canBurst = true;
 
-    void Jump()
+            GameObject otherPlayer = collision.gameObject;
+
+            if (stackParent == null && transform.position.y > otherPlayer.transform.position.y + (GetComponent<BoxCollider2D>().size.y / 1.1)) // collision is below player and players height
+            {
+                Debug.Log("Player " + id + "entered stack from above");
+                EnterStackAbove(otherPlayer);
+            } 
+            else if (stackChild == null && transform.position.y < otherPlayer.transform.position.y - (GetComponent<BoxCollider2D>().size.y / 1.1)) // collision is above player and players height
+            {
+                Debug.Log("Player " + id + "entered stack from below");
+                EnterStackBelow(otherPlayer);
+            }
+        }
+    }
+
+    public void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player")) // check if not colliding with player
+        {
+            canBurst = false;
+
+            GameObject otherPlayer = collision.gameObject;
+
+            if (otherPlayer == stackChild)
+            {
+                stackChild = null;
+                if (stackParent == null)
+                {
+                    inStack = false;
+                }
+            }
+            else if (otherPlayer == stackParent)
+            {
+                stackParent = null;
+                if (stackChild == null)
+                {
+                    inStack = false;
+                }
+            }
+        }
+    }
+
+    // Movement & Action Inputs
+    private void StandardMovement() // for movement seperate from player stack
+    {
+
+    }
+    private void Jump()
     {
         jumped = true;
         rb.AddForce(Vector2.up * jumpHeight * 100);
     }
-    void Crouch()
+    private float Crouch(bool enabled = true) // call this action squish in game i think
     {
-        transform.localScale = new Vector3(1, 0.5f, 1);
+        if (mv.movement[id].y < 0)
+        {
+            if (transform.localScale == new Vector3(1, 1, 1))
+            {
+                transform.localScale = new Vector3(1, 0.5f, 1);
+                transform.position = new Vector3(transform.position.x, transform.position.y - (GetComponent<BoxCollider2D>().size.y / 4), 0);
+            }
+
+            return crouchMultiplier;
+        } 
+        else
+        {
+            transform.localScale = new Vector3(1, 1, 1);
+            return 1;
+        }
+    }
+    private void Action()
+    {
+        // when in player stack
+        if (inStack)
+        {
+            LeaveStack();
+        }
     }
 
-    public void UpdateWeight(int add = 0)
+    // Weight and Burst Multipliers
+    public void UpdateWeight(int add)
     {
-        this.weight += add * weightMultiplier;
-        rb.mass = this.weight / 100;
+        weight += add * weightMultiplier;
     }
-    public void UpdateWeight(bool enabled, float multiplier)
+    public float GetWeightMultiplier(bool enabled, float multiplier)
     {
-        if (enabled)
+        if (enabled && canBurst)
         {
-            rb.mass = this.weight * multiplier / 100;
+            return weight * multiplier / 100;
         }
         else
         {
-            rb.mass = this.weight / 100;
+            return weight / 100;
         }
     }
+
+    // Player Stacking
+    private void EnterStackAbove(GameObject parent)
+    {
+        stackParent = parent;
+        inStack = true;
+    }
+    private void EnterStackBelow(GameObject child)
+    {
+        stackChild = child;
+        inStack = true;
+    }
+    private void LeaveStack()
+    {
+        stackChild = null;
+        stackParent = null;
+        inStack = false;
+
+        // TODO - change this so it shoots u in the players last facing direction
+        rb.AddForce(new Vector3(maxSpeed * Time.fixedDeltaTime, rb.velocity.y));
+    }
+
 }
