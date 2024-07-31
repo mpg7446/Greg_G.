@@ -20,9 +20,14 @@ public class PlayerMovement : MonoBehaviour
     public float crouchMultiplier = 0.2f;
     private float moving = 0;
 
-    public float weight = 50; // TODO add weight to players, weight and speed changes depending on items that have been picked up.
+    [SerializeField] private float weight = 100; // TODO add weight to players, weight and speed changes depending on items that have been picked up.
     // possibly have every player start with (slightly) different weights
     // when u start moving it applies a slight weight boost, allowing button mashing to overpower someone holding down a movement key
+    [SerializeField] private float weightMultiplier = 2;
+    [SerializeField] private float burstMultiplier = 1.1f;
+    [SerializeField] private int burstTimer = 5;
+    private int burstMax;
+    private bool burst = false;
 
     // jump settings
     private bool jumped = false;
@@ -37,26 +42,41 @@ public class PlayerMovement : MonoBehaviour
         idCounter++;
 
         gameObject.name += " " + id;
+
+        burstMax = burstTimer;
     }
 
     // movement - on physics update
     public void FixedUpdate()
     {
-        // start acceleration - TODO change to apply motion input onto movement vector
-        // movement vector always tries to return to zero motion
+        // movement inputs
         if (mv.movement[id].x != 0)
         {
+            // acceleration
             moving += speed * mv.movement[id].x;
             if (moving > maxSpeed)
             {
                 moving = maxSpeed;
-            } else if (moving < -maxSpeed)
+            } 
+            else if (moving < -maxSpeed)
             {
                 moving = -maxSpeed;
+            }
+
+            // weight burst
+            if (burstTimer > 0)
+            {
+                burstTimer--;
+                burst = true;
+            }
+            else
+            {
+                burst = false;
             }
         } 
         else if (mv.movement[id].x == 0)
         {
+            // deceleration
             if (moving < -maxSpeed/10)
             {
                 moving += maxSpeed / 10;
@@ -68,8 +88,15 @@ public class PlayerMovement : MonoBehaviour
             {
                 moving = 0;
             }
+
+            // cancel weight burst
+            burst = false;
+            burstTimer = burstMax;
         }
+        
+        // update speed and burst mulitpliers
         float finalSpeed = moving;
+        UpdateWeight(burst, burstMultiplier);
 
         // crouch
         if (mv.movement[id].y < 0)
@@ -107,5 +134,22 @@ public class PlayerMovement : MonoBehaviour
     void Crouch()
     {
         transform.localScale = new Vector3(1, 0.5f, 1);
+    }
+
+    public void UpdateWeight(int add = 0)
+    {
+        this.weight += add * weightMultiplier;
+        rb.mass = this.weight / 100;
+    }
+    public void UpdateWeight(bool enabled, float multiplier)
+    {
+        if (enabled)
+        {
+            rb.mass = this.weight * multiplier / 100;
+        }
+        else
+        {
+            rb.mass = this.weight / 100;
+        }
     }
 }

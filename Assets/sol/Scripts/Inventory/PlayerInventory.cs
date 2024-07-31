@@ -6,12 +6,14 @@ public class PlayerInventory : MonoBehaviour
 {
     public int itemCount = 0;
     private GameManager gameManager;
+    private PlayerMovement movement;
 
-    [SerializeField] private GameObject item;
+    private GameObject item;
 
     public void Start()
     {
         gameManager = GameObject.FindWithTag("GameController").GetComponent<GameManager>();
+        movement = GetComponent<PlayerMovement>();
     }
 
     public void IntersectItem(GameObject item)
@@ -38,5 +40,6 @@ public class PlayerInventory : MonoBehaviour
     {
         itemCount += amount;
         gameManager.currentItems += amount;
+        movement.UpdateWeight(amount);
     }
 }
