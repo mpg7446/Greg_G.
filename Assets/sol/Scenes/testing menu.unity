@@ -254,6 +254,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ed565e872d7b3b44a552c0c9af35c68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roomNameInput: {fileID: 0}
 --- !u!114 &886141411
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -495,7 +496,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9bfb067487cbb404fbd6f552ca7147a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  menuName: mainMenu
+  menuName: main
 --- !u!1 &2100245229
 GameObject:
   m_ObjectHideFlags: 0

@@ -16,18 +16,16 @@ public class PhotonLauncher : MonoBehaviourPunCallbacks
     public override void OnConnectedToMaster() // On Connected to Master Network
     {
         Debug.Log("Photon: Successfully Joined Master!");
-
         PhotonNetwork.JoinLobby();
     }
 
     public override void OnJoinedLobby() // On Joined Lobby
     {
         Debug.Log("Photon: Successfully Joined Lobby!");
-
         MenuManager.instance.OpenMenu("main");
     }
 
-    public void CreateRoom()
+    public void CreateRoom(string roomName)
     {
         if (string.IsNullOrEmpty(roomNameInput.text))
         {
@@ -37,9 +35,15 @@ public class PhotonLauncher : MonoBehaviourPunCallbacks
         PhotonNetwork.CreateRoom(roomNameInput.text);
         MenuManager.instance.OpenMenu("loading");
     }
+    public void CreateRoom()
+    {
+        PhotonNetwork.CreateRoom(null);
+        MenuManager.instance.OpenMenu("loading");
+    }
 
     public override void OnJoinedRoom()
     {
+        Debug.Log("Photon: Successfully Joined Room " + PhotonNetwork.CurrentRoom.Name);
         MenuManager.instance.OpenMenu("joinRooms");
     }
     public override void OnLeftRoom()
