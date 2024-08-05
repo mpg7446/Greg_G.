@@ -7,6 +7,8 @@ using TMPro;
 public class PhotonLauncher : MonoBehaviourPunCallbacks
 {
     [SerializeField] private TMP_InputField roomNameInput;
+    [SerializeField] private List<TMP_Text> roomNameDisplays;
+
     void Start()
     {
         Debug.Log("Photon: Connecting to Master");
@@ -25,7 +27,7 @@ public class PhotonLauncher : MonoBehaviourPunCallbacks
         MenuManager.instance.OpenMenu("main");
     }
 
-    public void CreateRoom(string roomName)
+    public void CreateRoom(string roomName) // Create room with custom room name
     {
         if (string.IsNullOrEmpty(roomNameInput.text))
         {
@@ -35,23 +37,44 @@ public class PhotonLauncher : MonoBehaviourPunCallbacks
         PhotonNetwork.CreateRoom(roomNameInput.text);
         MenuManager.instance.OpenMenu("loading");
     }
-    public void CreateRoom()
+    public void CreateRoom() // Create room with generated room name
     {
         PhotonNetwork.CreateRoom(null);
         MenuManager.instance.OpenMenu("loading");
     }
 
-    public override void OnJoinedRoom()
+    public void JoinRoom(string roomName)
+    {
+        PhotonNetwork.JoinRoom(roomName);
+        MenuManager.instance.OpenMenu("loading");
+    }
+    public void LeaveRoom()
+    {
+        PhotonNetwork.LeaveRoom();
+        MenuManager.instance.OpenMenu("loading");
+    }
+
+    public override void OnJoinedRoom() // On joined room - also calls after creating room
     {
         Debug.Log("Photon: Successfully Joined Room " + PhotonNetwork.CurrentRoom.Name);
-        MenuManager.instance.OpenMenu("joinRooms");
+        MenuManager.instance.OpenMenu("room");
+        
+        foreach (TMP_Text roomNameDisplay in roomNameDisplays)
+        {
+            roomNameDisplay.text = "Lobby Code: " + PhotonNetwork.CurrentRoom.Name;
+        }
     }
     public override void OnLeftRoom()
     {
         MenuManager.instance.OpenMenu("main");
+        if (PhotonNetwork.CurrentRoom == null)
+        {
+            Debug.Log("Photon: Successfully Left Room");
+        }
     }
-    public override void OnCreateRoomFailed(short returnCode, string message)
-    {
 
+    public override void OnCreateRoomFailed(short returnCode, string message) // If joined room fails
+    {
+        MenuManager.instance.OpenMenu("main");
     }
 }

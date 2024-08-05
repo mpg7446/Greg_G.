@@ -14,7 +14,12 @@ public class MenuManager : MonoBehaviour
         OpenMenu("loading"); // !!! THIS TO BE CHANGED this is just a placeholder for opening the loading screen
     }
 
-    public void OpenMenu(string menuName, bool onlyThisMenu = true)
+    public void OpenMenu(string menuName)
+    {
+        OpenMenu(menuName, true);
+    }
+
+    public void OpenMenu(string menuName, bool onlyThisMenu)
     {
         bool foundMenu = false;
         foreach (Menu menu in menus)
