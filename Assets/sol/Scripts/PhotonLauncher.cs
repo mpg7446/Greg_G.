@@ -49,7 +49,7 @@ public class PhotonLauncher : MonoBehaviourPunCallbacks
     {
         if (roomNameInput != null && roomNameInput.text != "")
         {
-            string input = roomNameInput.text;
+            string input = roomNameInput.text.ToUpper();
             Debug.Log("Attempting to join room " + input);
             JoinRoom(input);
         }
