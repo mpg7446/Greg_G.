@@ -41,7 +41,7 @@ public class PhotonLauncher : MonoBehaviourPunCallbacks
     }
     public void CreateRoom() // Create room with generated room name
     {
-        PhotonNetwork.CreateRoom(GenerateRandomName()); // Create room with new hex code as room name
+        PhotonNetwork.CreateRoom(GenerateRandomName(7, 3)); // Create room with new hex code as room name
         MenuManager.instance.OpenMenu("loading");
     }
 
@@ -105,9 +105,9 @@ public class PhotonLauncher : MonoBehaviourPunCallbacks
         MenuManager.instance.OpenMenu("main");
     }
 
-    private string GenerateRandomName()
+    private string GenerateRandomName(int mult, int add)
     {
-        int roomID = 23 * (PhotonNetwork.CountOfRooms + 3);
+        int roomID = mult * (PhotonNetwork.CountOfRooms + add);
 
         return roomID.ToString("X");
     }

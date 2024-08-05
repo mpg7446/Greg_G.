@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour
 
     // TESTING ONLY!!
     // DO NOT USE IN FINAL BUILD
-    public void Start()
+    private void Start()
     {
         // get item goal number thingy
         GameObject[] items = GameObject.FindGameObjectsWithTag("Item");
@@ -28,5 +28,16 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log("GAME ENDED GOAL WOOOOHHHH YEAHH BABYYYYYYY");
         }
+    }
+
+    public void StartGame()
+    {
+        Debug.Log("Game Started");
+        MenuManager.instance.OpenMenu("empty");
+    }
+
+    public void StartGame(int timeLimit)
+    {
+
     }
 }
