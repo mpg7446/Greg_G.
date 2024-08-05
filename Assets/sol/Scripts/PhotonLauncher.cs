@@ -31,12 +31,12 @@ public class PhotonLauncher : MonoBehaviourPunCallbacks
 
     public void CreateRoom(string roomName) // Create room with custom room name
     {
-        if (string.IsNullOrEmpty(roomNameInput.text))
+        if (string.IsNullOrEmpty(roomName))
         {
             Debug.LogWarning("Unable to create room: No room name given");
             return;
         }
-        PhotonNetwork.CreateRoom(roomNameInput.text);
+        PhotonNetwork.CreateRoom(roomName);
         MenuManager.instance.OpenMenu("loading");
     }
     public void CreateRoom() // Create room with generated room name
