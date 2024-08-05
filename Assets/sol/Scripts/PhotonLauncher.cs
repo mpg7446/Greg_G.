@@ -3,11 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using TMPro;
+using Photon.Realtime;
+using System.Linq;
 
 public class PhotonLauncher : MonoBehaviourPunCallbacks
 {
     [SerializeField] private TMP_InputField roomNameInput;
     [SerializeField] private List<TMP_Text> roomNameDisplays;
+
+    private Dictionary<string, RoomInfo> _cachedRoomList = new Dictionary<string, RoomInfo>();
 
     void Start()
     {
@@ -18,7 +22,7 @@ public class PhotonLauncher : MonoBehaviourPunCallbacks
     public override void OnConnectedToMaster() // On Connected to Master Network
     {
         Debug.Log("Photon: Successfully Joined Master!");
-        PhotonNetwork.JoinLobby();
+        PhotonNetwork.JoinLobby(TypedLobby.Default);
     }
 
     public override void OnJoinedLobby() // On Joined Lobby
@@ -39,14 +43,21 @@ public class PhotonLauncher : MonoBehaviourPunCallbacks
     }
     public void CreateRoom() // Create room with generated room name
     {
-        PhotonNetwork.CreateRoom(null);
+        PhotonNetwork.CreateRoom(GenerateRandomName()); // Create room with new hex code as room name
         MenuManager.instance.OpenMenu("loading");
     }
 
-    public void JoinRoom(string roomName)
+    public void JoinRoom(string roomName) // Join room with room name
     {
-        PhotonNetwork.JoinRoom(roomName);
-        MenuManager.instance.OpenMenu("loading");
+        if (roomName != null && roomName != "")
+        {
+            PhotonNetwork.JoinRoom(roomName);
+            MenuManager.instance.OpenMenu("loading");
+        }
+        else // Room name incorrectly entered
+        {
+            MenuManager.instance.OpenMenu("joinRooms");
+        }
     }
     public void LeaveRoom()
     {
@@ -75,6 +86,48 @@ public class PhotonLauncher : MonoBehaviourPunCallbacks
 
     public override void OnCreateRoomFailed(short returnCode, string message) // If joined room fails
     {
+        Debug.LogWarning("Photon Create Room Error: " + message);
         MenuManager.instance.OpenMenu("main");
+    }
+
+    public override void OnRoomListUpdate(List<RoomInfo> roomList)
+    {
+        foreach (RoomInfo room in roomList)
+        {
+            if (room.RemovedFromList)
+            {
+                if (_cachedRoomList.ContainsKey(room.Name))
+                {
+                    _cachedRoomList.Remove(room.Name);
+                }
+            }
+            else
+            {
+                Debug.Log("Room added/updated: " + room.Name);
+                _cachedRoomList[room.Name] = room;
+            }
+        }
+    }
+
+    private string GenerateRandomName()
+    {
+        int roomID = 1111;
+
+        if (_cachedRoomList.Count > 0)
+        {
+            RoomInfo lastRoom = _cachedRoomList.Values.Last();
+            roomID = ConvertToInt(lastRoom.Name);
+        }
+
+        return ConvertToHex(roomID);
+    }
+
+    private int ConvertToInt(string name)
+    {
+        return int.Parse(name, System.Globalization.NumberStyles.HexNumber);
+    }
+    private string ConvertToHex(int name)
+    {
+        return name.ToString("X");
     }
 }
