@@ -15,6 +15,11 @@ public class PhotonLauncher : MonoBehaviourPunCallbacks
     {
         Debug.Log("Photon: Connecting to Master");
         PhotonNetwork.ConnectUsingSettings();
+
+        if (roomNameInput == null)
+        {
+            Debug.LogError("Error: no roomNameInput selected");
+        }
     }
 
     public override void OnConnectedToMaster() // On Connected to Master Network
