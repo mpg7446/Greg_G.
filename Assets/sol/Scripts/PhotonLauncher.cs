@@ -11,8 +11,6 @@ public class PhotonLauncher : MonoBehaviourPunCallbacks
     [SerializeField] private TMP_InputField roomNameInput;
     [SerializeField] private List<TMP_Text> roomNameDisplays;
 
-    private Dictionary<string, RoomInfo> _cachedRoomList = new Dictionary<string, RoomInfo>();
-
     void Start()
     {
         Debug.Log("Photon: Connecting to Master");
@@ -47,6 +45,16 @@ public class PhotonLauncher : MonoBehaviourPunCallbacks
         MenuManager.instance.OpenMenu("loading");
     }
 
+    public void JoinRoom()
+    {
+        if (roomNameInput != null && roomNameInput.text != "")
+        {
+            string input = roomNameInput.text;
+            Debug.Log("Attempting to join room " + input);
+            JoinRoom(input);
+        }
+    }
+
     public void JoinRoom(string roomName) // Join room with room name
     {
         if (roomName != null && roomName != "")
@@ -57,6 +65,7 @@ public class PhotonLauncher : MonoBehaviourPunCallbacks
         else // Room name incorrectly entered
         {
             MenuManager.instance.OpenMenu("joinRooms");
+            roomNameInput.text = null;
         }
     }
     public void LeaveRoom()
@@ -75,6 +84,12 @@ public class PhotonLauncher : MonoBehaviourPunCallbacks
             roomNameDisplay.text = "Lobby Code: " + PhotonNetwork.CurrentRoom.Name;
         }
     }
+
+    public override void OnJoinRoomFailed(short returnCode, string message)
+    {
+        MenuManager.instance.OpenMenu("joinRooms");
+        roomNameInput.text = null;
+    }
     public override void OnLeftRoom()
     {
         MenuManager.instance.OpenMenu("main");
@@ -90,38 +105,10 @@ public class PhotonLauncher : MonoBehaviourPunCallbacks
         MenuManager.instance.OpenMenu("main");
     }
 
-    public override void OnRoomListUpdate(List<RoomInfo> roomList)
-    {
-        foreach (RoomInfo room in roomList)
-        {
-            if (room.RemovedFromList)
-            {
-                if (_cachedRoomList.ContainsKey(room.Name))
-                {
-                    _cachedRoomList.Remove(room.Name);
-                }
-            }
-            else
-            {
-                Debug.Log("Room added/updated: " + room.Name);
-                _cachedRoomList[room.Name] = room;
-            }
-        }
-    }
-
     private string GenerateRandomName()
     {
-        int roomID = 023 + PhotonNetwork.CountOfRooms;
+        int roomID = 23 * (PhotonNetwork.CountOfRooms + 3);
 
         return roomID.ToString("X");
-    }
-
-    private int ConvertToInt(string name)
-    {
-        return int.Parse(name, System.Globalization.NumberStyles.HexNumber);
-    }
-    private string ConvertToHex(int name)
-    {
-        return name.ToString("X");
     }
 }
