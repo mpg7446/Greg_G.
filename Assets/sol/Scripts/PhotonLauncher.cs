@@ -111,15 +111,9 @@ public class PhotonLauncher : MonoBehaviourPunCallbacks
 
     private string GenerateRandomName()
     {
-        int roomID = 1111;
+        int roomID = 023 + PhotonNetwork.CountOfRooms;
 
-        if (_cachedRoomList.Count > 0)
-        {
-            RoomInfo lastRoom = _cachedRoomList.Values.Last();
-            roomID = ConvertToInt(lastRoom.Name);
-        }
-
-        return ConvertToHex(roomID);
+        return roomID.ToString("X");
     }
 
     private int ConvertToInt(string name)
