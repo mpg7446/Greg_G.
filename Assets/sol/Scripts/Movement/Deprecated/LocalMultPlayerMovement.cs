@@ -2,10 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour
+public class LocalMultiplayerPlayerMovement : MonoBehaviour
 {
+    // !!!!
+    // THIS IS A DEBUG PLAYER MOVEMENT DO NOT USE THIS IN THE FINAL VERSION
+    // !!!!
+
+    public static int idCounter;
+    public int id;
+
     private Rigidbody2D rb;
-    private InputManager input;
+    private LocalMultiplayerInputManager input;
 
     // movement settings
     public float speed = 40;
@@ -17,7 +24,7 @@ public class PlayerMovement : MonoBehaviour
     private bool holdingAction = false;
 
     // player stacking
-    protected bool inStack;
+    private bool inStack;
     public GameObject stackParent;
     public GameObject stackChild;
 
@@ -42,12 +49,17 @@ public class PlayerMovement : MonoBehaviour
 
     private void Start()
     {
-        input = GetComponent<InputManager>();
+        input = GetComponent<LocalMultiplayerInputManager>();
         rb = GetComponent<Rigidbody2D>();
 
         boxCollider = GetComponent<BoxCollider2D>();
         circleCollider = GetComponent<CircleCollider2D>();
         circleCollider.enabled = false;
+
+        id = idCounter;
+        idCounter++;
+
+        gameObject.name += " " + id;
 
         burstMax = burstTimer;
     }
@@ -68,11 +80,11 @@ public class PlayerMovement : MonoBehaviour
             StackMovement();
         }
 
-        if (input.action && !holdingAction)
+        if (input.action[id] && !holdingAction)
         {
             Action();
             holdingAction = true;
-        } else if (!input.action && holdingAction)
+        } else if (!input.action[id] && holdingAction)
         {
             holdingAction = false;
         }
@@ -95,10 +107,12 @@ public class PlayerMovement : MonoBehaviour
             {
                 if (stackParent == null && transform.position.y > otherPlayer.transform.position.y + (GetComponent<BoxCollider2D>().size.y / 1.1)) // collision is below player and players height
                 {
+                    Debug.Log("Player " + id + " entered stack from above");
                     EnterStackAbove(otherPlayer);
                 }
                 else if (stackChild == null && transform.position.y < otherPlayer.transform.position.y - (GetComponent<BoxCollider2D>().size.y / 1.1)) // collision is above player and players height
                 {
+                    Debug.Log("Player " + id + " entered stack from below");
                     EnterStackBelow(otherPlayer);
                 }
             }
@@ -110,6 +124,26 @@ public class PlayerMovement : MonoBehaviour
         if (collision.gameObject.CompareTag("Player")) // check if not colliding with player
         {
             canBurst = false;
+            /*
+            GameObject otherPlayer = collision.gameObject;
+
+            if (otherPlayer == stackChild)
+            {
+                stackChild = null;
+                if (stackParent == null)
+                {
+                    inStack = false;
+                }
+            }
+            else if (otherPlayer == stackParent)
+            {
+                stackParent = null;
+                if (stackChild == null)
+                {
+                    inStack = false;
+                }
+            }
+            */
         }
     }
 
@@ -118,10 +152,10 @@ public class PlayerMovement : MonoBehaviour
     {
         SwitchCollider(false);
         // movement inputs
-        if (input.movement.x != 0)
+        if (input.movement[id].x != 0)
         {
             // acceleration
-            moving += speed * input.movement.x;
+            moving += speed * input.movement[id].x;
             if (moving > maxSpeed)
             {
                 moving = maxSpeed;
@@ -170,7 +204,7 @@ public class PlayerMovement : MonoBehaviour
         finalSpeed *= Crouch();
 
         // jump
-        if (!jumped && input.movement.y > 0 && rb.velocity.y == 0)
+        if (!jumped && input.movement[id].y > 0 && rb.velocity.y == 0)
         {
             Jump();
         }
@@ -192,9 +226,9 @@ public class PlayerMovement : MonoBehaviour
         jumped = true;
         rb.AddForce(Vector2.up * jumpHeight * 100);
     }
-    protected virtual float Crouch(bool enabled = true) // call this action squish in game i think
+    private float Crouch(bool enabled = true) // call this action squish in game i think
     {
-        if (input.movement.y < 0)
+        if (input.movement[id].y < 0)
         {
             if (transform.localScale == new Vector3(1, 1, 1))
             {
@@ -210,7 +244,7 @@ public class PlayerMovement : MonoBehaviour
             return 1;
         }
     }
-    protected virtual void Action()
+    private void Action()
     {
         // when in player stack
         if (inStack)
@@ -237,35 +271,35 @@ public class PlayerMovement : MonoBehaviour
     }
 
     // Player Stacking
-    protected void EnterStackAbove(GameObject parent)
+    private void EnterStackAbove(GameObject parent)
     {
         stackParent = parent;
         inStack = true;
 
         transform.position = parent.transform.position + new Vector3(0, parent.GetComponent<BoxCollider2D>().size.y);
     }
-    protected void EnterStackBelow(GameObject child)
+    private void EnterStackBelow(GameObject child)
     {
         stackChild = child;
         inStack = true;
     }
-    protected void LeaveStack()
+    private void LeaveStack()
     {
         if (stackParent != null && stackChild != null) // if player is a middle player in stack
         {
-            stackParent.GetComponent<PlayerMovement>().stackChild = stackChild;
-            stackChild.GetComponent<PlayerMovement>().stackParent = stackParent;
+            stackParent.GetComponent<LocalMultiplayerPlayerMovement>().stackChild = stackChild;
+            stackChild.GetComponent<LocalMultiplayerPlayerMovement>().stackParent = stackParent;
         } 
         else // if player is an end player in stack
         {
             // CHANGE THIS TO A FUNCTION TAHT GETS CALLED SO THAT inStack IS CORRECT
             if (stackParent != null && stackChild == null)
             {
-                stackParent.GetComponent<PlayerMovement>().LeaveStack(gameObject);
+                stackParent.GetComponent<LocalMultiplayerPlayerMovement>().LeaveStack(gameObject);
             }
             if (stackChild != null && stackParent == null)
             {
-                stackChild.GetComponent<PlayerMovement>().LeaveStack(gameObject);
+                stackChild.GetComponent<LocalMultiplayerPlayerMovement>().LeaveStack(gameObject);
             }
         }
 
@@ -279,7 +313,7 @@ public class PlayerMovement : MonoBehaviour
         transform.position += new Vector3(0, 0.5f, 0);
         rb.velocity = new Vector3(maxSpeed * 5 * Time.fixedDeltaTime, 0);
     }
-    protected void LeaveStack(GameObject player)
+    private void LeaveStack(GameObject player)
     {
         if (stackChild == player)
         {
@@ -303,7 +337,7 @@ public class PlayerMovement : MonoBehaviour
         boxCollider.enabled = !boxCollider.enabled;
         circleCollider.enabled = !circleCollider.enabled;
     }
-    protected void SwitchCollider(bool enabled)
+    private void SwitchCollider(bool enabled)
     {
         if (enabled)
         {

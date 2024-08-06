@@ -33,7 +33,7 @@ public class GameManager : MonoBehaviour
     public void StartGame()
     {
         Debug.Log("Game Started");
-        MenuManager.instance.OpenMenu("empty");
+        MenuManager.Instance.OpenMenu("empty");
     }
 
     public void StartGame(int timeLimit)

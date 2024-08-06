@@ -31,7 +31,7 @@ public class PhotonLauncher : MonoBehaviourPunCallbacks
     public override void OnJoinedLobby() // On Joined Lobby
     {
         Debug.Log("Photon: Successfully Joined Lobby!");
-        MenuManager.instance.OpenMenu("main");
+        MenuManager.Instance.OpenMenu("main");
     }
 
     public void CreateRoom(string roomName) // Create room with custom room name
@@ -42,12 +42,12 @@ public class PhotonLauncher : MonoBehaviourPunCallbacks
             return;
         }
         PhotonNetwork.CreateRoom(roomName);
-        MenuManager.instance.OpenMenu("loading");
+        MenuManager.Instance.OpenMenu("loading");
     }
     public void CreateRoom() // Create room with generated room name
     {
         PhotonNetwork.CreateRoom(GenerateRandomName(7, 3)); // Create room with new hex code as room name
-        MenuManager.instance.OpenMenu("loading");
+        MenuManager.Instance.OpenMenu("loading");
     }
 
     public void JoinRoom()
@@ -65,24 +65,26 @@ public class PhotonLauncher : MonoBehaviourPunCallbacks
         if (roomName != null && roomName != "")
         {
             PhotonNetwork.JoinRoom(roomName);
-            MenuManager.instance.OpenMenu("loading");
+            MenuManager.Instance.OpenMenu("loading");
         }
         else // Room name incorrectly entered
         {
-            MenuManager.instance.OpenMenu("joinRooms");
+            MenuManager.Instance.OpenMenu("joinRooms");
             roomNameInput.text = null;
         }
     }
     public void LeaveRoom()
     {
         PhotonNetwork.LeaveRoom();
-        MenuManager.instance.OpenMenu("loading");
+        MenuManager.Instance.OpenMenu("loading");
+        ClientManager.Instance.CloseScene("Lobby");
     }
 
     public override void OnJoinedRoom() // On joined room - also calls after creating room
     {
         Debug.Log("Photon: Successfully Joined Room " + PhotonNetwork.CurrentRoom.Name);
-        MenuManager.instance.OpenMenu("room");
+        MenuManager.Instance.OpenMenu("room");
+        ClientManager.Instance.LoadScene("Lobby");
         
         foreach (TMP_Text roomNameDisplay in roomNameDisplays)
         {
@@ -92,12 +94,12 @@ public class PhotonLauncher : MonoBehaviourPunCallbacks
 
     public override void OnJoinRoomFailed(short returnCode, string message)
     {
-        MenuManager.instance.OpenMenu("joinRooms");
+        MenuManager.Instance.OpenMenu("joinRooms");
         roomNameInput.text = null;
     }
     public override void OnLeftRoom()
     {
-        MenuManager.instance.OpenMenu("main");
+        MenuManager.Instance.OpenMenu("main");
         if (PhotonNetwork.CurrentRoom == null)
         {
             Debug.Log("Photon: Successfully Left Room");
@@ -107,7 +109,7 @@ public class PhotonLauncher : MonoBehaviourPunCallbacks
     public override void OnCreateRoomFailed(short returnCode, string message) // If joined room fails
     {
         Debug.LogWarning("Photon Create Room Error: " + message);
-        MenuManager.instance.OpenMenu("main");
+        MenuManager.Instance.OpenMenu("main");
     }
 
     private string GenerateRandomName(int mult, int add)

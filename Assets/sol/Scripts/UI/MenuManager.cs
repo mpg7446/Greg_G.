@@ -5,12 +5,12 @@ using System.Diagnostics;
 
 public class MenuManager : MonoBehaviour
 {
-    public static MenuManager instance;
+    public static MenuManager Instance;
     [SerializeField] private List<Menu> menus = new List<Menu>();
 
     public void Awake()
     {
-        instance = this;
+        Instance = this;
         OpenMenu("loading"); // !!! THIS TO BE CHANGED this is just a placeholder for opening the loading screen
     }
 

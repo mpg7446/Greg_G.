@@ -6,14 +6,18 @@ public class PlayerInventory : MonoBehaviour
 {
     public int itemCount = 0;
     private GameManager gameManager;
-    private PlayerMovement movement;
+    private LocalMultiplayerPlayerMovement movement;
 
     private GameObject item;
 
     public void Start()
     {
-        gameManager = GameObject.FindWithTag("GameController").GetComponent<GameManager>();
-        movement = GetComponent<PlayerMovement>();
+        try
+        {
+            gameManager = GameObject.FindWithTag("GameController").GetComponent<GameManager>();
+        } catch { }
+
+        movement = GetComponent<LocalMultiplayerPlayerMovement>();
     }
 
     public void IntersectItem(GameObject item)
