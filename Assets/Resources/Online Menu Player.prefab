@@ -104,6 +104,7 @@ MonoBehaviour:
   speed: 40
   maxSpeed: 300
   crouchMultiplier: 0.2
+  inStack: 0
   stackParent: {fileID: 0}
   stackChild: {fileID: 0}
   colliderMaxDelay: 15

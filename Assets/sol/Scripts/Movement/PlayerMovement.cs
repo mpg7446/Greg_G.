@@ -19,7 +19,7 @@ public class PlayerMovement : MonoBehaviour
     private bool holdingAction = false;
 
     // player stacking
-    protected bool inStack;
+    public bool inStack;
     public GameObject stackParent;
     public GameObject stackChild;
 
@@ -253,12 +253,38 @@ public class PlayerMovement : MonoBehaviour
         inStack = true;
 
         transform.position = parent.transform.position + new Vector3(0, parent.GetComponent<BoxCollider2D>().size.y);
+        photonView.RPC("RPCEnterStackBelow", RpcTarget.Others, parent, gameObject);
+    }
+    [PunRPC]
+    public void RPCEnterStackBelow(GameObject target, GameObject sender) // TODO DOESNT WORK
+    {
+        if (target == gameObject)
+        {
+            stackChild = sender;
+            inStack = true;
+
+            Debug.Log("Entered Stack Below over RPC for " + gameObject.name);
+        }
     }
     protected void EnterStackBelow(GameObject child)
     {
         stackChild = child;
         inStack = true;
+        photonView.RPC("RPCEnterStackBelow", RpcTarget.Others, child, gameObject);
     }
+    [PunRPC]
+    public void RPCEnterStackAbove(GameObject target, GameObject sender) // TODO DOESNT WORK
+    {
+        if (target == gameObject)
+        {
+            stackParent = sender;
+            inStack = true;
+
+            transform.position = sender.transform.position + new Vector3(0, sender.GetComponent<BoxCollider2D>().size.y);
+            Debug.Log("Entered Stack Above over RPC for " + gameObject.name);
+        }
+    }
+
     protected void LeaveStack()
     {
         if (stackParent != null && stackChild != null) // if player is a middle player in stack

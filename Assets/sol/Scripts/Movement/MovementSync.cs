@@ -22,6 +22,7 @@ namespace Photon.Pun.UtilityScripts
     public class MovementSync : Photon.Pun.MonoBehaviourPun, IPunObservable
     {
         private Rigidbody2D rb;
+        private PlayerMovement playerMovement;
         public float SmoothingDelay = 5;
         public void Awake()
         {
@@ -49,6 +50,9 @@ namespace Photon.Pun.UtilityScripts
                 stream.SendNext(transform.position);
                 stream.SendNext(transform.localScale);
                 stream.SendNext(rb.velocity);
+                //stream.SendNext(playerMovement.inStack);
+                //stream.SendNext(playerMovement.stackParent);
+                //stream.SendNext(playerMovement.stackChild);
             }
             else
             {
@@ -56,21 +60,33 @@ namespace Photon.Pun.UtilityScripts
                 correctPlayerPos = (Vector3)stream.ReceiveNext();
                 correctPlayerScale = (Vector3)stream.ReceiveNext();
                 correctVelocity = (Vector2)stream.ReceiveNext();
+                //inStack = (bool)stream.ReceiveNext();
+                //stackParent = (GameObject)stream.ReceiveNext();
+                //stackChild = (GameObject)stream.ReceiveNext();
             }
         }
 
-        private Vector3 correctPlayerPos = Vector3.zero; //We lerp towards this
-        private Vector3 correctPlayerScale = Vector3.zero; //We lerp towards this
+        // Information for updating remote player
+        private Vector3 correctPlayerPos = Vector3.zero;
+        private Vector3 correctPlayerScale = Vector3.zero;
         private Vector2 correctVelocity;
+        //private bool inStack = false;
+        //private GameObject stackParent = null;
+        //private GameObject stackChild = null;
 
         public void Update()
         {
-            if (!photonView.IsMine)
+            if (!photonView.IsMine) // Update remote player (smooth this, this looks good, at the cost of some accuracy)
             {
-                //Update remote player (smooth this, this looks good, at the cost of some accuracy)
+                // movement
                 transform.position = Vector3.Lerp(transform.position, correctPlayerPos, Time.deltaTime * this.SmoothingDelay);
                 transform.localScale = Vector3.Lerp(transform.localScale, correctPlayerScale, Time.deltaTime * this.SmoothingDelay);
-                rb.velocity = Vector2.Lerp(rb.velocity, correctVelocity, Time.deltaTime * this.SmoothingDelay);
+                rb.velocity = correctVelocity;
+
+                // stacking
+                //playerMovement.inStack = inStack;
+                //playerMovement.stackParent = stackParent;
+                //playerMovement.stackChild = stackChild;
             }
         }
 
