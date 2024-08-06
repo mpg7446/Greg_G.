@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,6 +8,7 @@ using UnityEngine.InputSystem;
 public class InputManager : MonoBehaviour
 {
     // Create Input Controller Variable
+    private PhotonView photonView;
     public static InputController inputController;
     public Vector2 movement;
     public bool action;
@@ -14,29 +16,41 @@ public class InputManager : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        // Instanciate Input Controller
-        inputController = new InputController();
+        photonView = GetComponent<PhotonView>();
 
-        // action Button
-        action = false;
+        if (photonView.IsMine)
+        {
+            // Instanciate Input Controller
+            inputController = new InputController();
 
-        inputController.MasterControls.P1_Action.performed += ActionPerformed;
-        inputController.MasterControls.P1_Action.canceled += ActionCanceled;
+            // action Button
+            action = false;
 
-        // Movement
-        movement = new Vector2(0, 0);
+            inputController.MasterControls.P1_Action.performed += ActionPerformed;
+            inputController.MasterControls.P1_Action.canceled += ActionCanceled;
 
-        inputController.MasterControls.P1_Movement.performed += MovementPerformed;
-        inputController.MasterControls.P1_Movement.canceled += MovementCanceled;
+            // Movement
+            movement = new Vector2(0, 0);
 
-        inputController.Enable();
+            inputController.MasterControls.P1_Movement.performed += MovementPerformed;
+            inputController.MasterControls.P1_Movement.canceled += MovementCanceled;
+
+            inputController.Enable();
+        }
+        else
+        {
+            enabled = false;
+        }
     }
 
     private void OnDestroy()
     {
-        Debug.Log("Input Manager: closing manager");
-        inputController.Disable();
-        inputController = null;
+        if (inputController != null)
+        {
+            Debug.Log("Input Manager: closing manager");
+            inputController.Disable();
+            inputController = null;
+        }
     }
 
     // Input Functions

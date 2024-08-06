@@ -1,9 +1,11 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    protected PhotonView photonView;
     private Rigidbody2D rb;
     private InputManager input;
 
@@ -42,8 +44,16 @@ public class PlayerMovement : MonoBehaviour
 
     private void Start()
     {
-        input = GetComponent<InputManager>();
-        rb = GetComponent<Rigidbody2D>();
+        photonView = GetComponent<PhotonView>();
+        if (photonView.IsMine)
+        {
+            input = GetComponent<InputManager>();
+            rb = GetComponent<Rigidbody2D>();
+        }
+        else
+        {
+            enabled = false;
+        }
 
         boxCollider = GetComponent<BoxCollider2D>();
         circleCollider = GetComponent<CircleCollider2D>();

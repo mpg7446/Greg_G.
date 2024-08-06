@@ -1,9 +1,11 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerInventory : MonoBehaviour
 {
+    private PhotonView photonView;
     public int itemCount = 0;
     private GameManager gameManager;
     private LocalMultiplayerPlayerMovement movement;
@@ -12,12 +14,21 @@ public class PlayerInventory : MonoBehaviour
 
     public void Start()
     {
-        try
+        photonView = GetComponent<PhotonView>();
+        if (photonView.IsMine)
         {
-            gameManager = GameObject.FindWithTag("GameController").GetComponent<GameManager>();
-        } catch { }
+            try
+            {
+                gameManager = GameObject.FindWithTag("GameController").GetComponent<GameManager>();
+            }
+            catch { }
 
-        movement = GetComponent<LocalMultiplayerPlayerMovement>();
+            movement = GetComponent<LocalMultiplayerPlayerMovement>();
+        }
+        else
+        {
+            enabled = false;
+        }
     }
 
     public void IntersectItem(GameObject item)

@@ -5,6 +5,7 @@ using Photon.Pun;
 using TMPro;
 using Photon.Realtime;
 using System.Linq;
+using UnityEngine.Rendering;
 
 public class PhotonLauncher : MonoBehaviourPunCallbacks
 {
@@ -90,6 +91,8 @@ public class PhotonLauncher : MonoBehaviourPunCallbacks
         {
             roomNameDisplay.text = "Lobby Code: " + PhotonNetwork.CurrentRoom.Name;
         }
+
+        SpawnPlayer("Online Menu Player");
     }
 
     public override void OnJoinRoomFailed(short returnCode, string message)
@@ -117,5 +120,10 @@ public class PhotonLauncher : MonoBehaviourPunCallbacks
         int roomID = mult * (PhotonNetwork.CountOfRooms + add);
 
         return roomID.ToString("X");
+    }
+
+    public void SpawnPlayer(string player)
+    {
+        PhotonNetwork.Instantiate(player, Vector3.zero, Quaternion.identity);
     }
 }
