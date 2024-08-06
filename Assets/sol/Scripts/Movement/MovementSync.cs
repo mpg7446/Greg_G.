@@ -47,20 +47,20 @@ namespace Photon.Pun.UtilityScripts
             {
                 //We own this player: send the others our data
                 stream.SendNext(transform.position);
-                stream.SendNext(transform.rotation);
+                stream.SendNext(transform.localScale);
                 stream.SendNext(rb.velocity);
             }
             else
             {
                 //Network player, receive data
                 correctPlayerPos = (Vector3)stream.ReceiveNext();
-                correctPlayerRot = (Quaternion)stream.ReceiveNext();
+                correctPlayerScale = (Vector3)stream.ReceiveNext();
                 correctVelocity = (Vector2)stream.ReceiveNext();
             }
         }
 
         private Vector3 correctPlayerPos = Vector3.zero; //We lerp towards this
-        private Quaternion correctPlayerRot = Quaternion.identity; //We lerp towards this
+        private Vector3 correctPlayerScale = Vector3.zero; //We lerp towards this
         private Vector2 correctVelocity;
 
         public void Update()
@@ -69,7 +69,7 @@ namespace Photon.Pun.UtilityScripts
             {
                 //Update remote player (smooth this, this looks good, at the cost of some accuracy)
                 transform.position = Vector3.Lerp(transform.position, correctPlayerPos, Time.deltaTime * this.SmoothingDelay);
-                transform.rotation = Quaternion.Lerp(transform.rotation, correctPlayerRot, Time.deltaTime * this.SmoothingDelay);
+                transform.localScale = Vector3.Lerp(transform.localScale, correctPlayerScale, Time.deltaTime * this.SmoothingDelay);
                 rb.velocity = Vector2.Lerp(rb.velocity, correctVelocity, Time.deltaTime * this.SmoothingDelay);
             }
         }
