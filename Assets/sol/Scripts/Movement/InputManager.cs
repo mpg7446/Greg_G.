@@ -10,6 +10,7 @@ public class InputManager : MonoBehaviour
     // Create Input Controller Variable
     private PhotonView photonView;
     public static InputController inputController;
+    public static InputManager Instance;
     public Vector2 movement;
     public bool action;
 
@@ -20,6 +21,8 @@ public class InputManager : MonoBehaviour
 
         if (photonView.IsMine)
         {
+            Instance = this;
+
             // Instanciate Input Controller
             inputController = new InputController();
 
@@ -45,7 +48,7 @@ public class InputManager : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (inputController != null)
+        if (Instance == this && inputController != null)
         {
             Debug.Log("Input Manager: closing manager");
             inputController.Disable();

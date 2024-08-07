@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    public static PlayerMovement Instance = null;
     protected PhotonView photonView;
     private Rigidbody2D rb;
     private InputManager input;
@@ -47,6 +48,7 @@ public class PlayerMovement : MonoBehaviour
         photonView = GetComponent<PhotonView>();
         if (photonView.IsMine)
         {
+            Instance = this;
             input = GetComponent<InputManager>();
             rb = GetComponent<Rigidbody2D>();
         }
@@ -64,7 +66,10 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnDestroy()
     {
-        Debug.Log("Player Movement: closing movement script");
+        if (enabled)
+        {
+            Debug.Log("Player Movement: closing movement script");
+        }
     }
 
     // movement - on physics update
@@ -253,14 +258,14 @@ public class PlayerMovement : MonoBehaviour
         inStack = true;
 
         transform.position = parent.transform.position + new Vector3(0, parent.GetComponent<BoxCollider2D>().size.y);
-        photonView.RPC("RPCEnterStackBelow", RpcTarget.Others, parent, gameObject);
+        photonView.RPC("RPCEnterStackBelow", RpcTarget.Others, parent.name, gameObject.name);
     }
     [PunRPC]
-    public void RPCEnterStackBelow(GameObject target, GameObject sender) // TODO DOESNT WORK
+    public void RPCEnterStackBelow(string target, string sender) // TODO DOESNT WORK
     {
-        if (target == gameObject)
+        if (target == gameObject.name)
         {
-            stackChild = sender;
+            stackChild = GameObject.Find(sender);
             inStack = true;
 
             Debug.Log("Entered Stack Below over RPC for " + gameObject.name);
@@ -270,24 +275,25 @@ public class PlayerMovement : MonoBehaviour
     {
         stackChild = child;
         inStack = true;
-        photonView.RPC("RPCEnterStackBelow", RpcTarget.Others, child, gameObject);
+        photonView.RPC("RPCEnterStackBelow", RpcTarget.Others, child.name, gameObject.name);
     }
     [PunRPC]
-    public void RPCEnterStackAbove(GameObject target, GameObject sender) // TODO DOESNT WORK
+    public void RPCEnterStackAbove(string target, string sender) // TODO DOESNT WORK
     {
-        if (target == gameObject)
+        if (target == gameObject.name)
         {
-            stackParent = sender;
+            GameObject senderObject = GameObject.Find(sender);
+            stackParent = senderObject;
             inStack = true;
 
-            transform.position = sender.transform.position + new Vector3(0, sender.GetComponent<BoxCollider2D>().size.y);
+            transform.position = senderObject.transform.position + new Vector3(0, senderObject.GetComponent<BoxCollider2D>().size.y);
             Debug.Log("Entered Stack Above over RPC for " + gameObject.name);
         }
     }
 
     protected void LeaveStack()
     {
-        if (stackParent != null && stackChild != null) // if player is a middle player in stack
+        if (stackParent != null && stackChild != null) // if player is a middle player in stack - THIS CODE IS REDUNDANT simply call new LeaveStack(player)
         {
             stackParent.GetComponent<PlayerMovement>().stackChild = stackChild;
             stackChild.GetComponent<PlayerMovement>().stackParent = stackParent;
@@ -295,11 +301,11 @@ public class PlayerMovement : MonoBehaviour
         else // if player is an end player in stack
         {
             // CHANGE THIS TO A FUNCTION TAHT GETS CALLED SO THAT inStack IS CORRECT
-            if (stackParent != null && stackChild == null)
+            if (stackParent != null)
             {
                 stackParent.GetComponent<PlayerMovement>().LeaveStack(gameObject);
             }
-            if (stackChild != null && stackParent == null)
+            if (stackChild != null)
             {
                 stackChild.GetComponent<PlayerMovement>().LeaveStack(gameObject);
             }
@@ -315,15 +321,38 @@ public class PlayerMovement : MonoBehaviour
         transform.position += new Vector3(0, 0.5f, 0);
         rb.velocity = new Vector3(maxSpeed * 5 * Time.fixedDeltaTime, 0);
     }
-    protected void LeaveStack(GameObject player)
+
+    [PunRPC]
+    protected void RPCLeaveStack(string target, string sender)
+    {
+        if (target == gameObject.name)
+        {
+            LeaveStack(GameObject.Find(sender));
+        }
+    }
+    protected void LeaveStack(GameObject player) // PLEASE FOR THE LOVE OF GOD FIX THIS THIS IS A NIGHTMARE PLEASE GOD HELP 
     {
         if (stackChild == player)
         {
-            stackChild = null;
+            if (stackParent != null)
+            {
+                stackChild = null; // this should change stackChild to the something else i honestly cant remember, i should really draw it out
+            }
+            else
+            {
+                stackChild = null;
+            }
         } 
         else if (stackParent == player)
         {
-            stackParent = null;
+            if (stackChild != null)
+            {
+                stackParent = null; // this should do practically the same as the last comment but the other way around
+            }
+            else
+            {
+                stackParent = null;
+            }
         }
 
         if (stackChild == null && stackParent == null)
@@ -331,6 +360,25 @@ public class PlayerMovement : MonoBehaviour
             inStack = false;
             colliderDelay = colliderMaxDelay;
         }
+    }
+
+    [PunRPC]
+    public string GetStackParent(string target)
+    {
+        if (target == name)
+        {
+            return stackParent.name;
+        }
+        return null;
+    }
+    [PunRPC]
+    public string GetStackChild(string target)
+    {
+        if (target == name)
+        {
+            return stackChild.name;
+        }
+        return null;
     }
 
     // Colliders
@@ -350,6 +398,11 @@ public class PlayerMovement : MonoBehaviour
             boxCollider.enabled = true;
             circleCollider.enabled = false;
         }
+    }
+
+    public void DestroyPlayer()
+    {
+        PhotonNetwork.Destroy(gameObject);
     }
 
 }

@@ -6,12 +6,12 @@ using TMPro;
 using Photon.Realtime;
 using System.Linq;
 using UnityEngine.Rendering;
+using WebSocketSharp;
 
 public class PhotonLauncher : MonoBehaviourPunCallbacks
 {
     [SerializeField] private TMP_InputField roomNameInput;
     [SerializeField] private List<TMP_Text> roomNameDisplays;
-
     void Start()
     {
         Debug.Log("Photon: Connecting to Master");
@@ -63,7 +63,7 @@ public class PhotonLauncher : MonoBehaviourPunCallbacks
 
     public void JoinRoom(string roomName) // Join room with room name
     {
-        if (roomName != null && roomName != "")
+        if (!roomName.IsNullOrEmpty())
         {
             PhotonNetwork.JoinRoom(roomName);
             MenuManager.Instance.OpenMenu("loading");
@@ -84,14 +84,17 @@ public class PhotonLauncher : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom() // On joined room - also calls after creating room
     {
         Debug.Log("Photon: Successfully Joined Room " + PhotonNetwork.CurrentRoom.Name);
+
         MenuManager.Instance.OpenMenu("room");
         ClientManager.Instance.LoadScene("Lobby");
         
+        // update room code visuals
         foreach (TMP_Text roomNameDisplay in roomNameDisplays)
         {
             roomNameDisplay.text = "Lobby Code: " + PhotonNetwork.CurrentRoom.Name;
         }
 
+        // spawn network player
         SpawnPlayer("Online Menu Player");
     }
 
@@ -122,8 +125,9 @@ public class PhotonLauncher : MonoBehaviourPunCallbacks
         return roomID.ToString("X");
     }
 
-    public void SpawnPlayer(string player)
+    public void SpawnPlayer(string playerType)
     {
-        PhotonNetwork.Instantiate(player, Vector3.zero, Quaternion.identity);
+        GameObject instance = PhotonNetwork.Instantiate(playerType, Vector3.zero, Quaternion.identity);
+        instance.name += " " + (PhotonNetwork.PlayerList.Length - 1);
     }
 }

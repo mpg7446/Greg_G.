@@ -41,6 +41,12 @@ MonoBehaviour:
   - RespawnSpaceship
   - RPCEnterStackAbove
   - RPCEnterStackBelow
+  - StartGame
+  - RPCStartGame
+  - RPCEndGame
+  - RPCLeaveStack
+  - GetStackChild
+  - GetStackParent
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 0

@@ -17,4 +17,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/sol/Scenes/Lobby.unity
     guid: e46eaf631b89f4145a6ad67f7fe4c4cd
+  - enabled: 1
+    path: Assets/sol/Scenes/sol nainofdsi sdfg.unity
+    guid: 97dd6c0a9f5386f4296bb2c9a25d0bc3
   m_configObjects: {}
