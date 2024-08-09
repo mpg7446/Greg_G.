@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     // item counts
     public int maxItems;
     public int currentItems;
+    public List<GameObject> itemSpawners;
 
     // TESTING ONLY!!
     // DO NOT USE IN FINAL BUILD (for now)
@@ -42,6 +43,9 @@ public class GameManager : MonoBehaviour
         if (RPC)
         {
             photonView.RPC("RPCStartGame",RpcTarget.Others);
+        } else
+        {
+            SpawnItems();
         }
 
         MenuManager.Instance.OpenMenu("empty");
@@ -51,9 +55,31 @@ public class GameManager : MonoBehaviour
         PhotonNetwork.CurrentRoom.IsOpen = false;
     }
 
+    private void SpawnItems()
+    {
+        // Spawn items over network (PhotonNetwork.Instantiate())
+        List<GameObject> randomizedSpawners = new List<GameObject>();
+        foreach (GameObject spawner in itemSpawners)
+        {
+            int r = UnityEngine.Random.Range(0, randomizedSpawners.Count);
+            randomizedSpawners.Insert(r, spawner);
+        }
+
+        Debug.Log("Original Spawner List");
+        foreach (GameObject spawner in itemSpawners)
+        {
+            Debug.Log(spawner.name);
+        }
+        Debug.Log("Randomized Spawner List");
+        foreach (GameObject spawner in randomizedSpawners)
+        {
+            Debug.Log(spawner.name);
+        }
+    }
+
     public void CloseClient()
     {
-        ClientManager.Instance.CloseGame();
+        ClientManager.Instance.CloseClient();
     }
 
     [PunRPC] 

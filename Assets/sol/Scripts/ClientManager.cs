@@ -32,7 +32,7 @@ public class ClientManager : MonoBehaviour
         SceneManager.UnloadSceneAsync(scene);
     }
 
-    public void CloseGame()
+    public void CloseClient()
     {
         Application.Quit();
     }
