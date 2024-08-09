@@ -19,7 +19,7 @@ namespace Photon.Pun.UtilityScripts
     /// Smoothed out movement for network gameobjects
     /// </summary>
     [RequireComponent(typeof(PhotonView))]
-    public class MovementSync : Photon.Pun.MonoBehaviourPun, IPunObservable
+    public class PlayerMovementSync : Photon.Pun.MonoBehaviourPun, IPunObservable
     {
         private Rigidbody2D rb;
         public float SmoothingDelay = 5;
@@ -49,6 +49,7 @@ namespace Photon.Pun.UtilityScripts
                 stream.SendNext(transform.position);
                 stream.SendNext(transform.localScale);
                 stream.SendNext(rb.velocity);
+                stream.SendNext(name);
             }
             else
             {
@@ -56,6 +57,7 @@ namespace Photon.Pun.UtilityScripts
                 correctPlayerPos = (Vector3)stream.ReceiveNext();
                 correctPlayerScale = (Vector3)stream.ReceiveNext();
                 correctVelocity = (Vector2)stream.ReceiveNext();
+                objectName = (string)stream.ReceiveNext();
             }
         }
 
@@ -63,6 +65,7 @@ namespace Photon.Pun.UtilityScripts
         private Vector3 correctPlayerPos = Vector3.zero;
         private Vector3 correctPlayerScale = Vector3.zero;
         private Vector2 correctVelocity;
+        private string objectName;
 
         public void Update()
         {
@@ -72,6 +75,7 @@ namespace Photon.Pun.UtilityScripts
                 transform.position = Vector3.Lerp(transform.position, correctPlayerPos, Time.deltaTime * this.SmoothingDelay);
                 transform.localScale = Vector3.Lerp(transform.localScale, correctPlayerScale, Time.deltaTime * this.SmoothingDelay);
                 rb.velocity = correctVelocity;
+                name = objectName;
             }
         }
 

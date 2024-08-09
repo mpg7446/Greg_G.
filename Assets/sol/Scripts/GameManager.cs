@@ -51,6 +51,11 @@ public class GameManager : MonoBehaviour
         PhotonNetwork.CurrentRoom.IsOpen = false;
     }
 
+    public void CloseClient()
+    {
+        ClientManager.Instance.CloseGame();
+    }
+
     [PunRPC] 
     private void RPCStartGame()
     {
