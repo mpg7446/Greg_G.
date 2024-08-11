@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,6 +13,7 @@ public class Item : MonoBehaviour
 
     private Vector3 origin;
     private GameManager gameManager;
+    private PhotonView photonView;
 
     // countdown
     public float countdown;
@@ -53,6 +55,7 @@ public class Item : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         origin = transform.position;
         gameManager = GameObject.FindWithTag("GameController").GetComponent<GameManager>();
+        photonView = gameManager.GetComponent<PhotonView>();
 
         runFromPlayers = gameManager.itemsRunAway;
         enableCountdown = gameManager.enablePickupCountdown;
@@ -72,27 +75,12 @@ public class Item : MonoBehaviour
 
         sliderObj.SetActive(false);
 
-        // Get Visuals Type
-        if (visualType == foodType.RANDOM)
-        {
-            // Select foodType for item 
-            Array values = Enum.GetValues(typeof(foodType));
-            visualType = (foodType)UnityEngine.Random.Range(1, values.Length);
-        }
-
-        // Setup Visual Bobbing
+        // Setup Visuals
         visual = transform.Find("Visuals").gameObject;
         bobbingMiddlePoint = visual.transform.localPosition.y;
         bobbingOffset = UnityEngine.Random.Range(0, 10);
 
-        // Disable visuals that are not equal to the visual type selected by Item script
-        foreach (ItemType visualChild in visual.GetComponentsInChildren<ItemType>())
-        {
-            if (visualChild.foodType != visualType)
-            {
-                Destroy(visualChild.gameObject);
-            }
-        }
+        UpdateVisuals(true);
 
         // player list setup for escaping players
         if (runFromPlayers)
@@ -241,5 +229,43 @@ public class Item : MonoBehaviour
                 }
             }
         }
+    }
+
+    private void UpdateVisuals(bool RPC = false)
+    {
+        // Get Visuals Type
+        if (RPC)
+        {
+            // Select foodType for item 
+            int foodID = (int)visualType;
+            if (visualType == foodType.RANDOM)
+            {
+                Array values = Enum.GetValues(typeof(foodType));
+                foodID = UnityEngine.Random.Range(1, values.Length);
+                visualType = (foodType)foodID;
+            }
+
+            photonView.RPC("UpdateVisuals", RpcTarget.Others, foodID);
+        }
+
+        // Disable visuals that are not equal to the visual type selected by Item script
+        foreach (ItemType visualChild in visual.GetComponentsInChildren<ItemType>())
+        {
+            if (visualChild.foodType == visualType)
+            {
+                visualChild.gameObject.SetActive(true);
+            } else
+            {
+                visualChild.gameObject.SetActive(false);
+            }
+        }
+    }
+
+    [PunRPC]
+    private void UpdateVisuals(int foodID)
+    {
+        Debug.Log("UpdateVisuals[RPC] recieved " +  foodID);
+        visualType = (foodType)foodID;
+        UpdateVisuals(false);
     }
 }
