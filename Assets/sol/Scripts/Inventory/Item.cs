@@ -40,6 +40,14 @@ public class Item : MonoBehaviour
     private double bobbingOffset;
     private double bobbingMiddlePoint;
 
+    [Tooltip("Visual Item Type")] public foodType visualType = foodType.RANDOM;
+    public enum foodType
+    {
+        RANDOM,
+        BURGER,
+        CHEESECAKE
+    }
+
     public void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -64,10 +72,27 @@ public class Item : MonoBehaviour
 
         sliderObj.SetActive(false);
 
-        // visual bobbing setup
+        // Get Visuals Type
+        if (visualType == foodType.RANDOM)
+        {
+            // Select foodType for item 
+            Array values = Enum.GetValues(typeof(foodType));
+            visualType = (foodType)UnityEngine.Random.Range(1, values.Length);
+        }
+
+        // Setup Visual Bobbing
         visual = transform.Find("Visuals").gameObject;
         bobbingMiddlePoint = visual.transform.localPosition.y;
         bobbingOffset = UnityEngine.Random.Range(0, 10);
+
+        // Disable visuals that are not equal to the visual type selected by Item script
+        foreach (ItemType visualChild in visual.GetComponentsInChildren<ItemType>())
+        {
+            if (visualChild.foodType != visualType)
+            {
+                Destroy(visualChild.gameObject);
+            }
+        }
 
         // player list setup for escaping players
         if (runFromPlayers)

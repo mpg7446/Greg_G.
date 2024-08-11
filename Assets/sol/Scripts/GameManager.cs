@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager Instance;
     private PhotonView photonView;
 
     public bool enablePickupCountdown = true;
@@ -20,6 +21,16 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         photonView = GetComponent<PhotonView>();
+
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+
         /* get item goal number thingy
         GameObject[] items = GameObject.FindGameObjectsWithTag("Item");
         maxItems = items.Length;
@@ -43,16 +54,15 @@ public class GameManager : MonoBehaviour
         if (RPC)
         {
             photonView.RPC("RPCStartGame",RpcTarget.Others);
-        } else
-        {
+            PhotonNetwork.CurrentRoom.IsOpen = false;
             SpawnItems();
         }
 
         MenuManager.Instance.OpenMenu("empty");
-        ClientManager.Instance.LoadScene("sol nainofdsi sdfg", "Lobby");
+        ClientManager.Instance.LoadScene("Empty Environment", "Lobby");
         PlayerMovement.Instance.DestroyPlayer();
 
-        PhotonNetwork.CurrentRoom.IsOpen = false;
+        ClientManager.Instance.GameStarted();
     }
 
     private void SpawnItems()
@@ -65,15 +75,16 @@ public class GameManager : MonoBehaviour
             randomizedSpawners.Insert(r, spawner);
         }
 
-        Debug.Log("Original Spawner List");
-        foreach (GameObject spawner in itemSpawners)
-        {
-            Debug.Log(spawner.name);
-        }
-        Debug.Log("Randomized Spawner List");
+
+        // Place items in randomized list
+        int itemCount = 0;
         foreach (GameObject spawner in randomizedSpawners)
         {
-            Debug.Log(spawner.name);
+            if (itemCount < maxItems)
+            {
+                PhotonNetwork.Instantiate("Test Item", spawner.transform.position, Quaternion.identity);
+                itemCount++;
+            }
         }
     }
 
@@ -96,11 +107,14 @@ public class GameManager : MonoBehaviour
         if (RPC)
         {
             photonView.RPC("RPCEndGame", RpcTarget.Others);
+            PhotonNetwork.CurrentRoom.IsOpen = true;
         }
 
         MenuManager.Instance.OpenMenu("Lobby");
         ClientManager.Instance.LoadScene("Lobby", "sol nainofdsi sdfg");
         PlayerMovement.Instance.DestroyPlayer();
+
+        ClientManager.Instance.GameFinished();
     }
 
     [PunRPC] 
