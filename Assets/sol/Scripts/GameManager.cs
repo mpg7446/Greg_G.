@@ -47,11 +47,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void StartGame(bool RPC = false)
+    public void StartGame(bool RPCHost = false)
     {
         Debug.Log("Game Started");
 
-        if (RPC)
+        if (RPCHost)
         {
             photonView.RPC("RPCStartGame",RpcTarget.Others);
             PhotonNetwork.CurrentRoom.IsOpen = false;

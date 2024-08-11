@@ -231,10 +231,10 @@ public class Item : MonoBehaviour
         }
     }
 
-    private void UpdateVisuals(bool RPC = false)
+    private void UpdateVisuals(bool RPCHost = false)
     {
         // Get Visuals Type
-        if (RPC)
+        if (RPCHost)
         {
             // Select foodType for item 
             int foodID = (int)visualType;
