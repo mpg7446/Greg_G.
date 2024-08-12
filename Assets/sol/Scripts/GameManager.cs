@@ -16,6 +16,8 @@ public class GameManager : MonoBehaviour
     public int currentItems;
     public List<GameObject> itemSpawners;
 
+    public Vector3 spawnLocation;
+
     // TESTING ONLY!!
     // DO NOT USE IN FINAL BUILD (for now)
     private void Start()
@@ -63,6 +65,14 @@ public class GameManager : MonoBehaviour
         PlayerMovement.Instance.DestroyPlayer();
 
         ClientManager.Instance.GameStarted();
+        PhotonNetwork.Instantiate("Player", spawnLocation, Quaternion.identity);
+    }
+
+    [PunRPC]
+    private void RPCStartGame()
+    {
+        Debug.Log("Remote user started game!");
+        StartGame();
     }
 
     private void SpawnItems()
@@ -91,13 +101,6 @@ public class GameManager : MonoBehaviour
     public void CloseClient()
     {
         ClientManager.Instance.CloseClient();
-    }
-
-    [PunRPC] 
-    private void RPCStartGame()
-    {
-        Debug.Log("Remote user started game!");
-        StartGame();
     }
 
     public void EndGame(bool RPC = false)

@@ -66,7 +66,6 @@ namespace Photon.Pun.UtilityScripts
         // Information for updating remote player
         private Vector3 correctPlayerPos = Vector3.zero;
         private float sliderValue = 0f;
-        private Item.foodType foodType;
 
         public void Update()
         {

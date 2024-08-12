@@ -12,12 +12,13 @@ GameObject:
   - component: {fileID: 2097821136671768695}
   - component: {fileID: -6271936724257076667}
   - component: {fileID: 3876485237656548015}
-  - component: {fileID: 518067615784010465}
+  - component: {fileID: 6245582689153734870}
+  - component: {fileID: -1643191477205949026}
   - component: {fileID: 385661493273039915}
   - component: {fileID: 2835319333953078350}
   - component: {fileID: 2969266834194631221}
   m_Layer: 3
-  m_Name: Online Menu Player
+  m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -89,7 +90,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movement: {x: 0, y: 0}
   action: 0
---- !u!114 &518067615784010465
+--- !u!114 &6245582689153734870
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -98,7 +99,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 2979831750552114468}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 10c8cee6e8f99654ba6c999c5d88ae86, type: 3}
+  m_Script: {fileID: 11500000, guid: e6197970270028741baaad98a05c89c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemCount: 0
+--- !u!114 &-1643191477205949026
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2979831750552114468}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b02a58df87e0e52469bf6932fdfe4d0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 40
@@ -107,7 +121,7 @@ MonoBehaviour:
   inStack: 0
   stackParent: {fileID: 0}
   stackChild: {fileID: 0}
-  colliderMaxDelay: 15
+  colliderMaxDelay: 25
   weight: 100
   weightMultiplier: 5
   burstMultiplier: 2

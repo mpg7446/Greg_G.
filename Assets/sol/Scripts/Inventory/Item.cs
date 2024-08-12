@@ -55,7 +55,7 @@ public class Item : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         origin = transform.position;
         gameManager = GameObject.FindWithTag("GameController").GetComponent<GameManager>();
-        photonView = gameManager.GetComponent<PhotonView>();
+        photonView = GetComponent<PhotonView>();
 
         runFromPlayers = gameManager.itemsRunAway;
         enableCountdown = gameManager.enablePickupCountdown;

@@ -7,8 +7,8 @@ public class PlayerInventory : MonoBehaviour
 {
     private PhotonView photonView;
     public int itemCount = 0;
-    private GameManager gameManager;
-    private LocalMultiplayerPlayerMovement movement;
+    private PlayerMovement movement;
+    private bool local = true;
 
     private GameObject item;
 
@@ -17,17 +17,11 @@ public class PlayerInventory : MonoBehaviour
         photonView = GetComponent<PhotonView>();
         if (photonView.IsMine)
         {
-            try
-            {
-                gameManager = GameObject.FindWithTag("GameController").GetComponent<GameManager>();
-            }
-            catch { }
-
-            movement = GetComponent<LocalMultiplayerPlayerMovement>();
+            movement = GetComponent<PlayerMovement>();
         }
         else
         {
-            enabled = false;
+            local = false;
         }
     }
 
@@ -54,7 +48,10 @@ public class PlayerInventory : MonoBehaviour
     public void PickupItem(int amount = 1)
     {
         itemCount += amount;
-        gameManager.currentItems += amount;
-        movement.UpdateWeight(amount);
+        GameManager.Instance.currentItems += amount;
+        if (local)
+        {
+            movement.UpdateWeight(amount);
+        }
     }
 }

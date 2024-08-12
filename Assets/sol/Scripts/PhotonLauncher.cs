@@ -95,7 +95,7 @@ public class PhotonLauncher : MonoBehaviourPunCallbacks
         }
 
         // spawn network player
-        SpawnPlayer("Online Menu Player");
+        SpawnPlayer("Menu Player");
     }
 
     public override void OnJoinRoomFailed(short returnCode, string message)
