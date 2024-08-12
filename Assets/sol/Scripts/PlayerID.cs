@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class PlayerID : MonoBehaviour
 {
-    private int id = 0;
+    private int id = -1;
     private PhotonView photonView;
 
     public TextMeshPro text;
@@ -31,7 +31,11 @@ public class PlayerID : MonoBehaviour
         if (photonView.IsMine)
         {
             SetID(PhotonNetwork.LocalPlayer.ActorNumber);
-            photonView.RPC("SetID",RpcTarget.Others, id);
+            photonView.RPC("SetID",RpcTarget.Others, id); // sets ID for all other players in room
+        }
+        else if (id == -1)
+        {
+            Debug.Log("i dont know what to do here, PlayerID hasnt got the correct id set");
         }
     }
 }
