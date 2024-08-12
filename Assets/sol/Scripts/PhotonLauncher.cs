@@ -130,10 +130,10 @@ public class PhotonLauncher : MonoBehaviourPunCallbacks
     private string GenerateRandomName()
     {
         int add = PhotonNetwork.CountOfRooms * 10;
-        string roomID = Random.Range(0, 9) + add.ToString("X");
+        string roomID = Random.Range(11, 99).ToString("X") + add.ToString("X");
 
         add = PhotonNetwork.CountOfPlayers * 10;
-        roomID += Random.Range(0, 9) + add.ToString("X");
+        roomID += Random.Range(0, 9).ToString("X") + add.ToString("X");
 
         return roomID;
     }

@@ -6,12 +6,15 @@ public class MenuPlayerMovement : PlayerMovement
 {
     protected override void Action()
     {
-        if (base.inStack)
+        /*if (base.inStack)
         {
             base.LeaveStack();
-        } else
+        } else*/
         {
             Debug.Log("Action pressed and not in stack, possibly have this change player customization??");
         }
     }
+
+    protected override void OnCollisionEnter2D(Collision2D collision) {}
+    protected override void OnCollisionExit2D(Collision2D collision) {}
 }

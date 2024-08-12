@@ -33,10 +33,21 @@ public class PlayerID : MonoBehaviour
             SetID(PhotonNetwork.LocalPlayer.ActorNumber);
             photonView.RPC("SetID",RpcTarget.Others, id); // sets ID for all other players in room
         }
-        else if (id == -1)
+        else
         {
             Debug.Log("i dont know what to do here, PlayerID hasnt got the correct id set");
             // this should probably get the ID from the host (or just another player i guess)
+            photonView.RPC("AskForID", RpcTarget.Others);
+        }
+    }
+
+    [PunRPC]
+    public void AskForID()
+    {
+        if (photonView.IsMine)
+        {
+            SetID(PhotonNetwork.LocalPlayer.ActorNumber);
+            photonView.RPC("SetID", RpcTarget.Others, id); // sets ID for all other players in room
         }
     }
 }

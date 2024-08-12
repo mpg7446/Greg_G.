@@ -11,6 +11,7 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody2D rb;
     private InputManager input;
     protected PlayerID playerID;
+    private SpriteRenderer spriteRenderer;
 
     // movement settings
     public float speed = 40;
@@ -64,6 +65,7 @@ public class PlayerMovement : MonoBehaviour
         boxCollider = GetComponent<BoxCollider2D>();
         circleCollider = GetComponent<CircleCollider2D>();
         circleCollider.enabled = false;
+        spriteRenderer = GetComponentInChildren<SpriteRenderer>();
 
         burstMax = burstTimer;
     }
@@ -82,6 +84,7 @@ public class PlayerMovement : MonoBehaviour
         if (!inStack)
         {
             StandardMovement();
+            UpdateVisuals();
         } else
         {
             StackMovement();
@@ -101,7 +104,7 @@ public class PlayerMovement : MonoBehaviour
             colliderDelay--;
         }
     }
-    public void OnCollisionEnter2D(Collision2D collision)
+    protected virtual void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Player")) // colliding with player
         {
@@ -124,7 +127,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    public void OnCollisionExit2D(Collision2D collision)
+    protected virtual void OnCollisionExit2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Player")) // check if not colliding with player
         {
@@ -401,6 +404,18 @@ public class PlayerMovement : MonoBehaviour
     public void DestroyPlayer()
     {
         PhotonNetwork.Destroy(gameObject);
+    }
+
+    private void UpdateVisuals()
+    {
+        if (input.movement.x > 0)
+        {
+            spriteRenderer.flipX = true;
+        } 
+        else if (input.movement.x < 0)
+        {
+            spriteRenderer.flipX = false;
+        }
     }
 
 }

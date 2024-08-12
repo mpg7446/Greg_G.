@@ -48,7 +48,7 @@ public class PlayerInventory : MonoBehaviour
     public void PickupItem(int amount = 1)
     {
         itemCount += amount;
-        GameManager.Instance.currentItems += amount;
+        GameManager.Instance.PickupItem();
         if (local)
         {
             movement.UpdateWeight(amount);

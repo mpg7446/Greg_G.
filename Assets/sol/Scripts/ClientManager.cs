@@ -13,7 +13,7 @@ public class ClientManager : MonoBehaviour
     public float trackingDistance;
     [Tooltip("Time it takes to snap to camera position (in seconds??)")] public float trackingSpeed;
 
-    private bool gameRunning = false;
+    public bool gameRunning = false;
 
     private void Start()
     {

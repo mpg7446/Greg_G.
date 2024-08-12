@@ -49,6 +49,7 @@ public class GameManager : MonoBehaviour
         if (currentItems >= maxItems)
         {
             Debug.Log("GAME ENDED GOAL WOOOOHHHH YEAHH BABYYYYYYY");
+            EndGame();
         }
     }
 
@@ -86,7 +87,7 @@ public class GameManager : MonoBehaviour
         List<GameObject> randomizedSpawners = new List<GameObject>();
         foreach (GameObject spawner in itemSpawners)
         {
-            int r = UnityEngine.Random.Range(0, randomizedSpawners.Count);
+            int r = Random.Range(0, randomizedSpawners.Count);
             randomizedSpawners.Insert(r, spawner);
         }
 
@@ -119,7 +120,7 @@ public class GameManager : MonoBehaviour
         }
 
         MenuManager.Instance.OpenMenu("Lobby");
-        ClientManager.Instance.LoadScene("Lobby", "sol nainofdsi sdfg");
+        ClientManager.Instance.LoadScene("Lobby", "Empty Environment");
         PlayerMovement.Instance.DestroyPlayer();
 
         ClientManager.Instance.GameFinished();
@@ -134,7 +135,7 @@ public class GameManager : MonoBehaviour
 
     public void PlayerLeft(Player player)
     {
-        if (playerCount <= 1)
+        if (playerCount <= 1 && ClientManager.Instance.gameRunning)
         {
             EndGame();
         }

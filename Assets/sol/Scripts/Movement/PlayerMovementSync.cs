@@ -22,6 +22,7 @@ namespace Photon.Pun.UtilityScripts
     public class PlayerMovementSync : Photon.Pun.MonoBehaviourPun, IPunObservable
     {
         private Rigidbody2D rb;
+        private SpriteRenderer sprite;
         public float SmoothingDelay = 5;
         public void Awake()
         {
@@ -32,6 +33,7 @@ namespace Photon.Pun.UtilityScripts
                 {
                     observed = true;
                     rb = GetComponent<Rigidbody2D>();
+                    sprite = GetComponentInChildren<SpriteRenderer>();
                     break;
                 }
             }
@@ -48,6 +50,7 @@ namespace Photon.Pun.UtilityScripts
                 //We own this player: send the others our data
                 stream.SendNext(transform.position);
                 stream.SendNext(transform.localScale);
+                stream.SendNext(sprite.flipX);
                 stream.SendNext(rb.velocity);
             }
             else
@@ -55,6 +58,7 @@ namespace Photon.Pun.UtilityScripts
                 //Network player, receive data
                 correctPlayerPos = (Vector3)stream.ReceiveNext();
                 correctPlayerScale = (Vector3)stream.ReceiveNext();
+                spriteFlip = (bool)stream.ReceiveNext();
                 correctVelocity = (Vector2)stream.ReceiveNext();
             }
         }
@@ -62,6 +66,7 @@ namespace Photon.Pun.UtilityScripts
         // Information for updating remote player
         private Vector3 correctPlayerPos = Vector3.zero;
         private Vector3 correctPlayerScale = Vector3.zero;
+        private bool spriteFlip = false;
         private Vector2 correctVelocity;
 
         public void Update()
@@ -71,6 +76,7 @@ namespace Photon.Pun.UtilityScripts
                 // movement
                 transform.position = Vector3.Lerp(transform.position, correctPlayerPos, Time.deltaTime * this.SmoothingDelay);
                 transform.localScale = correctPlayerScale;
+                sprite.flipX = spriteFlip;
                 rb.velocity = correctVelocity;
             }
         }
