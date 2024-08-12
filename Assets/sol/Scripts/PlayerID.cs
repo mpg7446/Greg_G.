@@ -36,6 +36,7 @@ public class PlayerID : MonoBehaviour
         else if (id == -1)
         {
             Debug.Log("i dont know what to do here, PlayerID hasnt got the correct id set");
+            // this should probably get the ID from the host (or just another player i guess)
         }
     }
 }

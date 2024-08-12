@@ -102,12 +102,12 @@ public class PhotonLauncher : MonoBehaviourPunCallbacks
         SpawnPlayer("Menu Player");
     }
 
-    public override void OnJoinRoomFailed(short returnCode, string message)
+    public override void OnJoinRoomFailed(short returnCode, string message) // Failed to connect to room, probably doesnt exist
     {
         MenuManager.Instance.OpenMenu("joinRooms");
-        roomNameInput.text = null;
+        roomNameInput.text = "lobby not dounf";
     }
-    public override void OnLeftRoom()
+    public override void OnLeftRoom() // Return to menus when leaving room
     {
         MenuManager.Instance.OpenMenu("main");
         if (PhotonNetwork.CurrentRoom == null)
@@ -135,10 +135,10 @@ public class PhotonLauncher : MonoBehaviourPunCallbacks
 
     public void SpawnPlayer(string playerType)
     {
-        GameObject instance = PhotonNetwork.Instantiate(playerType, Vector3.zero, Quaternion.identity);
+        PhotonNetwork.Instantiate(playerType, Vector3.zero, Quaternion.identity);
     }
     public void SpawnPlayer(string playerType, Vector3 position)
     {
-        GameObject instance = PhotonNetwork.Instantiate(playerType, position, Quaternion.identity);
+        PhotonNetwork.Instantiate(playerType, position, Quaternion.identity);
     }
 }
