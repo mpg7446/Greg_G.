@@ -47,6 +47,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Start()
     {
+        ClientManager.Instance.AddCameraTracker(gameObject);
         playerID = GetComponent<PlayerID>();
         photonView = GetComponent<PhotonView>();
         if (photonView.IsMine)

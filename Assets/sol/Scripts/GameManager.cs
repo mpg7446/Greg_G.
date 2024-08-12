@@ -1,4 +1,5 @@
 using Photon.Pun;
+using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,6 +11,8 @@ public class GameManager : MonoBehaviour
 
     public bool enablePickupCountdown = true;
     public bool itemsRunAway = false;
+
+    public int playerCount = 0;
 
     // item counts
     public int maxItems;
@@ -66,6 +69,8 @@ public class GameManager : MonoBehaviour
 
         ClientManager.Instance.GameStarted();
         PhotonLauncher.Instance.SpawnPlayer("Player", spawnLocation);
+
+        playerCount = PhotonNetwork.CurrentRoom.PlayerCount;
     }
 
     [PunRPC]
@@ -125,5 +130,13 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("Remote user ended game!");
         EndGame();
+    }
+
+    public void PlayerLeft(Player player)
+    {
+        if (playerCount <= 1)
+        {
+            EndGame();
+        }
     }
 }

@@ -115,6 +115,11 @@ public class PhotonLauncher : MonoBehaviourPunCallbacks
             Debug.Log("Photon: Successfully Left Room");
         }
     }
+    public override void OnPlayerLeftRoom(Player otherPlayer)
+    {
+        Debug.Log($"Player {otherPlayer.ActorNumber} left game");
+        GameManager.Instance.PlayerLeft(otherPlayer);
+    }
 
     public override void OnCreateRoomFailed(short returnCode, string message) // If joined room fails
     {

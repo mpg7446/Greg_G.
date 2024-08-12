@@ -7,7 +7,11 @@ public class ClientManager : MonoBehaviour
 {
     public static ClientManager Instance;
     public GameObject cameraObject;
+
     private Vector3 cameraDefaultPos;
+    private List<GameObject> cameraTrackers = new List<GameObject>();
+    public float trackingDistance;
+    [Tooltip("Time it takes to snap to camera position (in seconds??)")] public float trackingSpeed;
 
     private bool gameRunning = false;
 
@@ -20,19 +24,35 @@ public class ClientManager : MonoBehaviour
 
     private void Update()
     {
-        if (gameRunning && PlayerMovement.Instance != null)
+        if (gameRunning)
         {
-            UpdateCamera(false, PlayerMovement.Instance.transform.position);
+            // Clear null trackers
+            ClearEmptyTrackers();
+
+            // Change tracking depending on tracker visibility
+            if (TrackersVisible(PlayerMovement.Instance.gameObject, cameraTrackers))
+            {
+                // Follow all trackers
+                GameObject[] trackers = cameraTrackers.ToArray();
+                UpdateCamera(false, trackers);
+            } else
+            {
+                // Follow player only
+                UpdateCamera(false, PlayerMovement.Instance.gameObject.transform.position);
+            }
         } else
         {
-            cameraObject.transform.position = cameraDefaultPos;
+            // Return to default camera position (for menus)
+            cameraObject.transform.position = Vector3.Lerp(cameraObject.transform.position, cameraDefaultPos, trackingSpeed * Time.fixedDeltaTime);
         }
     }
 
+    // Load specific Scene
     public void LoadScene(string scene)
     {
         SceneManager.LoadScene(scene, LoadSceneMode.Additive);
     }
+    // Load specific scene and close all specified scenes
     public void LoadScene(string scene, params string[] closeScenes)
     {
         LoadScene(scene);
@@ -43,40 +63,94 @@ public class ClientManager : MonoBehaviour
         }
     }
 
+    // Close specified scene
     public void CloseScene(string scene)
     {
         SceneManager.UnloadSceneAsync(scene);
     }
 
+    // Close client
     public void CloseClient()
     {
         Application.Quit();
     }
 
-    public void UpdateCamera(bool intense, params Vector3[] playersPos)
+    // Update camera position
+    private void UpdateCamera(bool intense, params Vector3[] trackersPos)
     {
-        // Update Camera Position
+        // Get average tracker location
         Vector3 average = Vector3.zero;
-
-        foreach (Vector3 player in playersPos)
+        foreach (Vector3 player in trackersPos)
         {
             average += player;
         }
 
-        average /= playersPos.Length;
-        average.z = cameraObject.transform.position.z;
+        average /= trackersPos.Length;
+        average.z = cameraObject.transform.position.z; // dont need to change position.z from tracker positions
 
-        cameraObject.transform.position = average;
+        // Lerp to new averaged location
+        cameraObject.transform.position = Vector3.Lerp(cameraObject.transform.position, average, trackingSpeed * Time.fixedDeltaTime);
 
-        // Update Camera Zoom
+        // TODO - Update Camera Zoom
+    }
+
+    // Update camera position with GameObject[] input
+    private void UpdateCamera(bool intense, params GameObject[] trackers)
+    {
+        // Convert GameObject array to transform.position array
+        Vector3[] trackersPos = new Vector3[trackers.Length];
+
+        int i = 0;
+        foreach (GameObject tracker in trackers)
+        {
+            trackersPos[i] = tracker.transform.position;
+            i++;
+        }
+
+        // Update camera with new transform.position array
+        UpdateCamera(intense, trackersPos);
+    }
+
+    // Get trackers visibility
+    // based off of trackingDistance
+    private bool TrackersVisible(GameObject localTracker, List<GameObject> trackers)
+    {
+        bool playersVisible = false;
+        foreach (GameObject tracker in trackers)
+        {
+            if (tracker != localTracker && Vector3.Distance(localTracker.transform.position, tracker.transform.position) < trackingDistance)
+            {
+                playersVisible = true;
+            }
+        }
+
+        return playersVisible;
+    }
+
+    // Clear all instances of null in cameraTrackers
+    private void ClearEmptyTrackers()
+    {
+        foreach (GameObject tracker in cameraTrackers)
+        {
+            if (tracker == null)
+            {
+                cameraTrackers.Remove(tracker);
+            }
+        }
     }
 
     public void GameStarted()
     {
         gameRunning = true;
+        cameraTrackers = new List<GameObject>();
     }
     public void GameFinished()
     {
         gameRunning = false;
+    }
+
+    public void AddCameraTracker(GameObject tracker)
+    {
+        cameraTrackers.Add(tracker);
     }
 }

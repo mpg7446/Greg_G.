@@ -153,6 +153,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraObject: {fileID: 1144056218}
+  trackingDistance: 12
+  trackingSpeed: 0.2
 --- !u!4 &302872599
 Transform:
   m_ObjectHideFlags: 0

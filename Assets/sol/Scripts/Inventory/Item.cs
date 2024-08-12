@@ -128,6 +128,8 @@ public class Item : MonoBehaviour
     // FixedUpdate checks and updates countdown values, as well as applying
     public void FixedUpdate()
     {
+        ClearEmpty();
+
         // check if players are touching
         if (!touching && players.Count >= 1)
         {
@@ -165,6 +167,17 @@ public class Item : MonoBehaviour
         if (runFromPlayers)
         {
             RunFromPlayers();
+        }
+    }
+
+    public void ClearEmpty()
+    {
+        foreach (GameObject player in players)
+        {
+            if (player == null)
+            {
+                players.Remove(player);
+            }
         }
     }
 
