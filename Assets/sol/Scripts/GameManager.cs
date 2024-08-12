@@ -65,7 +65,7 @@ public class GameManager : MonoBehaviour
         PlayerMovement.Instance.DestroyPlayer();
 
         ClientManager.Instance.GameStarted();
-        PhotonNetwork.Instantiate("Player", spawnLocation, Quaternion.identity);
+        PhotonLauncher.Instance.SpawnPlayer("Player", spawnLocation);
     }
 
     [PunRPC]

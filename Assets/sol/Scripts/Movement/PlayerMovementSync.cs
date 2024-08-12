@@ -70,7 +70,7 @@ namespace Photon.Pun.UtilityScripts
             {
                 // movement
                 transform.position = Vector3.Lerp(transform.position, correctPlayerPos, Time.deltaTime * this.SmoothingDelay);
-                transform.localScale = Vector3.Lerp(transform.localScale, correctPlayerScale, Time.deltaTime * this.SmoothingDelay);
+                transform.localScale = correctPlayerScale;
                 rb.velocity = correctVelocity;
             }
         }

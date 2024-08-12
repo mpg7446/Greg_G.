@@ -10,10 +10,14 @@ using WebSocketSharp;
 
 public class PhotonLauncher : MonoBehaviourPunCallbacks
 {
+    public static PhotonLauncher Instance;
+
     [SerializeField] private TMP_InputField roomNameInput;
     [SerializeField] private List<TMP_Text> roomNameDisplays;
     void Start()
     {
+        Instance = this;
+
         Debug.Log("Photon: Connecting to Master");
         PhotonNetwork.ConnectUsingSettings();
 
@@ -47,7 +51,7 @@ public class PhotonLauncher : MonoBehaviourPunCallbacks
     }
     public void CreateRoom() // Create room with generated room name
     {
-        PhotonNetwork.CreateRoom(GenerateRandomName(7, 3)); // Create room with new hex code as room name
+        PhotonNetwork.CreateRoom(GenerateRandomName()); // Create room with new hex code as room name
         MenuManager.Instance.OpenMenu("loading");
     }
 
@@ -118,16 +122,23 @@ public class PhotonLauncher : MonoBehaviourPunCallbacks
         MenuManager.Instance.OpenMenu("main");
     }
 
-    private string GenerateRandomName(int mult, int add)
+    private string GenerateRandomName()
     {
-        int roomID = mult * (PhotonNetwork.CountOfRooms + add);
+        int add = PhotonNetwork.CountOfRooms * 10;
+        string roomID = Random.Range(0, 9) + add.ToString("X");
 
-        return roomID.ToString("X");
+        add = PhotonNetwork.CountOfPlayers * 10;
+        roomID += Random.Range(0, 9) + add.ToString("X");
+
+        return roomID;
     }
 
     public void SpawnPlayer(string playerType)
     {
         GameObject instance = PhotonNetwork.Instantiate(playerType, Vector3.zero, Quaternion.identity);
-        instance.name += " " + (PhotonNetwork.PlayerList.Length - 1);
+    }
+    public void SpawnPlayer(string playerType, Vector3 position)
+    {
+        GameObject instance = PhotonNetwork.Instantiate(playerType, position, Quaternion.identity);
     }
 }
