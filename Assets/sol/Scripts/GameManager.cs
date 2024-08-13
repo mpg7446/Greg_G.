@@ -119,7 +119,7 @@ public class GameManager : MonoBehaviour
             PhotonNetwork.CurrentRoom.IsOpen = true;
         }
 
-        MenuManager.Instance.OpenMenu("Lobby");
+        MenuManager.Instance.OpenMenu("lobby");
         ClientManager.Instance.LoadScene("Lobby", "Empty Environment");
         PlayerMovement.Instance.DestroyPlayer();
 
