@@ -116,6 +116,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10c8cee6e8f99654ba6c999c5d88ae86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  photonView: {fileID: 0}
   speed: 40
   maxSpeed: 300
   crouchMultiplier: 0.2

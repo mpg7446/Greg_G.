@@ -7,7 +7,7 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     public static PlayerMovement Instance = null;
-    protected PhotonView photonView;
+    public PhotonView photonView;
     private Rigidbody2D rb;
     private InputManager input;
     protected PlayerID playerID;
