@@ -15,6 +15,8 @@ public class ClientManager : MonoBehaviour
 
     public bool gameRunning = false;
 
+    // TODO - player cosmetics storage
+
     private void Start()
     {
         Instance = this;

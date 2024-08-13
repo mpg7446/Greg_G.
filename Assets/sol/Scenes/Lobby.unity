@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 24464661}
   - component: {fileID: 24464660}
   - component: {fileID: 24464659}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Environment
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -264,7 +264,7 @@ GameObject:
   - component: {fileID: 1129860232}
   - component: {fileID: 1129860231}
   - component: {fileID: 1129860230}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Environment (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -394,7 +394,7 @@ GameObject:
   - component: {fileID: 1142222661}
   - component: {fileID: 1142222660}
   - component: {fileID: 1142222659}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Environment (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

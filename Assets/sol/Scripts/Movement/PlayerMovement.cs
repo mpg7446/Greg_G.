@@ -19,6 +19,9 @@ public class PlayerMovement : MonoBehaviour
     public float crouchMultiplier = 0.2f;
     private float moving = 0;
 
+    public float groundDistance = 0.2f;
+    public float wallDistance;
+
     // action settings
     private bool holdingAction = false;
 
@@ -45,6 +48,11 @@ public class PlayerMovement : MonoBehaviour
     // jump settings
     private bool jumped = false;
     public float jumpHeight = 4.75f;
+
+    // DEBUG
+    //public bool isGrounded;
+    //public bool isAgainstWall;
+    public LayerMask layerMask;
 
     private void Start()
     {
@@ -140,7 +148,7 @@ public class PlayerMovement : MonoBehaviour
     {
         SwitchCollider(false);
         // movement inputs
-        if (input.movement.x != 0)
+        if (input.movement.x != 0 && !IsAgainstWall())
         {
             // acceleration
             moving += speed * input.movement.x;
@@ -192,7 +200,7 @@ public class PlayerMovement : MonoBehaviour
         finalSpeed *= Crouch();
 
         // jump
-        if (!jumped && input.movement.y > 0 && rb.velocity.y == 0)
+        if (!jumped && input.movement.y > 0 && IsGrounded())
         {
             Jump();
         }
@@ -209,6 +217,7 @@ public class PlayerMovement : MonoBehaviour
         SwitchCollider(true);
         rb.velocity = Vector3.up;
     }
+
     private void Jump()
     {
         jumped = true;
@@ -240,7 +249,37 @@ public class PlayerMovement : MonoBehaviour
             LeaveStack();
         }
     }
+    
+    protected bool IsGrounded()
+    {
+        Debug.DrawRay(transform.position, Vector2.down * groundDistance, Color.yellow);
 
+        if (Physics2D.Raycast(transform.position, Vector2.down, groundDistance, layerMask))
+        {
+            return true;
+        }
+        
+        return false;
+    }
+
+    protected bool IsAgainstWall()
+    {
+        /*
+        if (!IsGrounded() && input.movement.y == 0 && input.movement.x != 0 && rb.velocity.x == 0)
+            return true;
+
+        return false;*/
+
+        Debug.DrawRay(transform.position, (Vector2.right * input.movement.x) * wallDistance, Color.red);
+        if (Physics2D.Raycast(transform.position, Vector2.right * input.movement.x, wallDistance, layerMask))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    #region Weight and Burst Multipliers
     // Weight and Burst Multipliers
     public void UpdateWeight(int add)
     {
@@ -257,6 +296,7 @@ public class PlayerMovement : MonoBehaviour
             return weight / 100;
         }
     }
+    #endregion
 
     // Player Stacking
     protected void EnterStackAbove(GameObject parent)

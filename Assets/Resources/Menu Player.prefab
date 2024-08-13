@@ -120,6 +120,8 @@ MonoBehaviour:
   speed: 40
   maxSpeed: 300
   crouchMultiplier: 0.2
+  groundDistance: 0.7
+  wallDistance: 0.7
   inStack: 0
   stackParent: {fileID: 0}
   stackChild: {fileID: 0}
@@ -129,6 +131,9 @@ MonoBehaviour:
   burstMultiplier: 2
   burstTimer: 10
   jumpHeight: 4.75
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 128
 --- !u!61 &385661493273039915
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -25,7 +25,7 @@ public class enemy : MonoBehaviour
         rb.AddForce(new Vector3(movementSpeed * Time.fixedDeltaTime, 0, 0), ForceMode2D.Impulse);
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
         GameObject player = collision.gameObject;
         if (player.CompareTag("Player") && player.GetComponent<PlayerMovement>().photonView.IsMine)
@@ -39,7 +39,7 @@ public class enemy : MonoBehaviour
         }
     }
 
-    private void OnCollisionExit2D(Collision2D collision)
+    private void OnTriggerExit2D(Collider2D collision)
     {
 
     }

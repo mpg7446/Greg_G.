@@ -89,7 +89,7 @@ public class PhotonLauncher : MonoBehaviourPunCallbacks
     {
         Debug.Log("Photon: Successfully Joined Room " + PhotonNetwork.CurrentRoom.Name);
 
-        MenuManager.Instance.OpenMenu("room");
+        MenuManager.Instance.OpenMenu("lobby");
         ClientManager.Instance.LoadScene("Lobby");
         
         // update room code visuals

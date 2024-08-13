@@ -18,6 +18,7 @@ GameObject:
   - component: {fileID: 385661493273039915}
   - component: {fileID: 2835319333953078350}
   - component: {fileID: 2969266834194631221}
+  - component: {fileID: -3340244296570058213}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -134,6 +135,8 @@ MonoBehaviour:
   speed: 40
   maxSpeed: 300
   crouchMultiplier: 0.2
+  groundDistance: 0.7
+  wallDistance: 0.7
   inStack: 0
   stackParent: {fileID: 0}
   stackChild: {fileID: 0}
@@ -143,6 +146,9 @@ MonoBehaviour:
   burstMultiplier: 2
   burstTimer: 10
   jumpHeight: 4.75
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 128
 --- !u!61 &385661493273039915
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -250,6 +256,27 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!231 &-3340244296570058213
+SpringJoint2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2979831750552114468}
+  m_Enabled: 1
+  serializedVersion: 4
+  m_EnableCollision: 0
+  m_ConnectedRigidBody: {fileID: 0}
+  m_BreakForce: Infinity
+  m_BreakTorque: Infinity
+  m_BreakAction: 3
+  m_AutoConfigureConnectedAnchor: 0
+  m_Anchor: {x: 0, y: 0}
+  m_ConnectedAnchor: {x: 0, y: 0}
+  m_AutoConfigureDistance: 1
+  m_Distance: 1
+  m_DampingRatio: 0
+  m_Frequency: 1
 --- !u!1 &4660260754982817368
 GameObject:
   m_ObjectHideFlags: 0
