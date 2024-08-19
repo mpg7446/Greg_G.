@@ -7,6 +7,9 @@ public class ClientManager : MonoBehaviour
 {
     public static ClientManager Instance;
     public GameObject cameraObject;
+    private float defaultFOV;
+
+    [SerializeField] private bool limitFramerate = false;
 
     private Vector3 cameraDefaultPos;
     private List<GameObject> cameraTrackers = new List<GameObject>();
@@ -15,13 +18,21 @@ public class ClientManager : MonoBehaviour
 
     public bool gameRunning = false;
 
-    // TODO - player cosmetics storage
+    // TODO - player visuals storage
 
     private void Start()
     {
         Instance = this;
-        cameraDefaultPos = cameraObject.transform.position;
         LoadScene("testing menu");
+
+        cameraDefaultPos = cameraObject.transform.position;
+        defaultFOV = cameraObject.GetComponent<Camera>().fieldOfView;
+
+        if (limitFramerate)
+        {
+            QualitySettings.vSyncCount = 0;
+            Application.targetFrameRate = 50;
+        }
     }
 
     private void Update()
@@ -36,11 +47,11 @@ public class ClientManager : MonoBehaviour
             {
                 // Follow all trackers
                 GameObject[] trackers = cameraTrackers.ToArray();
-                UpdateCamera(false, trackers);
+                UpdateCamera(PlayerMovement.Instance.IsMoving, trackers);
             } else
             {
                 // Follow player only
-                UpdateCamera(false, PlayerMovement.Instance.gameObject.transform.position);
+                UpdateCamera(PlayerMovement.Instance.IsMoving, PlayerMovement.Instance.gameObject.transform.position);
             }
         } else
         {
@@ -49,11 +60,13 @@ public class ClientManager : MonoBehaviour
         }
     }
 
+    #region Scene Management
     // Load specific Scene
     public void LoadScene(string scene)
     {
         SceneManager.LoadScene(scene, LoadSceneMode.Additive);
     }
+
     // Load specific scene and close all specified scenes
     public void LoadScene(string scene, params string[] closeScenes)
     {
@@ -70,13 +83,9 @@ public class ClientManager : MonoBehaviour
     {
         SceneManager.UnloadSceneAsync(scene);
     }
+    #endregion
 
-    // Close client
-    public void CloseClient()
-    {
-        Application.Quit();
-    }
-
+    #region Camera Position
     // Update camera position
     private void UpdateCamera(bool intense, params Vector3[] trackersPos)
     {
@@ -91,9 +100,18 @@ public class ClientManager : MonoBehaviour
         average.z = cameraObject.transform.position.z; // dont need to change position.z from tracker positions
 
         // Lerp to new averaged location
-        cameraObject.transform.position = Vector3.Lerp(cameraObject.transform.position, average, trackingSpeed * Time.fixedDeltaTime);
+        cameraObject.transform.position = Vector3.Lerp(cameraObject.transform.position, average, trackingSpeed * Time.deltaTime);
 
         // TODO - Update Camera Zoom
+
+        float newFOV = defaultFOV;
+
+        if (intense)
+        {
+            newFOV *= 0.5f;
+        }
+
+        cameraObject.GetComponent<Camera>().fieldOfView = newFOV;
     }
 
     // Update camera position with GameObject[] input
@@ -112,7 +130,9 @@ public class ClientManager : MonoBehaviour
         // Update camera with new transform.position array
         UpdateCamera(intense, trackersPos);
     }
+#endregion
 
+    #region Camera Trackers
     // Get trackers visibility
     // based off of trackingDistance
     private bool TrackersVisible(GameObject localTracker, List<GameObject> trackers)
@@ -141,6 +161,12 @@ public class ClientManager : MonoBehaviour
         }
     }
 
+    public void AddCameraTracker(GameObject tracker)
+    {
+        cameraTrackers.Add(tracker);
+    }
+#endregion
+
     public void GameStarted()
     {
         gameRunning = true;
@@ -151,8 +177,9 @@ public class ClientManager : MonoBehaviour
         gameRunning = false;
     }
 
-    public void AddCameraTracker(GameObject tracker)
+    // Close client
+    public void CloseClient()
     {
-        cameraTrackers.Add(tracker);
+        Application.Quit();
     }
 }

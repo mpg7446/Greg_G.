@@ -22,6 +22,12 @@ public class PlayerMovement : MonoBehaviour
     public float groundDistance = 0.2f;
     public float wallDistance;
 
+    public bool IsMoving
+    {
+        get { return input.movement.x != 0; }
+        protected set { }
+    }
+
     // action settings
     private bool holdingAction = false;
 
@@ -79,14 +85,6 @@ public class PlayerMovement : MonoBehaviour
         burstMax = burstTimer;
     }
 
-    private void OnDestroy()
-    {
-        if (enabled)
-        {
-            Debug.Log("Player Movement: closing movement script");
-        }
-    }
-
     // movement - on physics update
     public void FixedUpdate()
     {
@@ -113,6 +111,8 @@ public class PlayerMovement : MonoBehaviour
             colliderDelay--;
         }
     }
+
+    #region Collisions
     protected virtual void OnCollisionEnter2D(Collision2D collision)
     {
         if (photonView.IsMine && collision.gameObject.CompareTag("Player")) // colliding with player
@@ -144,7 +144,28 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    // Movement & Action Inputs
+    // Colliders
+    private void SwitchCollider()
+    {
+        boxCollider.enabled = !boxCollider.enabled;
+        circleCollider.enabled = !circleCollider.enabled;
+    }
+    protected void SwitchCollider(bool enabled)
+    {
+        if (enabled)
+        {
+            boxCollider.enabled = false;
+            circleCollider.enabled = true;
+        }
+        else
+        {
+            boxCollider.enabled = true;
+            circleCollider.enabled = false;
+        }
+    }
+    #endregion
+
+    #region Movement & Actions
     private void StandardMovement() // for movement seperate from player stack
     {
         SwitchCollider(false);
@@ -250,7 +271,9 @@ public class PlayerMovement : MonoBehaviour
             LeaveStack();
         }
     }
-    
+    #endregion
+
+    #region Position Checks
     protected bool IsGrounded()
     {
         Debug.DrawRay(transform.position, Vector2.down * groundDistance, Color.yellow);
@@ -279,6 +302,7 @@ public class PlayerMovement : MonoBehaviour
 
         return false;
     }
+    #endregion
 
     #region Weight and Burst Multipliers
     // Weight and Burst Multipliers
@@ -299,7 +323,8 @@ public class PlayerMovement : MonoBehaviour
     }
     #endregion
 
-    // Player Stacking
+    #region Player Stacking
+    #region Enter Stack
     protected void EnterStackAbove(GameObject parent)
     {
         stackParent = parent;
@@ -308,6 +333,7 @@ public class PlayerMovement : MonoBehaviour
         transform.position = parent.transform.position + new Vector3(0, parent.GetComponent<BoxCollider2D>().size.y);
         photonView.RPC("RPCEnterStackBelow", RpcTarget.Others, parent.name, name);
     }
+
     [PunRPC]
     public void RPCEnterStackBelow(string target, string sender) // TODO DOESNT WORK WHY DOES THIS CALL FOR LOCAL PLAYER TOO???
     {
@@ -320,12 +346,14 @@ public class PlayerMovement : MonoBehaviour
             Debug.Log("Entered Stack Below over RPC for " + name);
         }
     }
+
     protected void EnterStackBelow(GameObject child)
     {
         stackChild = child;
         inStack = true;
         photonView.RPC("RPCEnterStackAbove", RpcTarget.Others, child.GetComponent<PlayerID>().GetID(), playerID.GetID());
     }
+
     [PunRPC]
     public void RPCEnterStackAbove(int targetID, int senderID) // TODO DOESNT WORK WHY DOES THIS CALL FOR LOCAL PLAYER TOO???
     {
@@ -349,7 +377,9 @@ public class PlayerMovement : MonoBehaviour
             Debug.Log("Entered Stack Above over RPC for " + playerID.GetID());
         }
     }
+    #endregion
 
+    #region Leave Stack
     // Leave stack
     protected void LeaveStack()
     {
@@ -385,6 +415,7 @@ public class PlayerMovement : MonoBehaviour
             LeaveStack(GameObject.Find(sender));
         }
     }
+
     protected void LeaveStack(GameObject player) // PLEASE FOR THE LOVE OF GOD FIX THIS THIS IS A NIGHTMARE PLEASE GOD HELP 
     {
         if (stackChild == player)
@@ -402,6 +433,7 @@ public class PlayerMovement : MonoBehaviour
             colliderDelay = colliderMaxDelay;
         }
     }
+    #endregion
 
     // Stack syncing
     [PunRPC]
@@ -413,6 +445,7 @@ public class PlayerMovement : MonoBehaviour
         }
         return null;
     }
+
     [PunRPC]
     public string GetStackChild(string target)
     {
@@ -422,31 +455,9 @@ public class PlayerMovement : MonoBehaviour
         }
         return null;
     }
+    #endregion
 
-    // Colliders
-    private void SwitchCollider()
-    {
-        boxCollider.enabled = !boxCollider.enabled;
-        circleCollider.enabled = !circleCollider.enabled;
-    }
-    protected void SwitchCollider(bool enabled)
-    {
-        if (enabled)
-        {
-            boxCollider.enabled = false;
-            circleCollider.enabled = true;
-        } else
-        {
-            boxCollider.enabled = true;
-            circleCollider.enabled = false;
-        }
-    }
-
-    public void DestroyPlayer()
-    {
-        PhotonNetwork.Destroy(gameObject);
-    }
-
+    #region Visuals // Should probably update to seperate script once visuals become more complicated
     private void UpdateVisuals()
     {
         if (input.movement.x > 0)
@@ -458,5 +469,20 @@ public class PlayerMovement : MonoBehaviour
             spriteRenderer.flipX = false;
         }
     }
+    #endregion
 
+    #region Destroy Player
+    public void DestroyPlayer()
+    {
+        PhotonNetwork.Destroy(gameObject);
+    }
+
+    private void OnDestroy()
+    {
+        if (enabled)
+        {
+            Debug.Log("Player Movement: closing movement script");
+        }
+    }
+    #endregion
 }
