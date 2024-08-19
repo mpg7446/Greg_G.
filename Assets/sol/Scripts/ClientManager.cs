@@ -47,16 +47,16 @@ public class ClientManager : MonoBehaviour
             {
                 // Follow all trackers
                 GameObject[] trackers = cameraTrackers.ToArray();
-                UpdateCamera(PlayerMovement.Instance.IsMoving, trackers);
+                UpdateCamera(false, trackers);
             } else
             {
                 // Follow player only
-                UpdateCamera(PlayerMovement.Instance.IsMoving, PlayerMovement.Instance.gameObject.transform.position);
+                UpdateCamera(false, PlayerMovement.Instance.gameObject.transform.position);
             }
         } else
         {
             // Return to default camera position (for menus)
-            cameraObject.transform.position = Vector3.Lerp(cameraObject.transform.position, cameraDefaultPos, trackingSpeed * Time.fixedDeltaTime);
+            cameraObject.transform.position = Vector3.Lerp(cameraObject.transform.position, cameraDefaultPos, trackingSpeed * Time.deltaTime);
         }
     }
 
@@ -108,7 +108,7 @@ public class ClientManager : MonoBehaviour
 
         if (intense)
         {
-            newFOV *= 0.5f;
+            newFOV *= 1.1f;
         }
 
         cameraObject.GetComponent<Camera>().fieldOfView = newFOV;

@@ -60,7 +60,7 @@ public class PlayerMovement : MonoBehaviour
     //public bool isAgainstWall;
     public LayerMask layerMask;
 
-    private void Start()
+    private void Awake()
     {
         ClientManager.Instance.AddCameraTracker(gameObject);
         playerID = GetComponent<PlayerID>();
@@ -115,6 +115,12 @@ public class PlayerMovement : MonoBehaviour
     #region Collisions
     protected virtual void OnCollisionEnter2D(Collision2D collision)
     {
+        if(photonView == null)
+        {
+            Debug.Log("missing photon view");
+            return;
+        }
+
         if (photonView.IsMine && collision.gameObject.CompareTag("Player")) // colliding with player
         {
             // enable weight bursting
@@ -138,6 +144,12 @@ public class PlayerMovement : MonoBehaviour
 
     protected virtual void OnCollisionExit2D(Collision2D collision)
     {
+        if (photonView == null)
+        {
+            Debug.Log("missing photon view");
+            return;
+        }
+
         if (photonView.IsMine && collision.gameObject.CompareTag("Player")) // check if not colliding with player
         {
             canBurst = false;
