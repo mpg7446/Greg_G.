@@ -67,6 +67,7 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
+            //Destroy(this);
             enabled = false;
         }
 
@@ -114,7 +115,7 @@ public class PlayerMovement : MonoBehaviour
     }
     protected virtual void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Player")) // colliding with player
+        if (photonView.IsMine && collision.gameObject.CompareTag("Player")) // colliding with player
         {
             // enable weight bursting
             canBurst = true;
@@ -137,7 +138,7 @@ public class PlayerMovement : MonoBehaviour
 
     protected virtual void OnCollisionExit2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Player")) // check if not colliding with player
+        if (photonView.IsMine && collision.gameObject.CompareTag("Player")) // check if not colliding with player
         {
             canBurst = false;
         }
