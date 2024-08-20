@@ -24,8 +24,13 @@ public class ClientManager : MonoBehaviour
     public enum PlayerVisual
     {
         None,
+        Racoon,
+        Brown,
+        Albino,
         Cat,
-        Racoon
+        PNG,
+        Isopod,
+        Gnarpy
     }
 
     private void Start()
@@ -185,9 +190,20 @@ public class ClientManager : MonoBehaviour
         gameRunning = false;
     }
 
-    public void SetRandomPlayerVisual()
+    public void SetRandomPlayerVisual(int rolls = 3)
     {
-        int id = UnityEngine.Random.Range(1, Enum.GetValues(typeof(PlayerVisual)).Length);
+        System.Random rnd = new System.Random();
+        int id = rnd.Next(1, Enum.GetValues(typeof(PlayerVisual)).Length);
+
+        for (int i = 1; i < rolls; i++)
+        {
+            int compare = rnd.Next(1, Enum.GetValues(typeof(PlayerVisual)).Length);
+            if (compare < id)
+            {
+                id = compare;
+            }
+        }
+
         playerVisual = (PlayerVisual)id;
     }
 
