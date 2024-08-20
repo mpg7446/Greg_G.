@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using static ClientManager;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -12,6 +13,8 @@ public class PlayerMovement : MonoBehaviour
     private InputManager input;
     protected PlayerID playerID;
     private SpriteRenderer spriteRenderer;
+
+    [SerializeField] private PlayerVisual playerVisual;
 
     // movement settings
     public float speed = 40;
@@ -91,7 +94,7 @@ public class PlayerMovement : MonoBehaviour
         if (!inStack)
         {
             StandardMovement();
-            UpdateVisuals();
+            UpdateVisualDirection();
         } else
         {
             StackMovement();
@@ -470,7 +473,7 @@ public class PlayerMovement : MonoBehaviour
     #endregion
 
     #region Visuals // Should probably update to seperate script once visuals become more complicated
-    private void UpdateVisuals()
+    private void UpdateVisualDirection()
     {
         if (input.movement.x > 0)
         {
@@ -479,6 +482,34 @@ public class PlayerMovement : MonoBehaviour
         else if (input.movement.x < 0)
         {
             spriteRenderer.flipX = false;
+        }
+    }
+
+    public void SetPlayerVisual(PlayerVisual playerVisual)
+    {
+        if (photonView.IsMine)
+        {
+            this.playerVisual = playerVisual;
+            photonView.RPC("SetPlayerVisual", RpcTarget.Others, (int)playerVisual);
+        }
+        else
+        {
+            photonView.RPC("AskForPlayerVisual", RpcTarget.Others);
+        }
+    }
+
+    [PunRPC]
+    public void SetPlayerVisual(int id)
+    {
+        playerVisual = (PlayerVisual)id;
+    }
+
+    [PunRPC]
+    public void AskForPlayerVisual()
+    {
+        if (photonView.IsMine)
+        {
+            photonView.RPC("SetPlayerVisual", RpcTarget.Others, (int)playerVisual);
         }
     }
     #endregion

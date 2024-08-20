@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,6 +20,12 @@ public class ClientManager : MonoBehaviour
     public bool gameRunning = false;
 
     // TODO - player visuals storage
+    public PlayerVisual playerVisual;
+    public enum PlayerVisual
+    {
+        Racoon,
+        Cat
+    }
 
     private void Start()
     {
@@ -175,6 +182,26 @@ public class ClientManager : MonoBehaviour
     public void GameFinished()
     {
         gameRunning = false;
+    }
+
+    public PlayerVisual GetPlayerVisual(int id)
+    {
+        return (PlayerVisual)id;
+    }
+    private void SetPlayerVisual(int id)
+    {
+        playerVisual = (PlayerVisual)id;
+        if (PlayerMovement.Instance != null)
+        {
+            PlayerMovement.Instance.SetPlayerVisual(playerVisual);
+        } else
+        {
+            Debug.LogError("ClientManager: No PlayerMovement found when attempting to update PlayerVisual");
+        }
+    }
+    public void SetRandomPlayerVisual()
+    {
+        SetPlayerVisual(UnityEngine.Random.Range(0, Enum.GetValues(typeof(PlayerVisual)).Length));
     }
 
     // Close client

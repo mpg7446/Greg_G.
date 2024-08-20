@@ -50,6 +50,8 @@ MonoBehaviour:
   - UpdateVisuals
   - SetID
   - AskForID
+  - AskForPlayerVisual
+  - SetPlayerVisual
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 0
