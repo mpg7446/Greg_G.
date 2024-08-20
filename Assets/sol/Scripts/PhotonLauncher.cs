@@ -91,6 +91,7 @@ public class PhotonLauncher : MonoBehaviourPunCallbacks
 
         MenuManager.Instance.OpenMenu("lobby");
         ClientManager.Instance.LoadScene("Lobby");
+        ClientManager.Instance.SetRandomPlayerVisual();
         
         // update room code visuals
         foreach (TMP_Text roomNameDisplay in roomNameDisplays)
@@ -100,7 +101,6 @@ public class PhotonLauncher : MonoBehaviourPunCallbacks
 
         // spawn network player
         SpawnPlayer("Menu Player");
-        ClientManager.Instance.SetRandomPlayerVisual();
     }
 
     public override void OnJoinRoomFailed(short returnCode, string message) // Failed to connect to room, probably doesnt exist

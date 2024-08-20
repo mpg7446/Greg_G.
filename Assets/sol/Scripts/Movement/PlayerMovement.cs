@@ -85,6 +85,8 @@ public class PlayerMovement : MonoBehaviour
         circleCollider.enabled = false;
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
 
+        SetPlayerVisual(ClientManager.Instance.playerVisual);
+
         burstMax = burstTimer;
     }
 
@@ -472,7 +474,7 @@ public class PlayerMovement : MonoBehaviour
     }
     #endregion
 
-    #region Visuals // Should probably update to seperate script once visuals become more complicated
+    #region Visuals
     private void UpdateVisualDirection()
     {
         if (input.movement.x > 0)
