@@ -83,15 +83,18 @@ public class PlayerManager : MonoBehaviour
             enabled = false;
         }
 
-        boxCollider = GetComponent<BoxCollider2D>();
-        circleCollider = GetComponent<CircleCollider2D>();
-        circleCollider.enabled = false;
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-
         SetPlayerVisual(ClientManager.Instance.playerVisual);
         if (playerModel == null)
         {
             playerModel = gameObject.GetComponent<PlayerModel>();
+        }
+
+        boxCollider = playerModel.stickers.GetComponent<BoxCollider2D>();
+        circleCollider = playerModel.stickers.GetComponent<CircleCollider2D>();
+        if (circleCollider != null) 
+        { 
+            circleCollider.enabled = false; 
         }
 
         burstMax = burstTimer;
@@ -168,13 +171,8 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
-    // Colliders
-    private void SwitchCollider()
-    {
-        boxCollider.enabled = !boxCollider.enabled;
-        circleCollider.enabled = !circleCollider.enabled;
-    }
-    protected void SwitchCollider(bool enabled)
+    // Switch Colliders
+    protected virtual void SwitchCollider(bool enabled)
     {
         if (enabled)
         {

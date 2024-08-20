@@ -15,6 +15,7 @@ public class MenuPlayerManager : PlayerManager
         }
     }
 
-    protected override void OnCollisionEnter2D(Collision2D collision) {}
-    protected override void OnCollisionExit2D(Collision2D collision) {}
+    protected override void OnCollisionEnter2D(Collision2D collision) { }
+    protected override void OnCollisionExit2D(Collision2D collision) { }
+    protected override void SwitchCollider(bool enabled) { }
 }
