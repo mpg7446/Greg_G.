@@ -20,9 +20,10 @@ public class ClientManager : MonoBehaviour
     public bool gameRunning = false;
 
     // TODO - player visuals storage
-    [SerializeField] public PlayerVisual playerVisual {  get; private set; }
+    public PlayerVisual playerVisual {  get; private set; }
     public enum PlayerVisual
     {
+        None,
         Cat,
         Racoon
     }
@@ -186,7 +187,7 @@ public class ClientManager : MonoBehaviour
 
     public void SetRandomPlayerVisual()
     {
-        int id = UnityEngine.Random.Range(0, Enum.GetValues(typeof(PlayerVisual)).Length);
+        int id = UnityEngine.Random.Range(1, Enum.GetValues(typeof(PlayerVisual)).Length);
         playerVisual = (PlayerVisual)id;
     }
 
