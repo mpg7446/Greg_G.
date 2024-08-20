@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Gnarpy
   m_EditorClassIdentifier: 
   playerVisual: 7
-  sprite: {fileID: 0}
+  sprite: {fileID: 21300000, guid: 062bdbd589876974d86faaafc86bd2a0, type: 3}
   offset: {x: 0, y: 0}

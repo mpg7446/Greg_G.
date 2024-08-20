@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Albino
   m_EditorClassIdentifier: 
   playerVisual: 3
-  sprite: {fileID: 0}
+  sprite: {fileID: 21300000, guid: f99ce433b0654674084727000b394d1d, type: 3}
   offset: {x: 0, y: 0}

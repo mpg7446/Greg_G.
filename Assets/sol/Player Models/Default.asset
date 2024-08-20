@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Default
   m_EditorClassIdentifier: 
   playerVisual: 1
-  sprite: {fileID: 21300000, guid: 2c26580d22f26fd4fab9f988123ab9ca, type: 3}
+  sprite: {fileID: 21300000, guid: 1b925fa59d60b10469c3b1dc301bf8bd, type: 3}
   offset: {x: 0, y: 0}

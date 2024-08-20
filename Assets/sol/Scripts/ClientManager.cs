@@ -194,6 +194,7 @@ public class ClientManager : MonoBehaviour
     {
         if (playerVisual == PlayerVisual.None)
         {
+            // Roll x amount of dice and select lowest number to choose which 
             System.Random rnd = new System.Random();
             int id = rnd.Next(1, Enum.GetValues(typeof(PlayerVisual)).Length);
 

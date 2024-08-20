@@ -1,3 +1,4 @@
+using ExitGames.Client.Photon.StructWrapping;
 using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
@@ -36,18 +37,26 @@ public class PlayerModelManager : MonoBehaviour
 
     public void LoadModel()
     {
-        PlayerModel matches = null;
+        // Get all matching PlayerModels
+        List<PlayerModel> matches = new List<PlayerModel>();
         foreach (PlayerModel model in models)
         {
             if (model.playerVisual == playerVisual)
             {
-                matches = model;
+                matches.Add(model);
             }
         }
 
-        if (matches != null)
+        // Pick random PlayerModel from matching PlayerModels
+        PlayerModel match = matches[0];
+        if (matches.Count > 1)
         {
-            sprite.sprite = matches.sprite;
+            match = matches[Random.Range(0, matches.Count)];
+        }
+
+        if (match != null)
+        {
+            sprite.sprite = match.sprite;
         }
     }
 
