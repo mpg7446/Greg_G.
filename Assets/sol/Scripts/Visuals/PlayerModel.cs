@@ -12,7 +12,7 @@ public class PlayerModel : MonoBehaviour
 
     // Objects
     [SerializeField] private GameObject cardboard;
-    [SerializeField] private GameObject stickers;
+    public GameObject stickers;
 
     public bool Squished {  get; private set; }
 
@@ -34,7 +34,7 @@ public class PlayerModel : MonoBehaviour
     public void Squish(bool rpc = true)
     {
         stickers.transform.localScale = new Vector3(1, 0.5f, 1);
-        transform.position = new Vector3(transform.position.x, transform.position.y - (GetComponent<BoxCollider2D>().size.y / 4), 0);
+        transform.position = new Vector3(transform.position.x, transform.position.y - (stickers.GetComponent<BoxCollider2D>().size.y / 4), 0);
         Squished = true;
 
         if (rpc)
