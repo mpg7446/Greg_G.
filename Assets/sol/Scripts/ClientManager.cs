@@ -20,7 +20,7 @@ public class ClientManager : MonoBehaviour
     public bool gameRunning = false;
 
     // TODO - player visuals storage
-    public PlayerVisual playerVisual {  get; private set; }
+    public PlayerVisual playerVisual;
     public enum PlayerVisual
     {
         None,
@@ -192,19 +192,22 @@ public class ClientManager : MonoBehaviour
 
     public void SetRandomPlayerVisual(int rolls = 3)
     {
-        System.Random rnd = new System.Random();
-        int id = rnd.Next(1, Enum.GetValues(typeof(PlayerVisual)).Length);
-
-        for (int i = 1; i < rolls; i++)
+        if (playerVisual == PlayerVisual.None)
         {
-            int compare = rnd.Next(1, Enum.GetValues(typeof(PlayerVisual)).Length);
-            if (compare < id)
-            {
-                id = compare;
-            }
-        }
+            System.Random rnd = new System.Random();
+            int id = rnd.Next(1, Enum.GetValues(typeof(PlayerVisual)).Length);
 
-        playerVisual = (PlayerVisual)id;
+            for (int i = 1; i < rolls; i++)
+            {
+                int compare = rnd.Next(1, Enum.GetValues(typeof(PlayerVisual)).Length);
+                if (compare < id)
+                {
+                    id = compare;
+                }
+            }
+
+            playerVisual = (PlayerVisual)id;
+        }
     }
 
     // Close client

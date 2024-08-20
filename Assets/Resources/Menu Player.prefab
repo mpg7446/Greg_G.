@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6290772913965468329}
   - component: {fileID: 2097821136671768695}
   - component: {fileID: 763892957857616828}
-  - component: {fileID: 751143632609414570}
+  - component: {fileID: 201229691262816248}
   - component: {fileID: -6271936724257076667}
   - component: {fileID: 3876485237656548015}
   - component: {fileID: 518067615784010465}
@@ -75,7 +75,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   text: {fileID: 6463679258253406323}
---- !u!114 &751143632609414570
+--- !u!114 &201229691262816248
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -84,10 +84,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 2979831750552114468}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3f910c4a6c94fd349ae71753c76c41d9, type: 3}
+  m_Script: {fileID: 11500000, guid: b4b74fdeabbcbae41a4bb1ce66cd87b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   playerVisual: 0
+  models:
+  - {fileID: 11400000, guid: cbac9d3c7e4ef494798f5b0c6d9b5289, type: 2}
+  - {fileID: 11400000, guid: ffa9cc509dcc9f6418a93337125c0595, type: 2}
+  - {fileID: 11400000, guid: d4dedef5d17af0c49887ac4517d28699, type: 2}
+  - {fileID: 11400000, guid: f2437690c735a104a9bcab8d08ca6e1e, type: 2}
+  - {fileID: 11400000, guid: 3f7941c2bf367674ea42fafb92492165, type: 2}
+  - {fileID: 11400000, guid: 39c8f25634693b4459602277834d2727, type: 2}
+  - {fileID: 11400000, guid: cc727347f444e334280837456f484f60, type: 2}
   cardboard: {fileID: 0}
   stickers: {fileID: 8609700007620302885}
 --- !u!114 &-6271936724257076667

@@ -15,7 +15,7 @@ public class PlayerManager : MonoBehaviour
     protected PlayerID playerID;
 
     // player visuals
-    private PlayerModel playerModel;
+    private PlayerModelManager playerModel;
     private SpriteRenderer spriteRenderer;
     [SerializeField] private PlayerVisual playerVisual;
 
@@ -84,10 +84,9 @@ public class PlayerManager : MonoBehaviour
         }
 
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-        SetPlayerVisual(ClientManager.Instance.playerVisual);
         if (playerModel == null)
         {
-            playerModel = gameObject.GetComponent<PlayerModel>();
+            playerModel = gameObject.GetComponent<PlayerModelManager>();
         }
 
         boxCollider = playerModel.stickers.GetComponent<BoxCollider2D>();
@@ -128,47 +127,29 @@ public class PlayerManager : MonoBehaviour
     }
 
     #region Collisions
-    protected virtual void OnCollisionEnter2D(Collision2D collision)
+    public virtual void CollisionEnter(Collision2D collision)
     {
-        if(photonView == null)
+        // enable weight bursting
+        canBurst = true;
+
+        GameObject otherPlayer = collision.gameObject;
+
+        if (!inStack && colliderDelay <= 0)
         {
-            Debug.Log("missing photon view");
-            return;
-        }
-
-        if (photonView.IsMine && collision.gameObject.CompareTag("Player")) // colliding with player
-        {
-            // enable weight bursting
-            canBurst = true;
-
-            GameObject otherPlayer = collision.gameObject;
-
-            if (!inStack && colliderDelay <= 0)
+            if (stackParent == null && transform.position.y > otherPlayer.transform.position.y + (GetComponent<BoxCollider2D>().size.y / 1.1)) // collision is below player and players height
             {
-                if (stackParent == null && transform.position.y > otherPlayer.transform.position.y + (GetComponent<BoxCollider2D>().size.y / 1.1)) // collision is below player and players height
-                {
-                    EnterStackAbove(otherPlayer);
-                }
-                else if (stackChild == null && transform.position.y < otherPlayer.transform.position.y - (GetComponent<BoxCollider2D>().size.y / 1.1)) // collision is above player and players height
-                {
-                    EnterStackBelow(otherPlayer);
-                }
+                EnterStackAbove(otherPlayer);
+            }
+            else if (stackChild == null && transform.position.y < otherPlayer.transform.position.y - (GetComponent<BoxCollider2D>().size.y / 1.1)) // collision is above player and players height
+            {
+                EnterStackBelow(otherPlayer);
             }
         }
     }
 
-    protected virtual void OnCollisionExit2D(Collision2D collision)
+    public virtual void CollisionExit(Collision2D collision)
     {
-        if (photonView == null)
-        {
-            Debug.Log("missing photon view");
-            return;
-        }
-
-        if (photonView.IsMine && collision.gameObject.CompareTag("Player")) // check if not colliding with player
-        {
-            canBurst = false;
-        }
+        canBurst = false;
     }
 
     // Switch Colliders
@@ -475,8 +456,8 @@ public class PlayerManager : MonoBehaviour
     }
     #endregion
 
-    #region Visuals
-    private void UpdateVisualDirection()
+    #region Visuals 
+    private void UpdateVisualDirection() // TODO - MOVE THIS TO PlayerModelManager!!!
     {
         if (input.movement.x > 0)
         {
@@ -485,34 +466,6 @@ public class PlayerManager : MonoBehaviour
         else if (input.movement.x < 0)
         {
             spriteRenderer.flipX = false;
-        }
-    }
-
-    public void SetPlayerVisual(PlayerVisual playerVisual)
-    {
-        if (photonView.IsMine)
-        {
-            this.playerVisual = playerVisual;
-            photonView.RPC("SetPlayerVisual", RpcTarget.Others, (int)playerVisual);
-        }
-        else
-        {
-            photonView.RPC("AskForPlayerVisual", RpcTarget.Others);
-        }
-    }
-
-    [PunRPC]
-    public void SetPlayerVisual(int id)
-    {
-        playerVisual = (PlayerVisual)id;
-    }
-
-    [PunRPC]
-    public void AskForPlayerVisual()
-    {
-        if (photonView.IsMine)
-        {
-            photonView.RPC("SetPlayerVisual", RpcTarget.Others, (int)playerVisual);
         }
     }
     #endregion

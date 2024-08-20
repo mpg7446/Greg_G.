@@ -83,6 +83,7 @@ public class PhotonLauncher : MonoBehaviourPunCallbacks
         PhotonNetwork.LeaveRoom();
         MenuManager.Instance.OpenMenu("loading");
         ClientManager.Instance.CloseScene("Lobby");
+        ClientManager.Instance.playerVisual = ClientManager.PlayerVisual.None;
     }
 
     public override void OnJoinedRoom() // On joined room - also calls after creating room

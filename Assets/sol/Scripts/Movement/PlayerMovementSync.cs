@@ -23,7 +23,7 @@ namespace Photon.Pun.UtilityScripts
     {
         private Rigidbody2D rb;
         private SpriteRenderer sprite;
-        private PlayerModel playerModel;
+        private PlayerModelManager playerModel;
         public float SmoothingDelay = 5;
         public void Awake()
         {

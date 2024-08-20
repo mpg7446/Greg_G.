@@ -117,7 +117,7 @@ public class Item : MonoBehaviour
             {
                 touching = false;
 
-                collision.GetComponent<PlayerInventory>().LeaveItem();
+                collision.GetComponentInParent<PlayerInventory>().LeaveItem();
             }
 
             // clear player from players list
@@ -184,7 +184,7 @@ public class Item : MonoBehaviour
     private void UpdateHolding(GameObject player)
     {
         // get player inventory script and copy countdown toggle
-        PlayerInventory inventory = player.GetComponent<PlayerInventory>();
+        PlayerInventory inventory = player.GetComponentInParent<PlayerInventory>();
 
         if (enableCountdown)
         {
@@ -209,7 +209,7 @@ public class Item : MonoBehaviour
     
     private void PickupItem()
     {
-        players[0].GetComponent<PlayerInventory>().PickupItem(score);
+        players[0].GetComponentInParent<PlayerInventory>().PickupItem(score);
         Destroy(gameObject);
     }
 
