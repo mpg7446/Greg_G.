@@ -15,7 +15,7 @@ public class ClientManager : MonoBehaviour
     private Vector3 cameraDefaultPos;
     private List<GameObject> cameraTrackers = new List<GameObject>();
     public float trackingDistance;
-    [Tooltip("Time it takes to snap to camera position (in seconds??)")] public float trackingSpeed;
+    [Tooltip("Time it takes to snap to camera position (not in seconds, im not too sure why)")] public float trackingSpeed;
 
     public bool gameRunning = false;
 
