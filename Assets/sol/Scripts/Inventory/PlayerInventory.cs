@@ -7,7 +7,7 @@ public class PlayerInventory : MonoBehaviour
 {
     private PhotonView photonView;
     public int itemCount = 0;
-    private PlayerMovement movement;
+    private PlayerManager movement;
     private bool local = true;
 
     private GameObject item;
@@ -17,7 +17,7 @@ public class PlayerInventory : MonoBehaviour
         photonView = GetComponent<PhotonView>();
         if (photonView.IsMine)
         {
-            movement = GetComponent<PlayerMovement>();
+            movement = GetComponent<PlayerManager>();
         }
         else
         {
