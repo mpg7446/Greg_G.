@@ -117,6 +117,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   photonView: {fileID: 0}
+  playerVisual: 0
   speed: 40
   maxSpeed: 300
   crouchMultiplier: 0.2
