@@ -56,7 +56,7 @@ public class ClientManager : MonoBehaviour
             ClearEmptyTrackers();
 
             // Change tracking depending on tracker visibility
-            if (TrackersVisible(PlayerMovement.Instance.gameObject, cameraTrackers))
+            if (TrackersVisible(PlayerManager.Instance.gameObject, cameraTrackers))
             {
                 // Follow all trackers
                 GameObject[] trackers = cameraTrackers.ToArray();
@@ -64,7 +64,7 @@ public class ClientManager : MonoBehaviour
             } else
             {
                 // Follow player only
-                UpdateCamera(false, PlayerMovement.Instance.gameObject.transform.position);
+                UpdateCamera(false, PlayerManager.Instance.gameObject.transform.position);
             }
         } else
         {

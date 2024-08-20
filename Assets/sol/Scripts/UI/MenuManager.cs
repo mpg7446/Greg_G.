@@ -11,7 +11,7 @@ public class MenuManager : MonoBehaviour
     public void Awake()
     {
         Instance = this;
-        OpenMenu("loading"); // !!! THIS TO BE CHANGED this is just a placeholder for opening the loading screen
+        OpenMenu("loading"); 
     }
 
     public void OpenMenu(string menuName)

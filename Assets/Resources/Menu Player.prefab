@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 385661493273039915}
   - component: {fileID: 2835319333953078350}
   - component: {fileID: 2969266834194631221}
+  - component: {fileID: 751143632609414570}
   m_Layer: 3
   m_Name: Menu Player
   m_TagString: Player
@@ -242,6 +243,19 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!114 &751143632609414570
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2979831750552114468}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f910c4a6c94fd349ae71753c76c41d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerVisual: 0
 --- !u!1 &4660260754982817368
 GameObject:
   m_ObjectHideFlags: 0
@@ -254,7 +268,7 @@ GameObject:
   - component: {fileID: 9125837584492212}
   - component: {fileID: 4633611011500805253}
   m_Layer: 3
-  m_Name: Visuals
+  m_Name: Stickers
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

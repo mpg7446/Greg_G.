@@ -28,7 +28,7 @@ public class enemy : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         GameObject player = collision.gameObject;
-        if (player.CompareTag("Player") && player.GetComponent<PlayerMovement>().photonView.IsMine)
+        if (player.CompareTag("Player") && player.GetComponent<PlayerManager>().photonView.IsMine)
         {
             Debug.Log("Mambo no. 5 has walked into a player");
             

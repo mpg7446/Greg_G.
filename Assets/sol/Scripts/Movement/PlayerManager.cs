@@ -1,3 +1,4 @@
+using ExitGames.Client.Photon.StructWrapping;
 using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
@@ -5,15 +6,17 @@ using System.Linq;
 using UnityEngine;
 using static ClientManager;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerManager : MonoBehaviour
 {
-    public static PlayerMovement Instance = null;
+    public static PlayerManager Instance = null;
     public PhotonView photonView;
     private Rigidbody2D rb;
     private InputManager input;
     protected PlayerID playerID;
-    private SpriteRenderer spriteRenderer;
 
+    // player visuals
+    private PlayerModel playerModel;
+    private SpriteRenderer spriteRenderer;
     [SerializeField] private PlayerVisual playerVisual;
 
     // movement settings
@@ -86,6 +89,10 @@ public class PlayerMovement : MonoBehaviour
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
 
         SetPlayerVisual(ClientManager.Instance.playerVisual);
+        if (playerModel == null)
+        {
+            playerModel = gameObject.GetComponent<PlayerModel>();
+        }
 
         burstMax = burstTimer;
     }
@@ -266,17 +273,13 @@ public class PlayerMovement : MonoBehaviour
     {
         if (input.movement.y < 0)
         {
-            if (transform.localScale == new Vector3(1, 1, 1))
-            {
-                transform.localScale = new Vector3(1, 0.5f, 1);
-                transform.position = new Vector3(transform.position.x, transform.position.y - (GetComponent<BoxCollider2D>().size.y / 4), 0);
-            }
-
+            if (!playerModel.Squished)
+                playerModel.Squish();
             return crouchMultiplier;
         } 
         else
         {
-            transform.localScale = new Vector3(1, 1, 1);
+            playerModel.UnSquish();
             return 1;
         }
     }

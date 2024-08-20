@@ -66,7 +66,7 @@ public class GameManager : MonoBehaviour
 
         MenuManager.Instance.OpenMenu("empty");
         ClientManager.Instance.LoadScene("Empty Environment", "Lobby");
-        PlayerMovement.Instance.DestroyPlayer();
+        PlayerManager.Instance.DestroyPlayer();
 
         ClientManager.Instance.GameStarted();
         PhotonLauncher.Instance.SpawnPlayer("Player", spawnLocation);
@@ -121,7 +121,7 @@ public class GameManager : MonoBehaviour
 
         MenuManager.Instance.OpenMenu("lobby");
         ClientManager.Instance.LoadScene("Lobby", "Empty Environment");
-        PlayerMovement.Instance.DestroyPlayer();
+        PlayerManager.Instance.DestroyPlayer();
 
         ClientManager.Instance.GameFinished();
     }
