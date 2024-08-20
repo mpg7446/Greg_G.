@@ -39,7 +39,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 2907572050142603307}
   - {fileID: 2551298906885155372}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -133,7 +132,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   photonView: {fileID: 0}
   playerVisual: 0
-  sprites: []
   speed: 40
   maxSpeed: 300
   crouchMultiplier: 0.2
@@ -271,6 +269,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerVisual: 0
+  cardboard: {fileID: 0}
+  stickers: {fileID: 4660260754982817368}
 --- !u!1 &4660260754982817368
 GameObject:
   m_ObjectHideFlags: 0
@@ -301,7 +301,8 @@ Transform:
   m_LocalPosition: {x: 0.137, y: -0.027, z: 0}
   m_LocalScale: {x: 0.19673198, y: 0.19673198, z: 0.19673198}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 2907572050142603307}
   m_Father: {fileID: 6290772913965468329}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &9125837584492212
@@ -404,14 +405,14 @@ RectTransform:
   m_GameObject: {fileID: 5298417521599606558}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.080759995, y: 0.080759995, z: 0.080759995}
+  m_LocalScale: {x: 0.41050768, y: 0.41050768, z: 0.41050768}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 6290772913965468329}
+  m_Father: {fileID: 2551298906885155372}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0.978}
+  m_AnchoredPosition: {x: -0.6963788, y: 5.108473}
   m_SizeDelta: {x: 20, y: 5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!23 &1224887821025996645
