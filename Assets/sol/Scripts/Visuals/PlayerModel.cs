@@ -39,7 +39,7 @@ public class PlayerModel : MonoBehaviour
 
         if (rpc)
         {
-            photonView.RPC("UnSquish", RpcTarget.Others, false);
+            photonView.RPC("Squish", RpcTarget.Others, false);
         }
     }
     [PunRPC]
