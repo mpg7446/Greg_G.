@@ -64,9 +64,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10c8cee6e8f99654ba6c999c5d88ae86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  photonView: {fileID: 0}
+  playerVisual: 0
   speed: 40
   maxSpeed: 300
   crouchMultiplier: 0.2
+  groundDistance: 0.2
+  wallDistance: 0
+  inStack: 0
   stackParent: {fileID: 0}
   stackChild: {fileID: 0}
   colliderMaxDelay: 15
@@ -75,6 +80,9 @@ MonoBehaviour:
   burstMultiplier: 2
   burstTimer: 10
   jumpHeight: 4.75
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!114 &1468375579308028494
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -207,7 +215,7 @@ GameObject:
   - component: {fileID: 9125837584492212}
   - component: {fileID: 4633611011500805253}
   m_Layer: 3
-  m_Name: Visuals
+  m_Name: Stickers
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

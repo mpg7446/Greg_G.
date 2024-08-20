@@ -13,12 +13,11 @@ public class PlayerManager : MonoBehaviour
     private Rigidbody2D rb;
     private InputManager input;
     protected PlayerID playerID;
-    private PlayerModel playerModel;
 
     // player visuals
+    private PlayerModel playerModel;
     private SpriteRenderer spriteRenderer;
     [SerializeField] private PlayerVisual playerVisual;
-    public List<Sprite> sprites = new List<Sprite>();
 
     // movement settings
     public float speed = 40;
