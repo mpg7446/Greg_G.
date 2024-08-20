@@ -136,11 +136,11 @@ public class PlayerManager : MonoBehaviour
 
         if (!inStack && colliderDelay <= 0)
         {
-            if (stackParent == null && transform.position.y > otherPlayer.transform.position.y + (GetComponent<BoxCollider2D>().size.y / 1.1)) // collision is below player and players height
+            if (stackParent == null && transform.position.y > otherPlayer.transform.position.y + (boxCollider.size.y / 1.1)) // collision is below player and players height
             {
                 EnterStackAbove(otherPlayer);
             }
-            else if (stackChild == null && transform.position.y < otherPlayer.transform.position.y - (GetComponent<BoxCollider2D>().size.y / 1.1)) // collision is above player and players height
+            else if (stackChild == null && transform.position.y < otherPlayer.transform.position.y - (boxCollider.size.y / 1.1)) // collision is above player and players height
             {
                 EnterStackBelow(otherPlayer);
             }
@@ -329,7 +329,7 @@ public class PlayerManager : MonoBehaviour
         stackParent = parent;
         inStack = true;
 
-        transform.position = parent.transform.position + new Vector3(0, parent.GetComponent<BoxCollider2D>().size.y);
+        transform.position = parent.transform.position + new Vector3(0, parent.GetComponentInChildren<BoxCollider2D>().size.y);
         photonView.RPC("RPCEnterStackBelow", RpcTarget.Others, parent.name, name);
     }
 
