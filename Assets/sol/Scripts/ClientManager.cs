@@ -21,6 +21,7 @@ public class ClientManager : MonoBehaviour
 
     // TODO - player visuals storage
     public PlayerVisual playerVisual;
+    public int playerVariation;
     public enum PlayerVisual
     {
         None,
@@ -208,6 +209,8 @@ public class ClientManager : MonoBehaviour
             }
 
             playerVisual = (PlayerVisual)id;
+
+            // Set playerVariation based on how many 
         }
     }
 
