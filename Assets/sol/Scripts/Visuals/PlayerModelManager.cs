@@ -58,6 +58,7 @@ public class PlayerModelManager : MonoBehaviour
         {
             sprite.sprite = match.sprite;
             sprite.transform.localPosition += match.offset;
+            sprite.transform.localScale = new Vector3(match.scale.x * sprite.transform.localScale.x, match.scale.y * sprite.transform.localScale.y, sprite.transform.localScale.z);
         }
     }
 
