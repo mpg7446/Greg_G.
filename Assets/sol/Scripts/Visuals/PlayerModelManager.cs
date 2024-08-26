@@ -47,7 +47,7 @@ public class PlayerModelManager : MonoBehaviour
             }
         }
 
-        // Pick random PlayerModel from matching PlayerModels
+        // Pick random PlayerModel from matching PlayerModels - MOVE THIS TO CLIENT MANAGER TO SYNC BETWEEN MATCHES
         PlayerModel match = matches[0];
         if (matches.Count > 1)
         {
@@ -57,6 +57,7 @@ public class PlayerModelManager : MonoBehaviour
         if (match != null)
         {
             sprite.sprite = match.sprite;
+            sprite.transform.localPosition += match.offset;
         }
     }
 

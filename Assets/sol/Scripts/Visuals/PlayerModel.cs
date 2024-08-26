@@ -8,5 +8,6 @@ public class PlayerModel : ScriptableObject
 {
     public PlayerVisual playerVisual;
     public Sprite sprite;
-    public Vector2 offset;
+    public Vector3 offset = new Vector3(0, 0);
+    public Vector3 scale = new Vector3(1, 1);
 }

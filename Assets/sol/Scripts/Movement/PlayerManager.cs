@@ -256,11 +256,11 @@ public class PlayerManager : MonoBehaviour
                 playerModel.Squish();
             return crouchMultiplier;
         } 
-        else
+        else if (playerModel.Squished)
         {
             playerModel.UnSquish();
-            return 1;
         }
+        return 1;
     }
     protected virtual void Action()
     {
