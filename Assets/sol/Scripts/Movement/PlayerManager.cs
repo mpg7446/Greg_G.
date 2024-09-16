@@ -172,9 +172,9 @@ public class PlayerManager : MonoBehaviour
     private void StandardMovement() // for movement seperate from player stack
     {
         SwitchCollider(false);
-        // movement inputs
+         //movement inputs
         if (input.movement.x != 0 && !IsAgainstWall())
-        {
+            {
             // acceleration
             moving += speed * input.movement.x;
             if (moving > maxSpeed)
@@ -287,12 +287,6 @@ public class PlayerManager : MonoBehaviour
 
     protected bool IsAgainstWall()
     {
-        /*
-        if (!IsGrounded() && input.movement.y == 0 && input.movement.x != 0 && rb.velocity.x == 0)
-            return true;
-
-        return false;*/
-
         Debug.DrawRay(transform.position, (Vector2.right * input.movement.x) * wallDistance, Color.red);
         if (Physics2D.Raycast(transform.position, Vector2.right * input.movement.x, wallDistance, layerMask))
         {
