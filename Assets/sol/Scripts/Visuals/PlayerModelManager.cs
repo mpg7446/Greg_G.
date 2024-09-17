@@ -39,8 +39,6 @@ public class PlayerModelManager : MonoBehaviour
 
     public void LoadModel()
     {
-        playerVisual = ClientManager.Instance.playerVisual;
-        playerVariation = ClientManager.Instance.playerVariation;
         PlayerModel match = null;
         List<PlayerModel> matches = new List<PlayerModel>();
 
@@ -73,6 +71,8 @@ public class PlayerModelManager : MonoBehaviour
     {
         if (photonView.IsMine)
         {
+            playerVisual = ClientManager.Instance.playerVisual;
+            playerVariation = ClientManager.Instance.playerVariation;
             LoadModel();
             photonView.RPC("SetPlayerVisual", RpcTarget.Others, (int)playerVisual, playerVariation);
             Debug.Log("PlayerModelManager: Set Players Visuals and called RPC");
