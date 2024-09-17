@@ -52,7 +52,7 @@ public class PlayerModelManager : MonoBehaviour
         }
 
         // Pick random PlayerModel from matching PlayerModels
-        if (playerVariation < 0)
+        if (photonView.IsMine && playerVariation < 0)
         {
             playerVariation = UnityEngine.Random.Range(0, matches.Count - 1);
             ClientManager.Instance.playerVariation = playerVariation;
