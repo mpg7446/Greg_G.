@@ -90,7 +90,7 @@ public class PlayerModelManager : MonoBehaviour
         playerVariation = variation;
         Debug.Log($"Recieved from remote user: PlayerVisual: {(PlayerVisual)id} ({id}) | PlayerVariation: {variation}");
         LoadModel();
-        Debug.Log("PlayerModelManaher: set player visuals for remote user");
+        Debug.Log("PlayerModelManager: set player visuals for local user");
     }
     [PunRPC]
     public void AskForPlayerVisual()
