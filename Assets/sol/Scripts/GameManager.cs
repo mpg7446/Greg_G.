@@ -48,14 +48,14 @@ public class GameManager : MonoBehaviour
 
         if (currentItems >= maxItems)
         {
-            Debug.Log("GAME ENDED GOAL WOOOOHHHH YEAHH BABYYYYYYY");
+            Debug.Log("GameManager: Game Ended");
             EndGame();
         }
     }
 
     public void StartGame(bool RPCHost = false)
     {
-        Debug.Log("Game Started");
+        Debug.Log("GameManager: Game Started");
 
         if (RPCHost)
         {
@@ -64,12 +64,12 @@ public class GameManager : MonoBehaviour
             SpawnItems();
         }
 
-        MenuManager.Instance.OpenMenu("empty");
-        ClientManager.Instance.LoadScene("Empty Environment", "Lobby");
         PlayerManager.Instance.DestroyPlayer();
 
-        ClientManager.Instance.GameStarted();
         PhotonLauncher.Instance.SpawnPlayer("Player", spawnLocation);
+        MenuManager.Instance.OpenMenu("game");
+        ClientManager.Instance.LoadScene("Empty Environment", "Lobby");
+        ClientManager.Instance.GameStarted();
 
         playerCount = PhotonNetwork.CurrentRoom.PlayerCount;
     }
@@ -123,6 +123,7 @@ public class GameManager : MonoBehaviour
         ClientManager.Instance.LoadScene("Lobby", "Empty Environment");
 
         PlayerManager.Instance.DestroyPlayer();
+        PhotonLauncher.Instance.SpawnPlayer("Menu Player");
         ClientManager.Instance.GameFinished();
     }
 
@@ -137,7 +138,7 @@ public class GameManager : MonoBehaviour
     {
         if (playerCount <= 1 && ClientManager.Instance.gameRunning)
         {
-            EndGame();
+            EndGame(true);
         }
     }
 }

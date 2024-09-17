@@ -23,6 +23,8 @@ public class PlayerInventory : MonoBehaviour
         {
             local = false;
         }
+
+        //ScoreCounter.Instance.AddCounter(this);
     }
 
     public void IntersectItem(GameObject item)
@@ -45,13 +47,23 @@ public class PlayerInventory : MonoBehaviour
         return false;
     }
 
-    public void PickupItem(int amount = 1)
+    public void PickupItem(int amount = 1, bool rpc = false)
     {
         itemCount += amount;
         GameManager.Instance.PickupItem();
         if (local)
         {
             movement.UpdateWeight(amount);
+            photonView.RPC("PickupItem", RpcTarget.Others, amount);
         }
+    }
+    public void PickupItem()
+    {
+        PickupItem(1);
+    }
+    [PunRPC]
+    public void PickupItem(int amount = 1)
+    {
+        PickupItem(amount);
     }
 }

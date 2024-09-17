@@ -37,7 +37,7 @@ public class ClientManager : MonoBehaviour
     private void Start()
     {
         Instance = this;
-        LoadScene("testing menu");
+        LoadScene("Menu");
 
         cameraDefaultPos = cameraObject.transform.position;
         defaultFOV = cameraObject.GetComponent<Camera>().fieldOfView;

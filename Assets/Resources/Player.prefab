@@ -89,6 +89,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerVisual: 0
+  playerVariation: -1
   models:
   - {fileID: 11400000, guid: cbac9d3c7e4ef494798f5b0c6d9b5289, type: 2}
   - {fileID: 11400000, guid: ffa9cc509dcc9f6418a93337125c0595, type: 2}

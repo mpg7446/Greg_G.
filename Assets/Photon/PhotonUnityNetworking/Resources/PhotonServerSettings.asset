@@ -54,6 +54,7 @@ MonoBehaviour:
   - SetPlayerVisual
   - Squish
   - UnSquish
+  - PickupItem
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 0
