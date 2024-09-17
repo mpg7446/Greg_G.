@@ -74,7 +74,7 @@ public class PlayerModelManager : MonoBehaviour
         if (photonView.IsMine)
         {
             LoadModel();
-            photonView.RPC("SetPlayerVisual", RpcTarget.Others);
+            photonView.RPC("SetPlayerVisual", RpcTarget.Others, (int)playerVisual, playerVariation);
             Debug.Log("PlayerModelManager: Set Players Visuals and called RPC");
         }
         else
@@ -96,7 +96,7 @@ public class PlayerModelManager : MonoBehaviour
     {
         if (photonView.IsMine)
         {
-            photonView.RPC("SetPlayerVisual", RpcTarget.Others, (int)playerVisual);
+            photonView.RPC("SetPlayerVisual", RpcTarget.Others, (int)playerVisual, playerVisual);
         }
     }
 
