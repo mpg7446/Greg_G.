@@ -157,8 +157,8 @@ MonoBehaviour:
   trackingDistance: 12
   trackingSpeed: 2
   gameRunning: 0
-  playerVisual: 1
-  playerVariation: 0
+  playerVisual: 0
+  playerVariation: -1
 --- !u!4 &302872599
 Transform:
   m_ObjectHideFlags: 0

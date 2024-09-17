@@ -83,7 +83,7 @@ public class PhotonLauncher : MonoBehaviourPunCallbacks
         PhotonNetwork.LeaveRoom();
         MenuManager.Instance.OpenMenu("loading");
         ClientManager.Instance.CloseScene("Lobby");
-        ClientManager.Instance.playerVisual = ClientManager.PlayerVisual.None;
+        ClientManager.Instance.ResetVisuals();
     }
 
     public override void OnJoinedRoom() // On joined room - also calls after creating room
@@ -92,7 +92,6 @@ public class PhotonLauncher : MonoBehaviourPunCallbacks
 
         MenuManager.Instance.OpenMenu("lobby");
         ClientManager.Instance.LoadScene("Lobby");
-        ClientManager.Instance.SetRandomPlayerVisual();
         
         // update room code visuals
         foreach (TMP_Text roomNameDisplay in roomNameDisplays)
@@ -101,6 +100,7 @@ public class PhotonLauncher : MonoBehaviourPunCallbacks
         }
 
         // spawn network player
+        ClientManager.Instance.SetRandomPlayerVisual();
         SpawnPlayer("Menu Player");
     }
 

@@ -1,5 +1,6 @@
 using ExitGames.Client.Photon.StructWrapping;
 using Photon.Pun;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,6 +9,7 @@ using static ClientManager;
 public class PlayerModelManager : MonoBehaviour
 {
     public PlayerVisual playerVisual;
+    [SerializeField] private int playerVariation = -1;
     public List<PlayerModel> models = new List<PlayerModel>();
     private PhotonView photonView;
 
@@ -32,13 +34,17 @@ public class PlayerModelManager : MonoBehaviour
         }
         sprite = stickers.GetComponentInChildren<SpriteRenderer>();
 
-        SetPlayerVisual(ClientManager.Instance.playerVisual);
+        SetPlayerVisual();
     }
 
     public void LoadModel()
     {
-        // Get all matching PlayerModels
+        playerVisual = ClientManager.Instance.playerVisual;
+        playerVariation = ClientManager.Instance.playerVariation;
+        PlayerModel match = null;
         List<PlayerModel> matches = new List<PlayerModel>();
+
+        // Get all matching PlayerModels
         foreach (PlayerModel model in models)
         {
             if (model.playerVisual == playerVisual)
@@ -47,28 +53,28 @@ public class PlayerModelManager : MonoBehaviour
             }
         }
 
-        // Pick random PlayerModel from matching PlayerModels - MOVE THIS TO CLIENT MANAGER TO SYNC BETWEEN MATCHES
-        PlayerModel match = matches[0];
-        if (matches.Count > 1)
+        // Pick random PlayerModel from matching PlayerModels
+        if (playerVariation < 0)
         {
-            match = matches[Random.Range(0, matches.Count)];
+            playerVariation = UnityEngine.Random.Range(0, matches.Count - 1);
+            ClientManager.Instance.playerVariation = playerVariation;
+            Debug.Log("PlayerModelManager: No player variable selected, choosing random variation");
         }
 
-        if (match != null)
-        {
-            sprite.sprite = match.sprite;
-            sprite.transform.localPosition += match.offset;
-            sprite.transform.localScale = new Vector3(match.scale.x * sprite.transform.localScale.x, match.scale.y * sprite.transform.localScale.y, sprite.transform.localScale.z);
-        }
+        match = matches[playerVariation];
+        Debug.Log($"PlayerModelManager: Player variable {playerVariation} selected");
+
+        sprite.sprite = match.sprite;
+        sprite.transform.localPosition += match.offset;
+        sprite.transform.localScale = new Vector3(match.scale.x * sprite.transform.localScale.x, match.scale.y * sprite.transform.localScale.y, sprite.transform.localScale.z);
     }
 
-    public void SetPlayerVisual(PlayerVisual playerVisual)
+    public void SetPlayerVisual()
     {
         if (photonView.IsMine)
         {
-            this.playerVisual = playerVisual;
-            photonView.RPC("SetPlayerVisual", RpcTarget.Others, (int)playerVisual);
             LoadModel();
+            photonView.RPC("SetPlayerVisual", RpcTarget.Others, (int)playerVisual, playerVariation);
             Debug.Log("PlayerModelManager: Set Players Visuals and called RPC");
         }
         else
@@ -78,9 +84,10 @@ public class PlayerModelManager : MonoBehaviour
         }
     }
     [PunRPC]
-    public void SetPlayerVisual(int id)
+    public void SetPlayerVisual(int id, int variation)
     {
         playerVisual = (PlayerVisual)id;
+        playerVariation = variation;
         LoadModel();
         Debug.Log("PlayerModelManaher: set player visuals for remote user");
     }

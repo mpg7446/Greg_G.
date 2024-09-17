@@ -111,7 +111,7 @@ public class GameManager : MonoBehaviour
 
     public void EndGame(bool RPC = false)
     {
-        Debug.Log("Game Ended");
+        Debug.Log("GameManager: Game Ended");
 
         if (RPC)
         {
@@ -121,8 +121,8 @@ public class GameManager : MonoBehaviour
 
         MenuManager.Instance.OpenMenu("lobby");
         ClientManager.Instance.LoadScene("Lobby", "Empty Environment");
-        PlayerManager.Instance.DestroyPlayer();
 
+        PlayerManager.Instance.DestroyPlayer();
         ClientManager.Instance.GameFinished();
     }
 

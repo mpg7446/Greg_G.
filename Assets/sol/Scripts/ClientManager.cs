@@ -21,7 +21,7 @@ public class ClientManager : MonoBehaviour
 
     // TODO - player visuals storage
     public PlayerVisual playerVisual;
-    public int playerVariation;
+    public int playerVariation = -1;
     public enum PlayerVisual
     {
         None,
@@ -71,6 +71,31 @@ public class ClientManager : MonoBehaviour
         {
             // Return to default camera position (for menus)
             cameraObject.transform.position = Vector3.Lerp(cameraObject.transform.position, cameraDefaultPos, trackingSpeed * Time.deltaTime);
+        }
+    }
+    public void ResetVisuals()
+    {
+        playerVisual = PlayerVisual.None;
+        playerVariation = -1;
+    }
+    public void SetRandomPlayerVisual(int rolls = 3)
+    {
+        if (playerVisual == PlayerVisual.None)
+        {
+            // Roll x amount of dice and select lowest number to choose which 
+            System.Random rnd = new System.Random();
+            int id = rnd.Next(1, Enum.GetValues(typeof(PlayerVisual)).Length);
+
+            for (int i = 1; i < rolls; i++)
+            {
+                int compare = rnd.Next(1, Enum.GetValues(typeof(PlayerVisual)).Length);
+                if (compare < id)
+                {
+                    id = compare;
+                }
+            }
+
+            playerVisual = (PlayerVisual)id;
         }
     }
 
@@ -189,29 +214,6 @@ public class ClientManager : MonoBehaviour
     public void GameFinished()
     {
         gameRunning = false;
-    }
-
-    public void SetRandomPlayerVisual(int rolls = 3)
-    {
-        if (playerVisual == PlayerVisual.None)
-        {
-            // Roll x amount of dice and select lowest number to choose which 
-            System.Random rnd = new System.Random();
-            int id = rnd.Next(1, Enum.GetValues(typeof(PlayerVisual)).Length);
-
-            for (int i = 1; i < rolls; i++)
-            {
-                int compare = rnd.Next(1, Enum.GetValues(typeof(PlayerVisual)).Length);
-                if (compare < id)
-                {
-                    id = compare;
-                }
-            }
-
-            playerVisual = (PlayerVisual)id;
-
-            // Set playerVariation based on how many 
-        }
     }
 
     // Close client
