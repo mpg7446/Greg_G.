@@ -31,7 +31,7 @@ public class ScoreCounter : MonoBehaviour
             {
                 GameObject newCounter = Instantiate(counter, gameObject.transform);
                 newCounter.GetComponent<Counter>().player = player;
-                newCounter.name = player.name + "_Counter";
+                newCounter.name = player.GetComponent<PlayerID>().GetID() + "_Counter";
                 counters.Add(newCounter);
             }
         }

@@ -20,6 +20,6 @@ public class Counter : MonoBehaviour
     private void FixedUpdate()
     {
         Score = inventory.itemCount;
-        counterText.text = $"{player.name}'s Score: {Score}";
+        counterText.text = $"{player.GetComponent<PlayerID>().GetID()}'s Score: {Score}";
     }
 }
