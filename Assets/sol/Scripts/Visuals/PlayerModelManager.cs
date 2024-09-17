@@ -88,6 +88,7 @@ public class PlayerModelManager : MonoBehaviour
     {
         playerVisual = (PlayerVisual)id;
         playerVariation = variation;
+        Debug.Log($"Recieved from remote user: PlayerVisual: {(PlayerVisual)id} ({id}) | PlayerVariation: {variation}");
         LoadModel();
         Debug.Log("PlayerModelManaher: set player visuals for remote user");
     }
@@ -96,7 +97,7 @@ public class PlayerModelManager : MonoBehaviour
     {
         if (photonView.IsMine)
         {
-            photonView.RPC("SetPlayerVisual", RpcTarget.Others, (int)playerVisual, playerVisual);
+            photonView.RPC("SetPlayerVisual", RpcTarget.Others, (int)playerVisual, playerVariation);
         }
     }
 
