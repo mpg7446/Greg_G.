@@ -12,6 +12,7 @@ public class ClientManager : MonoBehaviour
 
     [SerializeField] private bool limitFramerate = false;
 
+    // Camera tracking
     private Vector3 cameraDefaultPos;
     private List<GameObject> cameraTrackers = new List<GameObject>();
     public float trackingDistance;
@@ -19,7 +20,7 @@ public class ClientManager : MonoBehaviour
 
     public bool gameRunning = false;
 
-    // TODO - player visuals storage
+    // Player visuals
     public PlayerVisual playerVisual;
     public int playerVariation = -1;
     public enum PlayerVisual
@@ -33,6 +34,7 @@ public class ClientManager : MonoBehaviour
         Isopod,
         Gnarpy
     }
+    public List<PlayerModel> playerModels = new List<PlayerModel>();
 
     private void Start()
     {
@@ -97,6 +99,28 @@ public class ClientManager : MonoBehaviour
 
             playerVisual = (PlayerVisual)id;
         }
+        if (playerVariation <= 0)
+        {
+            setRandomPlayerVariation();
+        }
+
+    }
+
+    private void setRandomPlayerVariation()
+    {
+        PlayerModel match = null;
+        List<PlayerModel> matches = new List<PlayerModel>();
+
+        // Get all matching PlayerModels
+        foreach (PlayerModel model in playerModels)
+        {
+            if (model.playerVisual == playerVisual)
+            {
+                matches.Add(model);
+            }
+        }
+
+        playerVariation = UnityEngine.Random.Range(0, matches.Count - 1);
     }
 
     #region Scene Management
