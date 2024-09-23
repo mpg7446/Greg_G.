@@ -68,7 +68,7 @@ public class GameManager : MonoBehaviour
 
         PhotonLauncher.Instance.SpawnPlayer("Player", spawnLocation);
         MenuManager.Instance.OpenMenu("game");
-        ClientManager.Instance.LoadScene("Empty Environment", "Lobby");
+        ClientManager.Instance.LoadScene("Game Background", "Lobby");
         ClientManager.Instance.GameStarted();
 
         playerCount = PhotonNetwork.CurrentRoom.PlayerCount;
