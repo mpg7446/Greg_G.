@@ -142,7 +142,7 @@ public class PhotonLauncher : MonoBehaviourPunCallbacks
 
     public void SpawnPlayer(string playerType)
     {
-        PhotonNetwork.Instantiate(playerType, Vector3.zero, Quaternion.identity);
+        PhotonNetwork.Instantiate(playerType, new Vector3(0, 10, 0), Quaternion.identity);
     }
     public void SpawnPlayer(string playerType, Vector3 position)
     {
