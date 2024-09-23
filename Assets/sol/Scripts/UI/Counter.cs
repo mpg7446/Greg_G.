@@ -10,12 +10,13 @@ public class Counter : MonoBehaviour
     private PlayerInventory inventory;
     public int Score;
 
-    private void Start()
+    public void Init(GameObject player)
     {
+        this.player = player;
         if (counterText == null)
             counterText = GetComponent<TMP_Text>();
         if (inventory == null)
-            inventory = player.GetComponent<PlayerInventory>();
+            inventory = this.player.GetComponent<PlayerInventory>();
     }
     private void FixedUpdate()
     {

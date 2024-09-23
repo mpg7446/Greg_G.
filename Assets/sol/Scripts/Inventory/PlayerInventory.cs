@@ -14,6 +14,8 @@ public class PlayerInventory : MonoBehaviour
 
     public void Start()
     {
+        ScoreCounter.Instance.AddCounter(gameObject);
+
         photonView = GetComponent<PhotonView>();
         if (photonView.IsMine)
         {
@@ -23,8 +25,6 @@ public class PlayerInventory : MonoBehaviour
         {
             local = false;
         }
-
-        //ScoreCounter.Instance.AddCounter(this);
     }
 
     public void IntersectItem(GameObject item)
@@ -51,6 +51,7 @@ public class PlayerInventory : MonoBehaviour
     {
         itemCount += amount;
         GameManager.Instance.PickupItem();
+        ScoreCounter.Instance.IncreaseCounter(gameObject, amount);
         if (local)
         {
             movement.UpdateWeight(amount);

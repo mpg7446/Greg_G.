@@ -14,26 +14,43 @@ public class ScoreCounter : MonoBehaviour
             Destroy(this);
         Instance = this;
 
-        CreateCounters();
+        //CreateCounters();
 
         //AddCounters();
         //SpawnCounters();
     }
 
-    private void CreateCounters()
-    {
-        counters = new List<GameObject>();
-        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+    //private void CreateCounters()
+    //{
+    //    counters = new List<GameObject>();
+    //    GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
 
-        foreach (GameObject player in players)
+    //    foreach (GameObject player in players)
+    //    {
+    //        if (counter != null)
+    //        {
+    //            GameObject newCounter = Instantiate(counter, gameObject.transform);
+    //            newCounter.GetComponent<Counter>().player = player;
+    //            newCounter.name = player.GetComponent<PlayerID>().GetID() + "_Counter";
+    //            counters.Add(newCounter);
+    //        }
+    //    }
+    //}
+
+    public void AddCounter(GameObject obj)
+    {
+        GameObject newCounter = Instantiate(counter, gameObject.transform);
+        newCounter.GetComponent<Counter>().Init(obj);
+        counters.Add(newCounter);
+    }
+
+    public void IncreaseCounter(GameObject obj, int amount = 1)
+    {
+        foreach(GameObject counter in counters)
         {
-            if (counter != null)
-            {
-                GameObject newCounter = Instantiate(counter, gameObject.transform);
-                newCounter.GetComponent<Counter>().player = player;
-                newCounter.name = player.GetComponent<PlayerID>().GetID() + "_Counter";
-                counters.Add(newCounter);
-            }
+            Counter cont = counter.GetComponent<Counter>();
+            if (cont.player == obj)
+                cont.Score += amount;
         }
     }
 

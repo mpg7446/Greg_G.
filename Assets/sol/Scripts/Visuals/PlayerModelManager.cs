@@ -39,7 +39,6 @@ public class PlayerModelManager : MonoBehaviour
 
     public void LoadModel()
     {
-        PlayerModel match = null;
         List<PlayerModel> matches = new List<PlayerModel>();
 
         // Get all matching PlayerModels
@@ -54,8 +53,8 @@ public class PlayerModelManager : MonoBehaviour
         Debug.Log($"PlayerModelManager: Player variable {playerVariation} selected");
 
         sprite.sprite = matches[playerVariation].sprite;
-        sprite.transform.localPosition += match.offset;
-        sprite.transform.localScale = new Vector3(match.scale.x * sprite.transform.localScale.x, match.scale.y * sprite.transform.localScale.y, sprite.transform.localScale.z);
+        sprite.transform.localPosition += matches[playerVariation].offset;
+        sprite.transform.localScale = new Vector3(matches[playerVariation].scale.x * sprite.transform.localScale.x, matches[playerVariation].scale.y * sprite.transform.localScale.y, sprite.transform.localScale.z);
     }
 
     public void SetPlayerVisual()
