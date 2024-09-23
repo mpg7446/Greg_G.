@@ -51,18 +51,9 @@ public class PlayerModelManager : MonoBehaviour
             }
         }
 
-        // Pick random PlayerModel from matching PlayerModels
-        if (photonView.IsMine && playerVariation < 0)
-        {
-            playerVariation = UnityEngine.Random.Range(0, matches.Count - 1);
-            ClientManager.Instance.playerVariation = playerVariation;
-            Debug.Log("PlayerModelManager: No player variable selected, choosing random variation");
-        }
-
-        match = matches[playerVariation];
         Debug.Log($"PlayerModelManager: Player variable {playerVariation} selected");
 
-        sprite.sprite = match.sprite;
+        sprite.sprite = matches[playerVariation].sprite;
         sprite.transform.localPosition += match.offset;
         sprite.transform.localScale = new Vector3(match.scale.x * sprite.transform.localScale.x, match.scale.y * sprite.transform.localScale.y, sprite.transform.localScale.z);
     }
