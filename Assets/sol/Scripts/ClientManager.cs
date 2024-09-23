@@ -108,7 +108,6 @@ public class ClientManager : MonoBehaviour
 
     private void setRandomPlayerVariation()
     {
-        PlayerModel match = null;
         List<PlayerModel> matches = new List<PlayerModel>();
 
         // Get all matching PlayerModels
