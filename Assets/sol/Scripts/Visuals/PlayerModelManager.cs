@@ -42,7 +42,7 @@ public class PlayerModelManager : MonoBehaviour
         List<PlayerModel> matches = new List<PlayerModel>();
 
         // Get all matching PlayerModels
-        foreach (PlayerModel model in models)
+        foreach (PlayerModel model in ClientManager.Instance.playerModels)
         {
             if (model.playerVisual == playerVisual)
             {
