@@ -165,6 +165,7 @@ MonoBehaviour:
   inStack: 0
   stackParent: {fileID: 0}
   stackChild: {fileID: 0}
+  boxCollider: {fileID: 0}
   colliderMaxDelay: 25
   weight: 100
   weightMultiplier: 5
