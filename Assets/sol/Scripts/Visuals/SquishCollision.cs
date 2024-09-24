@@ -19,7 +19,7 @@ public class SquishCollision : MonoBehaviour
             return;
         }
 
-        if (photonView.IsMine && collision.gameObject.CompareTag("Player")) // colliding with player
+        if (photonView.IsMine && collision.gameObject.CompareTag("Player")) // colliding with player/object
         {
             PlayerManager.Instance.CollisionEnter(collision);
         }
@@ -35,6 +35,14 @@ public class SquishCollision : MonoBehaviour
         if (photonView.IsMine && collision.gameObject.CompareTag("Player")) // check if not colliding with player
         {
             PlayerManager.Instance.CollisionExit(collision);
-        }
+        } 
+        //else if (photonView.IsMine)
+        //{
+        //    PlayerManager.Instance.PassableExit(collision);
+        //}
     }
+    //private void OnTriggerEnter2D(Collider2D collision)
+    //{
+    //    PlayerManager.Instance.TriggerEnter(collision);
+    //}
 }

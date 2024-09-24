@@ -34,6 +34,8 @@ public class PlayerManager : MonoBehaviour
         protected set { }
     }
 
+    private GameObject passableObject = null;
+
     // action settings
     private bool holdingAction = false;
 
@@ -42,7 +44,7 @@ public class PlayerManager : MonoBehaviour
     public GameObject stackParent;
     public GameObject stackChild;
 
-    private BoxCollider2D boxCollider;
+    public BoxCollider2D boxCollider;
     private CircleCollider2D circleCollider;
     private int colliderDelay = 0;
     [SerializeField] private int colliderMaxDelay = 25;
@@ -65,6 +67,7 @@ public class PlayerManager : MonoBehaviour
     //public bool isGrounded;
     //public bool isAgainstWall;
     public LayerMask layerMask;
+    public LayerMask passableMask;
 
     private void Awake()
     {
@@ -102,14 +105,14 @@ public class PlayerManager : MonoBehaviour
     // movement - on physics update
     public void FixedUpdate()
     {
-        if (!inStack)
-        {
+        //if (!inStack)
+        //{
             StandardMovement();
             UpdateVisualDirection();
-        } else
-        {
-            StackMovement();
-        }
+        //} else
+        //{
+        //    StackMovement();
+        //}
 
         if (input.action && !holdingAction)
         {
@@ -132,46 +135,65 @@ public class PlayerManager : MonoBehaviour
         // enable weight bursting
         canBurst = true;
 
-        GameObject otherPlayer = collision.gameObject;
-
-        if (!inStack && colliderDelay <= 0)
-        {
-            if (stackParent == null && transform.position.y > otherPlayer.transform.position.y + (boxCollider.size.y / 1.1)) // collision is below player and players height
-            {
-                EnterStackAbove(otherPlayer);
-            }
-            else if (stackChild == null && transform.position.y < otherPlayer.transform.position.y - (boxCollider.size.y / 1.1)) // collision is above player and players height
-            {
-                EnterStackBelow(otherPlayer);
-            }
-        }
+        //if (!inStack && colliderDelay <= 0)
+        //{
+        //    if (stackParent == null && transform.position.y > otherObject.transform.position.y + (boxCollider.size.y / 1.1)) // collision is below player and players height
+        //    {
+        //        EnterStackAbove(otherObject);
+        //    }
+        //    else if (stackChild == null && transform.position.y < otherObject.transform.position.y - (boxCollider.size.y / 1.1)) // collision is above player and players height
+        //    {
+        //        EnterStackBelow(otherObject);
+        //    }
+        //}
     }
 
     public virtual void CollisionExit(Collision2D collision)
     {
         canBurst = false;
     }
+    //public virtual void PassableExit(Collision2D collision)
+    //{
+    //    if (collision.gameObject == passableObject)
+    //    {
+    //        passableObject.GetComponent<Collider2D>().isTrigger = true;
+    //        passableObject = null;
+    //    }
+    //}
+
+    //public virtual void TriggerEnter(Collider2D collision)
+    //{
+    //    GameObject otherObject = collision.gameObject;
+
+    //    // Walls
+    //    RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.right * input.movement.x, wallDistance);
+    //    if (passableObject == null && otherObject.layer == LayerMask.NameToLayer("Passable") && hit.transform.position.y - (boxCollider.size.y / 1.1) <= transform.position.y)
+    //    {
+    //        passableObject = otherObject;
+    //        passableObject.GetComponent<Collider2D>().isTrigger = false;
+    //    }
+    //}
 
     // Switch Colliders
-    protected virtual void SwitchCollider(bool enabled)
-    {
-        if (enabled)
-        {
-            boxCollider.enabled = false;
-            circleCollider.enabled = true;
-        }
-        else
-        {
-            boxCollider.enabled = true;
-            circleCollider.enabled = false;
-        }
-    }
+    //protected virtual void SwitchCollider(bool enabled)
+    //{
+    //    if (enabled)
+    //    {
+    //        boxCollider.enabled = false;
+    //        circleCollider.enabled = true;
+    //    }
+    //    else
+    //    {
+    //        boxCollider.enabled = true;
+    //        circleCollider.enabled = false;
+    //    }
+    //}
     #endregion
 
     #region Movement & Actions
     private void StandardMovement() // for movement seperate from player stack
     {
-        SwitchCollider(false);
+        //SwitchCollider(false);
          //movement inputs
         if (input.movement.x != 0 && !IsAgainstWall())
             {
@@ -237,11 +259,11 @@ public class PlayerManager : MonoBehaviour
         Vector2 trans = new Vector3(finalSpeed * Time.fixedDeltaTime, rb.velocity.y);
         rb.velocity = trans;
     }
-    private void StackMovement() // for movement in a player stack
-    {
-        SwitchCollider(true);
-        rb.velocity = Vector3.up;
-    }
+    //private void StackMovement() // for movement in a player stack
+    //{
+    //    SwitchCollider(true);
+    //    rb.velocity = Vector3.up;
+    //}
 
     private void Jump()
     {
@@ -277,7 +299,8 @@ public class PlayerManager : MonoBehaviour
     {
         Debug.DrawRay(transform.position, Vector2.down * groundDistance, Color.yellow);
 
-        if (Physics2D.Raycast(transform.position, Vector2.down, groundDistance, layerMask))
+        if (Physics2D.Raycast(transform.position, Vector2.down, groundDistance, layerMask) || 
+            (passableObject != null && Physics2D.Raycast(transform.position, Vector2.down, groundDistance, passableMask)))
         {
             return true;
         }

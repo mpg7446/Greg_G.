@@ -101,12 +101,12 @@ public class ClientManager : MonoBehaviour
         }
         if (playerVariation <= 0)
         {
-            setRandomPlayerVariation();
+            SetRandomPlayerVariation();
         }
 
     }
 
-    private void setRandomPlayerVariation()
+    public void SetRandomPlayerVariation()
     {
         List<PlayerModel> matches = new List<PlayerModel>();
 

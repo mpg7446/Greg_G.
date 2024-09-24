@@ -160,6 +160,9 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 128
+  passableMask:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!50 &2969266834194631221
 Rigidbody2D:
   serializedVersion: 4
@@ -474,6 +477,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4549882667129177147}
   - component: {fileID: 3027323443380457144}
+  - component: {fileID: 8073472616122079675}
   m_Layer: 3
   m_Name: Stickers
   m_TagString: Untagged
@@ -543,3 +547,15 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.2464819, y: 1.2464819}
   m_EdgeRadius: 0
+--- !u!114 &8073472616122079675
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8609700007620302885}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c049ed344fcb9b4ebc88216f746e659, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -13,9 +13,12 @@ public class MenuPlayerManager : PlayerManager
         {
             Debug.Log("Action pressed and not in stack, possibly have this change player customization??");
         }
+
+        ClientManager.Instance.SetRandomPlayerVariation();
+        gameObject.GetComponent<PlayerModelManager>().SetPlayerVisual();
     }
 
-    public override void CollisionEnter(Collision2D collision) { }
-    public override void CollisionExit(Collision2D collision) { }
-    protected override void SwitchCollider(bool enabled) { }
+    //public override void CollisionEnter(Collision2D collision) { }
+    //public override void CollisionExit(Collision2D collision) { }
+    //protected override void SwitchCollider(bool enabled) { }
 }
