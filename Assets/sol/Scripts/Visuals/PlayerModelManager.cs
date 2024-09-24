@@ -10,7 +10,7 @@ public class PlayerModelManager : MonoBehaviour
 {
     public PlayerVisual playerVisual;
     [SerializeField] private int playerVariation = -1;
-    public List<PlayerModel> models = new List<PlayerModel>();
+    //public List<PlayerModel> models = new List<PlayerModel>();
     private PhotonView photonView;
 
     // Objects
