@@ -95,33 +95,37 @@ public class Item : MonoBehaviour
 
     public void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player")) // check to see if interacts with player
+        GameObject obj = collision.gameObject.transform.parent.gameObject;
+
+        if (obj.CompareTag("Player")) // check to see if interacts with player
         {
 
-            players.Add(collision.gameObject);
+            players.Add(obj);
             Debug.Log("player added to players list at id " + (players.Count - 1));
 
             if (players.Count == 1)
             {
-                UpdateHolding(collision.gameObject);
+                UpdateHolding(obj);
             }
         }
     }
 
     public void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player")) // check to see if interacts with player
+        GameObject obj = collision.gameObject.transform.parent.gameObject;
+
+        if (obj.CompareTag("Player")) // check to see if interacts with player
         {
             // remove touching value if that was the last player leaving
-            if (players.IndexOf(collision.gameObject) == 0 && players.Count == 1)
+            if (players.IndexOf(obj) == 0 && players.Count == 1)
             {
                 touching = false;
 
-                collision.GetComponentInParent<PlayerInventory>().LeaveItem();
+                obj.GetComponent<PlayerInventory>().LeaveItem();
             }
 
             // clear player from players list
-            players.Remove(collision.gameObject);
+            players.Remove(obj);
         }
     }
 
@@ -184,7 +188,7 @@ public class Item : MonoBehaviour
     private void UpdateHolding(GameObject player)
     {
         // get player inventory script and copy countdown toggle
-        PlayerInventory inventory = player.GetComponentInParent<PlayerInventory>();
+        PlayerInventory inventory = player.GetComponent<PlayerInventory>();
 
         if (enableCountdown)
         {
@@ -209,7 +213,7 @@ public class Item : MonoBehaviour
     
     private void PickupItem()
     {
-        players[0].GetComponentInParent<PlayerInventory>().PickupItem(score);
+        players[0].GetComponent<PlayerInventory>().PickupItem(score, true);
         Destroy(gameObject);
     }
 

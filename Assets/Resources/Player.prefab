@@ -90,17 +90,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerVisual: 0
   playerVariation: -1
-  models:
-  - {fileID: 11400000, guid: cbac9d3c7e4ef494798f5b0c6d9b5289, type: 2}
-  - {fileID: 11400000, guid: ffa9cc509dcc9f6418a93337125c0595, type: 2}
-  - {fileID: 11400000, guid: d4dedef5d17af0c49887ac4517d28699, type: 2}
-  - {fileID: 11400000, guid: f2437690c735a104a9bcab8d08ca6e1e, type: 2}
-  - {fileID: 11400000, guid: 3f7941c2bf367674ea42fafb92492165, type: 2}
-  - {fileID: 11400000, guid: 39c8f25634693b4459602277834d2727, type: 2}
-  - {fileID: 11400000, guid: cc727347f444e334280837456f484f60, type: 2}
-  - {fileID: 11400000, guid: 88ec5412146612345a09f6c7c146f144, type: 2}
-  - {fileID: 11400000, guid: 3ad9d1746ccf2f34baaa6244f34b8faf, type: 2}
-  - {fileID: 11400000, guid: 7f6fb6532a51e2f4e92b103b74b8e1d5, type: 2}
   cardboard: {fileID: 0}
   stickers: {fileID: 8043734352474032317}
 --- !u!114 &-6271936724257076667

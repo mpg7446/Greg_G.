@@ -49,6 +49,7 @@ public class PlayerInventory : MonoBehaviour
 
     public void PickupItem(int amount = 1, bool rpc = false)
     {
+        Debug.Log("PickupItem(amount) called");
         itemCount += amount;
         GameManager.Instance.PickupItem();
         ScoreCounter.Instance.IncreaseCounter(gameObject, amount);
@@ -60,11 +61,13 @@ public class PlayerInventory : MonoBehaviour
     }
     public void PickupItem()
     {
-        PickupItem(1);
+        Debug.Log("PickupItem() called");
+        PickupItem(1, false);
     }
     [PunRPC]
     public void PickupItem(int amount = 1)
     {
-        PickupItem(amount);
+        Debug.Log("RPC PickupItem() called");
+        PickupItem(amount, false);
     }
 }
