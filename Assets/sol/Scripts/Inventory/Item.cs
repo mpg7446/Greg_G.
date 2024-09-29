@@ -97,9 +97,8 @@ public class Item : MonoBehaviour
     {
         GameObject obj = collision.gameObject.transform.parent.gameObject;
 
-        if (obj.CompareTag("Player")) // check to see if interacts with player
+        if (obj.CompareTag("Player") && obj.GetComponent<MenuPlayerManager>() == null) // check to see if interacts with player
         {
-
             players.Add(obj);
             Debug.Log("player added to players list at id " + (players.Count - 1));
 
