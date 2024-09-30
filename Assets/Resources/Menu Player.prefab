@@ -135,7 +135,7 @@ MonoBehaviour:
   speed: 40
   maxSpeed: 300
   crouchMultiplier: 0.2
-  groundDistance: 0.7
+  groundDistance: 0.8
   wallDistance: 0.7
   inStack: 0
   stackParent: {fileID: 0}

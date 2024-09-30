@@ -299,7 +299,7 @@ public class PlayerManager : MonoBehaviour
     {
         Debug.DrawRay(transform.position, Vector2.down * groundDistance, Color.yellow);
 
-        if (Physics2D.Raycast(transform.position, Vector2.down, groundDistance, layerMask) || 
+        if (rb.velocity.y <= 0 && Physics2D.Raycast(transform.position, Vector2.down, groundDistance, layerMask) || 
             (passableObject != null && Physics2D.Raycast(transform.position, Vector2.down, groundDistance, passableMask)))
         {
             return true;

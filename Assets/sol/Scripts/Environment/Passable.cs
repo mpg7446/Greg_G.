@@ -16,7 +16,7 @@ public class Passable : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (player.transform.position.y - (player.boxCollider.bounds.size.y / 1.1) > collider.transform.position.y)
+        if (player.transform.position.y - (player.boxCollider.bounds.size.y / 1.2) > collider.transform.position.y)
             collider.enabled = true;
         else
             collider.enabled = false;

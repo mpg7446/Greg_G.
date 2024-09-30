@@ -15,6 +15,7 @@ public class ClientManager : MonoBehaviour
     // Camera tracking
     private Vector3 cameraDefaultPos;
     private List<GameObject> cameraTrackers = new List<GameObject>();
+    private List<Vector3> visibleTrackers = new List<Vector3>();
     public float trackingDistance;
     [Tooltip("Time it takes to snap to camera position (not in seconds, im not too sure why)")] public float trackingSpeed;
 
@@ -190,17 +191,17 @@ public class ClientManager : MonoBehaviour
     private void UpdateCamera(bool intense, params GameObject[] trackers)
     {
         // Convert GameObject array to transform.position array
-        Vector3[] trackersPos = new Vector3[trackers.Length];
+        //Vector3[] trackersPos = new Vector3[trackers.Length];
 
-        int i = 0;
-        foreach (GameObject tracker in trackers)
-        {
-            trackersPos[i] = tracker.transform.position;
-            i++;
-        }
+        //int i = 0;
+        //foreach (GameObject tracker in trackers)
+        //{
+        //    trackersPos[i] = tracker.transform.position;
+        //    i++;
+        //}
 
         // Update camera with new transform.position array
-        UpdateCamera(intense, trackersPos);
+        UpdateCamera(intense, visibleTrackers.ToArray());
     }
 #endregion
 
@@ -209,13 +210,20 @@ public class ClientManager : MonoBehaviour
     // based off of trackingDistance
     private bool TrackersVisible(GameObject localTracker, List<GameObject> trackers)
     {
+        bool visible = false;
+        visibleTrackers.Clear();
+        visibleTrackers.Add(localTracker.transform.position);
+
         foreach (GameObject tracker in trackers)
         {
             if (tracker != localTracker && Vector3.Distance(localTracker.transform.position, tracker.transform.position) < trackingDistance)
-                return true;
+            {
+                visible = true;
+                visibleTrackers.Add(tracker.transform.position);
+            }
         }
 
-        return false;
+        return visible;
     }
 
     // Clear all instances of null in cameraTrackers

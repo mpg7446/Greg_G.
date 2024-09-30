@@ -73,7 +73,7 @@ public class ScoreCounter : MonoBehaviour
             newCounters.Insert(index, counter);
         }
 
-        Debug.Log("ScoreCounter: Score Reordered!");
+        Debug.Log("ScoreCounter: Scores Reordered!");
         counters = newCounters;
     }
 
