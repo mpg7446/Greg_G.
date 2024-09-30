@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -50,8 +51,30 @@ public class ScoreCounter : MonoBehaviour
         {
             Counter cont = counter.GetComponent<Counter>();
             if (cont.player == obj)
-                cont.Score += amount;
+                cont.IncreaseScore(amount);
         }
+
+        ReOrder();
+    }
+
+    private void ReOrder()
+    {
+        List<GameObject> newCounters = new List<GameObject>();
+
+        foreach(GameObject counter in counters)
+        {
+            int index = 0;
+            foreach(GameObject newCounter in newCounters)
+            {
+                if (newCounter.GetComponent<Counter>().Score < counter.GetComponent<Counter>().Score)
+                    index++;
+            }
+
+            newCounters.Insert(index, counter);
+        }
+
+        Debug.Log("ScoreCounter: Score Reordered!");
+        counters = newCounters;
     }
 
     //public void AddCounters()

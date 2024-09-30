@@ -52,11 +52,11 @@ public class PlayerInventory : MonoBehaviour
         Debug.Log("PickupItem(amount) called");
         itemCount += amount;
         GameManager.Instance.PickupItem();
-        ScoreCounter.Instance.IncreaseCounter(gameObject, amount);
         if (local)
         {
             movement.UpdateWeight(amount);
             photonView.RPC("PickupItem", RpcTarget.Others, amount);
+            ScoreCounter.Instance.IncreaseCounter(gameObject, amount);
         }
     }
     public void PickupItem()
