@@ -212,7 +212,9 @@ public class Item : MonoBehaviour
     
     private void PickupItem()
     {
-        players[0].GetComponent<PlayerInventory>().PickupItem(score, true);
+        PlayerInventory inv = players[0].GetComponent<PlayerInventory>();
+        if (inv.IsMine)
+            inv.PickupItem(score, true);
         Destroy(gameObject);
     }
 

@@ -6,9 +6,9 @@ using UnityEngine;
 public class PlayerInventory : MonoBehaviour
 {
     private PhotonView photonView;
+    public bool IsMine { get { return photonView.IsMine; } }
     public int itemCount = 0;
     private PlayerManager movement;
-    private bool local = true;
 
     private GameObject item;
 
@@ -17,14 +17,7 @@ public class PlayerInventory : MonoBehaviour
         ScoreCounter.Instance.AddCounter(gameObject);
 
         photonView = GetComponent<PhotonView>();
-        if (photonView.IsMine)
-        {
-            movement = GetComponent<PlayerManager>();
-        }
-        else
-        {
-            local = false;
-        }
+        movement = GetComponent<PlayerManager>();
     }
 
     public void IntersectItem(GameObject item)
@@ -49,25 +42,20 @@ public class PlayerInventory : MonoBehaviour
 
     public void PickupItem(int amount = 1, bool rpc = false)
     {
-        Debug.Log("PickupItem(amount) called");
+        //Debug.Log("PickupItem(amount) called");
         itemCount += amount;
-        GameManager.Instance.PickupItem();
-        if (local)
+        GameManager.Instance.PickupItem(amount);
+        if (rpc && photonView.IsMine)
         {
             movement.UpdateWeight(amount);
             photonView.RPC("PickupItem", RpcTarget.Others, amount);
             ScoreCounter.Instance.IncreaseCounter(gameObject, amount);
         }
     }
-    public void PickupItem()
-    {
-        Debug.Log("PickupItem() called");
-        PickupItem(1, false);
-    }
     [PunRPC]
     public void PickupItem(int amount = 1)
     {
-        Debug.Log("RPC PickupItem() called");
+        //Debug.Log("RPC PickupItem() called");
         PickupItem(amount, false);
     }
 }

@@ -75,6 +75,8 @@ public class ClientManager : MonoBehaviour
             cameraObject.transform.position = Vector3.Lerp(cameraObject.transform.position, cameraDefaultPos, trackingSpeed * Time.deltaTime);
         }
     }
+
+    #region Visuals
     public void ResetVisuals()
     {
         playerVisual = PlayerVisual.None;
@@ -122,6 +124,12 @@ public class ClientManager : MonoBehaviour
         playerVariation = UnityEngine.Random.Range(0, matches.Count - 1);
     }
 
+    public void SetNextPlayerVariation()
+    {
+
+    }
+    #endregion
+
     #region Scene Management
     // Load specific Scene
     public void LoadScene(string scene)
@@ -156,9 +164,11 @@ public class ClientManager : MonoBehaviour
         foreach (Vector3 player in trackersPos)
         {
             average += player;
+            //Debug.Log($"UpdateCamera: added {player} to average ({average})");
         }
 
         average /= trackersPos.Length;
+        //Debug.Log($"UpdateCamera: average averaged | {average}");
         average.z = cameraObject.transform.position.z; // dont need to change position.z from tracker positions
 
         // Lerp to new averaged location
@@ -166,14 +176,14 @@ public class ClientManager : MonoBehaviour
 
         // TODO - Update Camera Zoom
 
-        float newFOV = defaultFOV;
+        //float newFOV = defaultFOV;
 
-        if (intense)
-        {
-            newFOV *= 1.1f;
-        }
+        //if (intense)
+        //{
+        //    newFOV *= 1.1f;
+        //}
 
-        cameraObject.GetComponent<Camera>().fieldOfView = newFOV;
+        //cameraObject.GetComponent<Camera>().fieldOfView = newFOV;
     }
 
     // Update camera position with GameObject[] input
@@ -199,16 +209,13 @@ public class ClientManager : MonoBehaviour
     // based off of trackingDistance
     private bool TrackersVisible(GameObject localTracker, List<GameObject> trackers)
     {
-        bool playersVisible = false;
         foreach (GameObject tracker in trackers)
         {
             if (tracker != localTracker && Vector3.Distance(localTracker.transform.position, tracker.transform.position) < trackingDistance)
-            {
-                playersVisible = true;
-            }
+                return true;
         }
 
-        return playersVisible;
+        return false;
     }
 
     // Clear all instances of null in cameraTrackers
@@ -226,6 +233,7 @@ public class ClientManager : MonoBehaviour
     public void AddCameraTracker(GameObject tracker)
     {
         cameraTrackers.Add(tracker);
+        Debug.Log($"ClientManager: successfully added tracker (Player {tracker.GetComponent<PlayerID>().GetID()})");
     }
 #endregion
 

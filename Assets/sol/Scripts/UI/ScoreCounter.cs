@@ -77,6 +77,11 @@ public class ScoreCounter : MonoBehaviour
         counters = newCounters;
     }
 
+    public void ClearCounters()
+    {
+        counters = new List<GameObject>();
+    }
+
     //public void AddCounters()
     //{
     //    counters = new Dictionary<PlayerInventory, int>();

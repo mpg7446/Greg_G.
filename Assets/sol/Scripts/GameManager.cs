@@ -42,14 +42,15 @@ public class GameManager : MonoBehaviour
         */
     }
 
-    public void PickupItem()
+    public void PickupItem(int amount = 1)
     {
-        currentItems++;
+        currentItems += amount;
+        //Debug.Log("GameManager: PickupItem called with amount " + amount);
 
         if (currentItems >= maxItems)
         {
             Debug.Log("GameManager: Game Ended");
-            EndGame();
+            EndGame(true);
         }
     }
 
