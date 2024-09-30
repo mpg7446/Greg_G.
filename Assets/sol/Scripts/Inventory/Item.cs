@@ -100,7 +100,7 @@ public class Item : MonoBehaviour
         if (obj.CompareTag("Player") && obj.GetComponent<MenuPlayerManager>() == null) // check to see if interacts with player
         {
             players.Add(obj);
-            Debug.Log("player added to players list at id " + (players.Count - 1));
+            //Debug.Log("player added to players list at id " + (players.Count - 1));
 
             if (players.Count == 1)
             {
@@ -144,7 +144,7 @@ public class Item : MonoBehaviour
         {
             countdown -= 2;
 
-            if (countdown < 0)
+            if (countdown <= 0)
             {
                 PickupItem();
             }
@@ -213,9 +213,11 @@ public class Item : MonoBehaviour
     private void PickupItem()
     {
         PlayerInventory inv = players[0].GetComponent<PlayerInventory>();
-        if (inv.IsMine)
+        if (inv.IsMine && GameManager.Instance.IsRunning)
+        {
             inv.PickupItem(score, true);
-        Destroy(gameObject);
+            PhotonNetwork.Destroy(gameObject);
+        }
     }
 
     private void RunFromPlayers()
@@ -282,7 +284,7 @@ public class Item : MonoBehaviour
     [PunRPC]
     private void UpdateVisuals(int foodID)
     {
-        Debug.Log("UpdateVisuals[RPC] recieved " +  foodID);
+        //Debug.Log("UpdateVisuals[RPC] recieved " +  foodID);
         visualType = (foodType)foodID;
         UpdateVisuals(false);
     }

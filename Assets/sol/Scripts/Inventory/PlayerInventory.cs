@@ -40,22 +40,23 @@ public class PlayerInventory : MonoBehaviour
         return false;
     }
 
+    [PunRPC]
     public void PickupItem(int amount = 1, bool rpc = false)
     {
         //Debug.Log("PickupItem(amount) called");
         itemCount += amount;
-        GameManager.Instance.PickupItem(amount);
+        GameManager.Instance.PickupItem(this, amount);
         if (rpc && photonView.IsMine)
         {
             movement.UpdateWeight(amount);
             photonView.RPC("PickupItem", RpcTarget.Others, amount);
             ScoreCounter.Instance.IncreaseCounter(gameObject, amount);
         }
-    }
+    }/*
     [PunRPC]
     public void PickupItem(int amount = 1)
     {
         //Debug.Log("RPC PickupItem() called");
         PickupItem(amount, false);
-    }
+    }*/
 }

@@ -9,9 +9,12 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
     private PhotonView photonView;
 
+    public string map;
+
     public bool enablePickupCountdown = true;
     public bool itemsRunAway = false;
 
+    public bool IsRunning {  get; private set; }
     public int playerCount = 0;
 
     // item counts
@@ -53,6 +56,16 @@ public class GameManager : MonoBehaviour
             EndGame(true);
         }
     }
+    public void PickupItem(PlayerInventory sender, int amount = 1)
+    {
+        currentItems += amount;
+
+        if (sender.IsMine && currentItems >= maxItems)
+        {
+            Debug.Log("GameManager: Game Ended by sender");
+            EndGame(true);
+        }
+    }
 
     public void StartGame(bool RPCHost = false)
     {
@@ -69,10 +82,11 @@ public class GameManager : MonoBehaviour
 
         PhotonLauncher.Instance.SpawnPlayer("Player", spawnLocation);
         MenuManager.Instance.OpenMenu("game");
-        ClientManager.Instance.LoadScene("Game Background", "Lobby");
+        ClientManager.Instance.LoadScene(map, "Lobby");
         ClientManager.Instance.GameStarted();
 
         playerCount = PhotonNetwork.CurrentRoom.PlayerCount;
+        IsRunning = true;
     }
 
     [PunRPC]
@@ -110,29 +124,31 @@ public class GameManager : MonoBehaviour
         ClientManager.Instance.CloseClient();
     }
 
-    public void EndGame(bool RPC = false)
-    {
-        Debug.Log("GameManager: Game Ended");
-
-        if (RPC)
-        {
-            photonView.RPC("RPCEndGame", RpcTarget.Others);
-            PhotonNetwork.CurrentRoom.IsOpen = true;
-        }
-
-        MenuManager.Instance.OpenMenu("lobby");
-        ClientManager.Instance.LoadScene("Lobby", "Empty Environment");
-
-        PlayerManager.Instance.DestroyPlayer();
-        PhotonLauncher.Instance.SpawnPlayer("Menu Player");
-        ClientManager.Instance.GameFinished();
-    }
-
-    [PunRPC] 
+    [PunRPC]
     private void RPCEndGame()
     {
         Debug.Log("Remote user ended game!");
-        EndGame();
+        EndGame(false);
+    }
+
+    public void EndGame(bool RPC = false)
+    {
+        if (IsRunning) {
+            if (RPC)
+            {
+                photonView.RPC("RPCEndGame", RpcTarget.Others);
+                PhotonNetwork.CurrentRoom.IsOpen = true;
+            }
+
+            MenuManager.Instance.OpenMenu("lobby");
+            ClientManager.Instance.LoadScene("Lobby", map);
+
+            PlayerManager.Instance.DestroyPlayer();
+            PhotonLauncher.Instance.SpawnPlayer("Menu Player");
+            ClientManager.Instance.GameFinished();
+
+            IsRunning = false;
+        }
     }
 
     public void PlayerLeft(Player player)
