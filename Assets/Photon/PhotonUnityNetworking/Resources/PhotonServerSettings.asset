@@ -55,6 +55,7 @@ MonoBehaviour:
   - Squish
   - UnSquish
   - PickupItem
+  - EndGame
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 0

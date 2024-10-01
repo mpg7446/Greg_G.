@@ -95,7 +95,12 @@ public class Item : MonoBehaviour
 
     public void OnTriggerEnter2D(Collider2D collision)
     {
-        GameObject obj = collision.gameObject.transform.parent.gameObject;
+        GameObject obj;
+        try
+        {
+            obj = collision.gameObject.transform.parent.gameObject;
+        }
+        catch { return; }
 
         if (obj.CompareTag("Player") && obj.GetComponent<MenuPlayerManager>() == null) // check to see if interacts with player
         {
@@ -111,7 +116,11 @@ public class Item : MonoBehaviour
 
     public void OnTriggerExit2D(Collider2D collision)
     {
-        GameObject obj = collision.gameObject.transform.parent.gameObject;
+        GameObject obj;
+        try
+        {
+            obj = collision.gameObject.transform.parent.gameObject;
+        } catch { return; }
 
         if (obj.CompareTag("Player")) // check to see if interacts with player
         {
@@ -147,6 +156,7 @@ public class Item : MonoBehaviour
             if (countdown <= 0)
             {
                 PickupItem();
+                Destroy(gameObject);
             }
 
             UpdateSlider();
@@ -201,6 +211,7 @@ public class Item : MonoBehaviour
         {
             // skip countdown sequence and immediately pickup item - TODO possibly change this to be a part of the players settings??
             PickupItem();
+            Destroy(gameObject);
         }
     }
 
@@ -213,11 +224,10 @@ public class Item : MonoBehaviour
     private void PickupItem()
     {
         PlayerInventory inv = players[0].GetComponent<PlayerInventory>();
-        GameManager.Instance.RemoveItem(gameObject);
+        //GameManager.Instance.RemoveItem(gameObject);
         if (inv.IsMine && GameManager.Instance.IsRunning)
         {
             inv.PickupItem(score, true);
-            PhotonNetwork.Destroy(gameObject);
         }
     }
 

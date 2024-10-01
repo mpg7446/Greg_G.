@@ -19,7 +19,8 @@ public class GameManager : MonoBehaviour
 
     // item counts
     public int maxItems;
-    public int currentItems { get { return items.Count; } }
+    //public int currentItems { get { return items.Count; } }
+    public int currentItems;
     private List<GameObject> items;
     public List<GameObject> itemSpawners;
 
@@ -45,9 +46,10 @@ public class GameManager : MonoBehaviour
         maxItems = items.Length;
         */
     }
-
+    /*
     public void PickupItem(int amount = 1)
     {
+        currentItems -= amount;
         //Debug.Log("GameManager: PickupItem called with amount " + amount);
 
         if (currentItems >= maxItems)
@@ -55,9 +57,11 @@ public class GameManager : MonoBehaviour
             Debug.Log("GameManager: Game Ended");
             EndGame(true);
         }
-    }
+    }*/
     public void PickupItem(PlayerInventory sender, int amount = 1)
     {
+        currentItems = currentItems + amount;
+        Debug.Log("GameManager: ItemCount changed to " + currentItems);
         if (sender.IsMine && currentItems >= maxItems)
         {
             Debug.Log("GameManager: Game Ended by sender");
@@ -65,11 +69,12 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void StartGame(bool RPCHost = false)
+    [PunRPC]
+    public void StartGame(bool rpc = false)
     {
         Debug.Log("GameManager: Game Started");
 
-        if (RPCHost)
+        if (rpc)
         {
             photonView.RPC("StartGame",RpcTarget.Others, false);
             PhotonNetwork.CurrentRoom.IsOpen = false;
@@ -85,6 +90,7 @@ public class GameManager : MonoBehaviour
 
         playerCount = PhotonNetwork.CurrentRoom.PlayerCount;
         IsRunning = true;
+        currentItems = 0;
     }
     /*
     [PunRPC]
@@ -111,7 +117,8 @@ public class GameManager : MonoBehaviour
         {
             if (itemCount < maxItems)
             {
-                items.Add(PhotonNetwork.Instantiate("Test Item", spawner.transform.position, Quaternion.identity));
+                PhotonNetwork.Instantiate("Test Item", spawner.transform.position, Quaternion.identity);
+                currentItems++;
             }
         }
     }
@@ -137,22 +144,25 @@ public class GameManager : MonoBehaviour
     {
         ClientManager.Instance.CloseClient();
     }
-
+    /*
     [PunRPC]
     private void RPCEndGame()
     {
         Debug.Log("Remote user ended game!");
         EndGame(false);
-    }
+    }*/
 
-    public void EndGame(bool RPC = false)
+    [PunRPC]
+    public void EndGame(bool rpc = false)
     {
         if (IsRunning) {
-            if (RPC)
+            Debug.Log("GameManager: Ending Game");
+
+            if (rpc)
             {
-                photonView.RPC("RPCEndGame", RpcTarget.Others);
+                photonView.RPC("EndGame", RpcTarget.Others, false);
                 PhotonNetwork.CurrentRoom.IsOpen = true;
-                ClearItems();
+                //ClearItems();
             }
 
             MenuManager.Instance.OpenMenu("lobby");

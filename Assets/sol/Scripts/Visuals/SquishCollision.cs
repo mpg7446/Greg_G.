@@ -15,7 +15,7 @@ public class SquishCollision : MonoBehaviour
     {
         if (photonView == null)
         {
-            Debug.Log("missing photon view");
+            //Debug.Log("missing photon view");
             return;
         }
 

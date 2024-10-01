@@ -1,4 +1,5 @@
 using Photon.Pun;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -55,6 +56,14 @@ public class ScoreCounter : MonoBehaviour
 
         //ReOrder();
         counters.Sort();
+
+        //get the children
+        //set their index to their counter index
+        for (int i = 0; i < counters.Count; i++)
+        {
+            counters[i].transform.SetSiblingIndex(i);
+        }
+        Debug.Log("SCORE COUNT ER SORTED");
     }
 
     /*private void ReOrder()

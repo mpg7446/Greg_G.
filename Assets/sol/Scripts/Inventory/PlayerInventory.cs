@@ -45,10 +45,11 @@ public class PlayerInventory : MonoBehaviour
     {
         //Debug.Log("PickupItem(amount) called");
         itemCount += amount;
+        Debug.Log("PlayerInventory: ItemCount changed to " + itemCount);
         GameManager.Instance.PickupItem(this, amount);
         if (rpc && photonView.IsMine)
         {
-            movement.UpdateWeight(amount);
+            movement.UpdateWeight(-amount);
             photonView.RPC("PickupItem", RpcTarget.Others, amount, false);
             ScoreCounter.Instance.IncreaseCounter(gameObject, amount);
         }

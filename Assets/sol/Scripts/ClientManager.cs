@@ -39,6 +39,8 @@ public class ClientManager : MonoBehaviour
 
     private void Start()
     {
+        if (Instance != null)
+            Destroy(this);
         Instance = this;
         LoadScene("Menu");
 
