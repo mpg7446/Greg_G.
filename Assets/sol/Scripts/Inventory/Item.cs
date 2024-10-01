@@ -213,6 +213,7 @@ public class Item : MonoBehaviour
     private void PickupItem()
     {
         PlayerInventory inv = players[0].GetComponent<PlayerInventory>();
+        GameManager.Instance.RemoveItem(gameObject);
         if (inv.IsMine && GameManager.Instance.IsRunning)
         {
             inv.PickupItem(score, true);

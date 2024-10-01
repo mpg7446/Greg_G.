@@ -49,7 +49,7 @@ public class PlayerInventory : MonoBehaviour
         if (rpc && photonView.IsMine)
         {
             movement.UpdateWeight(amount);
-            photonView.RPC("PickupItem", RpcTarget.Others, amount);
+            photonView.RPC("PickupItem", RpcTarget.Others, amount, false);
             ScoreCounter.Instance.IncreaseCounter(gameObject, amount);
         }
     }/*

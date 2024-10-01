@@ -19,7 +19,8 @@ public class GameManager : MonoBehaviour
 
     // item counts
     public int maxItems;
-    public int currentItems;
+    public int currentItems { get { return items.Count; } }
+    private List<GameObject> items;
     public List<GameObject> itemSpawners;
 
     public Vector3 spawnLocation;
@@ -47,7 +48,6 @@ public class GameManager : MonoBehaviour
 
     public void PickupItem(int amount = 1)
     {
-        currentItems += amount;
         //Debug.Log("GameManager: PickupItem called with amount " + amount);
 
         if (currentItems >= maxItems)
@@ -58,8 +58,6 @@ public class GameManager : MonoBehaviour
     }
     public void PickupItem(PlayerInventory sender, int amount = 1)
     {
-        currentItems += amount;
-
         if (sender.IsMine && currentItems >= maxItems)
         {
             Debug.Log("GameManager: Game Ended by sender");
@@ -73,7 +71,7 @@ public class GameManager : MonoBehaviour
 
         if (RPCHost)
         {
-            photonView.RPC("RPCStartGame",RpcTarget.Others);
+            photonView.RPC("StartGame",RpcTarget.Others, false);
             PhotonNetwork.CurrentRoom.IsOpen = false;
             SpawnItems();
         }
@@ -88,13 +86,13 @@ public class GameManager : MonoBehaviour
         playerCount = PhotonNetwork.CurrentRoom.PlayerCount;
         IsRunning = true;
     }
-
+    /*
     [PunRPC]
     private void RPCStartGame()
     {
         Debug.Log("Remote user started game!");
         StartGame();
-    }
+    }*/
 
     private void SpawnItems()
     {
@@ -113,10 +111,26 @@ public class GameManager : MonoBehaviour
         {
             if (itemCount < maxItems)
             {
-                PhotonNetwork.Instantiate("Test Item", spawner.transform.position, Quaternion.identity);
-                itemCount++;
+                items.Add(PhotonNetwork.Instantiate("Test Item", spawner.transform.position, Quaternion.identity));
             }
         }
+    }
+
+    private void ClearItems()
+    {
+        foreach (GameObject item in items)
+            PhotonNetwork.Destroy(item);
+        items = new List<GameObject>();
+    }
+
+    public void RemoveItem(GameObject obj)
+    {
+        if (items.Contains(obj))
+            items.Remove(obj);
+        else
+            foreach (GameObject item in items)
+                if (item == null)
+                    items.Remove(item);
     }
 
     public void CloseClient()
@@ -138,11 +152,13 @@ public class GameManager : MonoBehaviour
             {
                 photonView.RPC("RPCEndGame", RpcTarget.Others);
                 PhotonNetwork.CurrentRoom.IsOpen = true;
+                ClearItems();
             }
 
             MenuManager.Instance.OpenMenu("lobby");
             ClientManager.Instance.LoadScene("Lobby", map);
 
+            ScoreCounter.Instance.ClearCounters();
             PlayerManager.Instance.DestroyPlayer();
             PhotonLauncher.Instance.SpawnPlayer("Menu Player");
             ClientManager.Instance.GameFinished();

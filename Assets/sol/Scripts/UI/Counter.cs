@@ -1,9 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class Counter : MonoBehaviour
+public class Counter : MonoBehaviour, IComparable<Counter>
 {
     public TMP_Text counterText;
     public GameObject player;
@@ -32,5 +33,10 @@ public class Counter : MonoBehaviour
     public void IncreaseScore(int amount = 1)
     {
         score += amount;
+    }
+
+    public int CompareTo(Counter obj)
+    {
+        return obj.score - score;
     }
 }

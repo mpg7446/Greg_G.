@@ -7,7 +7,7 @@ public class ScoreCounter : MonoBehaviour
 {
     public static ScoreCounter Instance;
 
-    public List<GameObject> counters = new List<GameObject>();
+    public List<Counter> counters = new List<Counter>();
     public GameObject counter;
     private void Awake()
     {
@@ -40,24 +40,24 @@ public class ScoreCounter : MonoBehaviour
 
     public void AddCounter(GameObject obj)
     {
-        GameObject newCounter = Instantiate(counter, gameObject.transform);
-        newCounter.GetComponent<Counter>().Init(obj);
+        Counter newCounter = Instantiate(counter, gameObject.transform).GetComponent<Counter>();
+        newCounter.Init(obj);
         counters.Add(newCounter);
     }
 
     public void IncreaseCounter(GameObject obj, int amount = 1)
     {
-        foreach(GameObject counter in counters)
+        foreach(Counter counter in counters)
         {
-            Counter cont = counter.GetComponent<Counter>();
-            if (cont.player == obj)
-                cont.IncreaseScore(amount);
+            if (counter.player == obj)
+                counter.IncreaseScore(amount);
         }
 
-        ReOrder();
+        //ReOrder();
+        counters.Sort();
     }
 
-    private void ReOrder()
+    /*private void ReOrder()
     {
         List<GameObject> newCounters = new List<GameObject>();
 
@@ -75,11 +75,15 @@ public class ScoreCounter : MonoBehaviour
 
         Debug.Log("ScoreCounter: Scores Reordered!");
         counters = newCounters;
-    }
+    }*/
 
     public void ClearCounters()
     {
-        counters = new List<GameObject>();
+        foreach (Counter counter in counters)
+        {
+            Destroy(counter.gameObject);
+        }
+        counters = new List<Counter>();
     }
 
     //public void AddCounters()

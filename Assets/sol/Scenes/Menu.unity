@@ -2168,7 +2168,7 @@ MonoBehaviour:
   enablePickupCountdown: 1
   itemsRunAway: 0
   playerCount: 0
-  maxItems: 2
+  maxItems: 16
   currentItems: 0
   itemSpawners:
   - {fileID: 1025473931}
