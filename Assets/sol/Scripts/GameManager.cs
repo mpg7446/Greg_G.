@@ -17,17 +17,16 @@ public class GameManager : MonoBehaviour
     public bool IsRunning {  get; private set; }
     public int playerCount = 0;
 
-    // item counts
-    public int maxItems;
+    // Item Management
+    [SerializeField] private int maxItems;
+    public int currentItems { get; private set; }
+    public bool PassedMaxItems { get { return currentItems >= maxItems; } }
     //public int currentItems { get { return items.Count; } }
-    public int currentItems;
-    private List<GameObject> items;
+    //private List<GameObject> items;
     public List<GameObject> itemSpawners;
 
     public Vector3 spawnLocation;
 
-    // TESTING ONLY!!
-    // DO NOT USE IN FINAL BUILD (for now)
     private void Start()
     {
         photonView = GetComponent<PhotonView>();
@@ -57,7 +56,7 @@ public class GameManager : MonoBehaviour
             Debug.Log("GameManager: Game Ended");
             EndGame(true);
         }
-    }*/
+    }
     public void PickupItem(PlayerInventory sender, int amount = 1)
     {
         currentItems = currentItems + amount;
@@ -67,11 +66,12 @@ public class GameManager : MonoBehaviour
             Debug.Log("GameManager: Game Ended by sender");
             EndGame(true);
         }
-    }
+    }*/
 
     [PunRPC]
     public void StartGame(bool rpc = false)
     {
+        DestroyItems();
         Debug.Log("GameManager: Game Started");
 
         if (rpc)
@@ -110,7 +110,6 @@ public class GameManager : MonoBehaviour
             randomizedSpawners.Insert(r, spawner);
         }
 
-
         // Place items in randomized list
         int itemCount = 0;
         foreach (GameObject spawner in randomizedSpawners)
@@ -118,11 +117,19 @@ public class GameManager : MonoBehaviour
             if (itemCount < maxItems)
             {
                 PhotonNetwork.Instantiate("Test Item", spawner.transform.position, Quaternion.identity);
-                currentItems++;
+                itemCount++;
             }
         }
     }
-
+    public void DestroyItems()
+    {
+        GameObject[] items = GameObject.FindGameObjectsWithTag("Item");
+        for (int i = 0; i < items.Length; i++)
+        {
+            Destroy(items[i]);
+        }
+    }
+    /*
     private void ClearItems()
     {
         foreach (GameObject item in items)
@@ -138,6 +145,10 @@ public class GameManager : MonoBehaviour
             foreach (GameObject item in items)
                 if (item == null)
                     items.Remove(item);
+    }*/
+    public void IncreaseItems(int amount = 1)
+    {
+        currentItems += amount;
     }
 
     public void CloseClient()
@@ -175,6 +186,9 @@ public class GameManager : MonoBehaviour
 
             IsRunning = false;
         }
+
+        // Destroy all existing items in case of errors rejoining game
+        DestroyItems();
     }
 
     public void PlayerLeft(Player player)

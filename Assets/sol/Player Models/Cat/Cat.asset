@@ -13,5 +13,7 @@ MonoBehaviour:
   m_Name: Cat
   m_EditorClassIdentifier: 
   playerVisual: 4
-  sprite: {fileID: 0}
-  offset: {x: 0, y: 0}
+  sprite: {fileID: 21300000, guid: e7f7a38bef1acb542ba5a4ddcff756fb, type: 3}
+  offset: {x: 0, y: 0, z: 0}
+  scale: {x: 1, y: 1, z: 0}
+  Credits: '@Garn47 on Twitter'

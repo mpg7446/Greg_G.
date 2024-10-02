@@ -40,7 +40,7 @@ public class PlayerInventory : MonoBehaviour
         return false;
     }
 
-    [PunRPC]
+    /*[PunRPC]
     public void PickupItem(int amount = 1, bool rpc = false)
     {
         //Debug.Log("PickupItem(amount) called");
@@ -53,7 +53,7 @@ public class PlayerInventory : MonoBehaviour
             photonView.RPC("PickupItem", RpcTarget.Others, amount, false);
             ScoreCounter.Instance.IncreaseCounter(gameObject, amount);
         }
-    }/*
+    }
     [PunRPC]
     public void PickupItem(int amount = 1)
     {

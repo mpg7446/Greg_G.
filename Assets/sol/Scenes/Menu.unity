@@ -2169,7 +2169,6 @@ MonoBehaviour:
   itemsRunAway: 0
   playerCount: 0
   maxItems: 16
-  currentItems: 0
   itemSpawners:
   - {fileID: 1025473931}
   - {fileID: 982341193}
@@ -2198,7 +2197,7 @@ MonoBehaviour:
   - {fileID: 1786278772}
   - {fileID: 1912173224}
   - {fileID: 369077133}
-  spawnLocation: {x: 0, y: 0, z: 0}
+  spawnLocation: {x: 0, y: 10, z: 0}
 --- !u!4 &670460900
 Transform:
   m_ObjectHideFlags: 0
@@ -6101,7 +6100,7 @@ MonoBehaviour:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 670460900}
   - {fileID: 886141414}
   - {fileID: 2100245232}
-  - {fileID: 670460900}
   - {fileID: 1597699164}

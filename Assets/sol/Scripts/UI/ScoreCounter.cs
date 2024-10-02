@@ -53,8 +53,24 @@ public class ScoreCounter : MonoBehaviour
             if (counter.player == obj)
                 counter.IncreaseScore(amount);
         }
+        ReOrder();
+    }
+    public void IncreaseCounter(int playerID, int amount = 1)
+    {
+        foreach(Counter counter in counters)
+        {
+            Debug.Log($"IncreaseCounter testing against: {counter.player.GetComponent<PlayerID>().GetID()} | {playerID} | compareTo = {playerID.CompareTo(counter.player.GetComponent<PlayerID>().GetID())}");
+            if (playerID.CompareTo(counter.player.GetComponent<PlayerID>().GetID()) == 0)
+            {
+                counter.IncreaseScore(amount);
+                Debug.Log($"Increased Counter for {counter.name} by {amount}");
+            }
+        }
+        ReOrder();
+    }
 
-        //ReOrder();
+    private void ReOrder()
+    {
         counters.Sort();
 
         //get the children

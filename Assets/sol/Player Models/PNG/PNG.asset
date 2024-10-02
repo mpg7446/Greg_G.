@@ -14,4 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerVisual: 5
   sprite: {fileID: 21300000, guid: fb6a898c1325b114dbf9a4d28d40f465, type: 3}
-  offset: {x: 0, y: 0}
+  offset: {x: 0, y: 0, z: 0}
+  scale: {x: 1, y: 1, z: 0}
+  Credits: google images (i dont know where from)

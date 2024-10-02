@@ -10,8 +10,7 @@ public class Counter : MonoBehaviour, IComparable<Counter>
     public GameObject player;
     private PlayerInventory inventory;
 
-    public int Score { get { return score; } }
-    private int score;
+    public int Score { get; private set; }
     private string name; // Name is set up for Photon Nicknames if we decide to use it
 
     public void Init(GameObject player)
@@ -23,20 +22,23 @@ public class Counter : MonoBehaviour, IComparable<Counter>
             inventory = this.player.GetComponent<PlayerInventory>();
 
         name = "Player " + player.GetComponent<PlayerID>().GetID();
+        Score = 0;
+        counterText.text = $"{name}'s Score: {Score}";
     }
     private void FixedUpdate()
     {
-        score = inventory.itemCount;
-        counterText.text = $"{name}'s Score: {score}";
+        //Score = inventory.itemCount;
+        //counterText.text = $"{name}'s Score: {Score}";
     }
 
     public void IncreaseScore(int amount = 1)
     {
-        score += amount;
+        Score += amount;
+        counterText.text = $"{name}'s Score: {Score}";
     }
 
     public int CompareTo(Counter obj)
     {
-        return obj.score - score;
+        return obj.Score - Score;
     }
 }

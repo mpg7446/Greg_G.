@@ -137,7 +137,10 @@ public class ClientManager : MonoBehaviour
     // Load specific Scene
     public void LoadScene(string scene)
     {
-        SceneManager.LoadScene(scene, LoadSceneMode.Additive);
+        if (SceneManager.GetSceneByName(scene).name == null)
+            SceneManager.LoadScene(scene, LoadSceneMode.Additive);
+        else
+            Debug.LogWarning($"ClientManaher.LoadScene: Unable to find scene by name \"{scene}\"");
     }
 
     // Load specific scene and close all specified scenes

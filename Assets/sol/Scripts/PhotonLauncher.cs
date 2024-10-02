@@ -71,6 +71,7 @@ public class PhotonLauncher : MonoBehaviourPunCallbacks
         {
             PhotonNetwork.JoinRoom(roomName);
             MenuManager.Instance.OpenMenu("loading");
+            GameManager.Instance.DestroyItems();
         }
         else // Room name incorrectly entered
         {
@@ -142,10 +143,12 @@ public class PhotonLauncher : MonoBehaviourPunCallbacks
 
     public void SpawnPlayer(string playerType)
     {
-        PhotonNetwork.Instantiate(playerType, new Vector3(0, 10, 0), Quaternion.identity);
+        float stackOffset = (PhotonNetwork.CurrentRoom.PlayerCount - 1) * 1.246482f;
+        PhotonNetwork.Instantiate(playerType, new Vector3(0, 10 + stackOffset, 0), Quaternion.identity);
     }
     public void SpawnPlayer(string playerType, Vector3 position)
     {
-        PhotonNetwork.Instantiate(playerType, position, Quaternion.identity);
+        Vector3 stackOffset = new Vector3(0, (PhotonNetwork.CurrentRoom.PlayerCount - 1) * 1.246482f, 0);
+        PhotonNetwork.Instantiate(playerType, position + stackOffset, Quaternion.identity);
     }
 }

@@ -10,4 +10,6 @@ public class PlayerModel : ScriptableObject
     public Sprite sprite;
     public Vector3 offset = new Vector3(0, 0);
     public Vector3 scale = new Vector3(1, 1);
+    [Space(10)]
+    public string Credits;
 }

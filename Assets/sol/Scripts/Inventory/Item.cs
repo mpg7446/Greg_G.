@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem.Processors;
 using UnityEngine.UI;
 
 public class Item : MonoBehaviour
@@ -153,10 +154,9 @@ public class Item : MonoBehaviour
         {
             countdown -= 2;
 
-            if (countdown <= 0)
+            if (countdown <= 0 && players[0].GetComponent<PlayerInventory>().IsMine)
             {
                 PickupItem();
-                Destroy(gameObject);
             }
 
             UpdateSlider();
@@ -207,12 +207,12 @@ public class Item : MonoBehaviour
                 inventory.IntersectItem(gameObject);
             }
         }
-        else
-        {
-            // skip countdown sequence and immediately pickup item - TODO possibly change this to be a part of the players settings??
-            PickupItem();
-            Destroy(gameObject);
-        }
+        //else
+        //{
+        //    // skip countdown sequence and immediately pickup item - TODO possibly change this to be a part of the players settings??
+        //    PickupItem();
+        //    Destroy(gameObject);
+        //}
     }
 
     private void UpdateSlider()
@@ -220,15 +220,30 @@ public class Item : MonoBehaviour
         sliderObj.SetActive(true);
         slider.value = countdownLimit - countdown;
     }
-    
+
     private void PickupItem()
     {
         PlayerInventory inv = players[0].GetComponent<PlayerInventory>();
-        //GameManager.Instance.RemoveItem(gameObject);
-        if (inv.IsMine && GameManager.Instance.IsRunning)
-        {
-            inv.PickupItem(score, true);
-        }
+        ScoreCounter.Instance.IncreaseCounter(inv.gameObject, score);
+
+        PlayerManager.Instance.UpdateWeight(-score);
+        inv.itemCount += score;
+        photonView.RPC("PickupItem", RpcTarget.Others, inv.gameObject.GetComponent<PlayerID>().GetID());
+
+        GameManager.Instance.IncreaseItems(score);
+        if (GameManager.Instance.PassedMaxItems)
+            GameManager.Instance.EndGame(true);
+
+        Destroy(gameObject);
+    }
+    [PunRPC]
+    private void PickupItem(int playerID)
+    {
+        Debug.Log("Item recieved PickupItem over RPC from Player "+playerID);
+        ScoreCounter.Instance.IncreaseCounter(playerID, score);
+        GameManager.Instance.IncreaseItems(score);
+
+        Destroy(gameObject);
     }
 
     private void RunFromPlayers()
@@ -280,6 +295,8 @@ public class Item : MonoBehaviour
         }
 
         // Disable visuals that are not equal to the visual type selected by Item script
+        if (visual.GetComponentsInChildren<ItemType>() == null)
+            return;
         foreach (ItemType visualChild in visual.GetComponentsInChildren<ItemType>())
         {
             if (visualChild.foodType == visualType)
