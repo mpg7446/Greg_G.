@@ -5,19 +5,21 @@ using UnityEngine;
 
 public class Passable : MonoBehaviour
 {
-    private Collider2D collider;
-    private PlayerManager player;
+    private new Collider2D collider;
+    private Collider2D playerCollider;
 
     private void Awake()
     {
         collider = GetComponent<Collider2D>();
-        player = PlayerManager.Instance;
+        playerCollider = PlayerManager.Instance.gameObject.GetComponentInChildren<Collider2D>();
     }
 
     private void FixedUpdate()
     {
-        if (player.transform.position.y - (player.boxCollider.bounds.size.y / 1.2) > collider.transform.position.y)
+        Vector3 heading = playerCollider.bounds.min + new Vector3(0, playerCollider.bounds.size.y / 2.1f, 0) - collider.bounds.max;
+        if (Vector3.Dot(Vector3.up, heading) > 0){
             collider.enabled = true;
+        }
         else
             collider.enabled = false;
     }

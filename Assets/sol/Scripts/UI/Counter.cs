@@ -11,7 +11,7 @@ public class Counter : MonoBehaviour, IComparable<Counter>
     private PlayerInventory inventory;
 
     public int Score { get; private set; }
-    private string name; // Name is set up for Photon Nicknames if we decide to use it
+    private new string name; // Name is set up for Photon Nicknames if we decide to use it
 
     public void Init(GameObject player)
     {
