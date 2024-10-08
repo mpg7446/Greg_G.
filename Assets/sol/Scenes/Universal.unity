@@ -155,6 +155,7 @@ MonoBehaviour:
   cameraObject: {fileID: 1144056218}
   limitFramerate: 1
   trackingDistance: 12
+  thisPlayerWeight: 6
   trackingSpeed: 2
   gameRunning: 0
   playerVisual: 0

@@ -17,6 +17,7 @@ public class ClientManager : MonoBehaviour
     private List<GameObject> cameraTrackers = new List<GameObject>();
     private List<Vector3> visibleTrackers = new List<Vector3>();
     public float trackingDistance;
+    public int thisPlayerWeight = 2;
     [Tooltip("Time it takes to snap to camera position (not in seconds, im not too sure why)")] public float trackingSpeed;
 
     public bool gameRunning = false;
@@ -62,7 +63,7 @@ public class ClientManager : MonoBehaviour
             ClearEmptyTrackers();
 
             // Change tracking depending on tracker visibility
-            if (TrackersVisible(PlayerManager.Instance.gameObject, cameraTrackers))
+            if (TrackersVisible(PlayerManager.Instance.gameObject, cameraTrackers, thisPlayerWeight))
             {
                 // Follow all trackers
                 GameObject[] trackers = cameraTrackers.ToArray();
@@ -213,11 +214,10 @@ public class ClientManager : MonoBehaviour
     #region Camera Trackers
     // Get trackers visibility
     // based off of trackingDistance
-    private bool TrackersVisible(GameObject localTracker, List<GameObject> trackers)
+    private bool TrackersVisible(GameObject localTracker, List<GameObject> trackers, int localWeight = 2)
     {
         bool visible = false;
-        visibleTrackers.Clear();
-        visibleTrackers.Add(localTracker.transform.position);
+        for (visibleTrackers.Clear(); visibleTrackers.Count < localWeight; visibleTrackers.Add(localTracker.transform.position))
 
         foreach (GameObject tracker in trackers)
         {

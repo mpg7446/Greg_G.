@@ -45,7 +45,7 @@ public class PlayerManager : MonoBehaviour
     public GameObject stackChild;
 
     public BoxCollider2D boxCollider;
-    private CircleCollider2D circleCollider;
+    //private CircleCollider2D circleCollider;
     private int colliderDelay = 0;
     [SerializeField] private int colliderMaxDelay = 25;
 
@@ -93,11 +93,11 @@ public class PlayerManager : MonoBehaviour
         }
 
         boxCollider = playerModel.stickers.GetComponent<BoxCollider2D>();
-        circleCollider = playerModel.stickers.GetComponent<CircleCollider2D>();
-        if (circleCollider != null) 
-        { 
-            circleCollider.enabled = false; 
-        }
+        //circleCollider = playerModel.stickers.GetComponent<CircleCollider2D>();
+        //if (circleCollider != null) 
+        //{ 
+        //    circleCollider.enabled = false; 
+        //}
 
         burstMax = burstTimer;
     }
