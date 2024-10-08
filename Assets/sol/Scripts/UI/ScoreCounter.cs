@@ -9,6 +9,7 @@ public class ScoreCounter : MonoBehaviour
     public static ScoreCounter Instance;
 
     public List<Counter> counters = new List<Counter>();
+    public Counter winner { get; private set; }
     public GameObject counter;
     private void Awake()
     {
@@ -72,6 +73,7 @@ public class ScoreCounter : MonoBehaviour
     private void ReOrder()
     {
         counters.Sort();
+        winner = counters[0];
 
         //get the children
         //set their index to their counter index
@@ -79,7 +81,7 @@ public class ScoreCounter : MonoBehaviour
         {
             counters[i].transform.SetSiblingIndex(i);
         }
-        Debug.Log("SCORE COUNT ER SORTED");
+        Debug.Log($"ScoreCounters ReOrdered! current winner is {winner.name}");
     }
 
     /*private void ReOrder()

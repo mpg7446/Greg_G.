@@ -8,11 +8,12 @@ using static ClientManager;
 
 public class PlayerManager : MonoBehaviour
 {
+    public int ID {  get; private set; }
+
     public static PlayerManager Instance = null;
     public PhotonView photonView;
     private Rigidbody2D rb;
     private InputManager input;
-    protected PlayerID playerID;
 
     // player visuals
     private PlayerModelManager playerModel;
@@ -72,7 +73,7 @@ public class PlayerManager : MonoBehaviour
     private void Awake()
     {
         ClientManager.Instance.AddCameraTracker(gameObject);
-        playerID = GetComponent<PlayerID>();
+        ID = GetComponent<PlayerID>().GetID();
         photonView = GetComponent<PhotonView>();
         if (photonView.IsMine)
         {
@@ -367,14 +368,14 @@ public class PlayerManager : MonoBehaviour
     {
         stackChild = child;
         inStack = true;
-        photonView.RPC("RPCEnterStackAbove", RpcTarget.Others, child.GetComponent<PlayerID>().GetID(), playerID.GetID());
+        photonView.RPC("RPCEnterStackAbove", RpcTarget.Others, child.GetComponent<PlayerID>().GetID(), ID);
     }
 
     [PunRPC]
     public void RPCEnterStackAbove(int targetID, int senderID) // TODO DOESNT WORK WHY DOES THIS CALL FOR LOCAL PLAYER TOO???
     {
-        Debug.Log("Recieve RPCEnterStackAbove: target: " + targetID + " object: " + playerID.GetID());
-        if (targetID == playerID.GetID())
+        Debug.Log("Recieve RPCEnterStackAbove: target: " + targetID + " object: " + ID);
+        if (targetID == ID)
         {
             PlayerID[] senderIDs = FindObjectsOfType<PlayerID>();
             GameObject senderObject = null;
@@ -383,14 +384,14 @@ public class PlayerManager : MonoBehaviour
                 if (ID.GetID() == senderID)
                 {
                     senderObject = ID.gameObject;
-                    Debug.Log($"Found target object! {playerID.GetID()}");
+                    Debug.Log($"Found target object! {ID}");
                 }
             }
             stackParent = senderObject;
             inStack = true;
 
             transform.position = senderObject.transform.position + new Vector3(0, senderObject.GetComponent<BoxCollider2D>().size.y);
-            Debug.Log("Entered Stack Above over RPC for " + playerID.GetID());
+            Debug.Log("Entered Stack Above over RPC for " + ID);
         }
     }
     #endregion

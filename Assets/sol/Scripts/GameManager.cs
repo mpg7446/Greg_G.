@@ -176,19 +176,36 @@ public class GameManager : MonoBehaviour
                 //ClearItems();
             }
 
-            MenuManager.Instance.OpenMenu("lobby");
-            ClientManager.Instance.LoadScene("Lobby", map);
+            // Check if player won
+            if (ScoreCounter.Instance.winner.playerID == PlayerManager.Instance.ID)
+                MenuManager.Instance.OpenMenu("win");
+            else
+                MenuManager.Instance.OpenMenu("lose");
 
+            // Reset counters and scores and players and more scores :3
+            ClientManager.Instance.CloseScene(map);
             ScoreCounter.Instance.ClearCounters();
             PlayerManager.Instance.DestroyPlayer();
-            PhotonLauncher.Instance.SpawnPlayer("Menu Player");
             ClientManager.Instance.GameFinished();
-
             IsRunning = false;
+
+            // Call timer event to close win/lose screen
+            StartCoroutine(closeStateScreen(3f));
         }
 
         // Destroy all existing items in case of errors rejoining game
         DestroyItems();
+    }
+
+    private IEnumerator closeStateScreen(float time)
+    {
+        Debug.Log($"Started CloseStateScreen Timer for {time}s");
+        yield return new WaitForSeconds(time);
+
+        Debug.Log("Finished CloseStatScreen Timer");
+        MenuManager.Instance.OpenMenu("lobby", true);
+        ClientManager.Instance.LoadScene("Lobby");
+        PhotonLauncher.Instance.SpawnPlayer("Menu Player");
     }
 
     public void PlayerLeft(Player player)

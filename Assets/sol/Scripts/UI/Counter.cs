@@ -8,6 +8,7 @@ public class Counter : MonoBehaviour, IComparable<Counter>
 {
     public TMP_Text counterText;
     public GameObject player;
+    public int playerID {  get; private set; }
     private PlayerInventory inventory;
 
     public int Score { get; private set; }
@@ -21,7 +22,8 @@ public class Counter : MonoBehaviour, IComparable<Counter>
         if (inventory == null)
             inventory = this.player.GetComponent<PlayerInventory>();
 
-        name = "Player " + player.GetComponent<PlayerID>().GetID();
+        playerID = player.GetComponent<PlayerID>().GetID();
+        name = $"Player {playerID}";
         Score = 0;
         counterText.text = $"{name}'s Score: {Score}";
     }
