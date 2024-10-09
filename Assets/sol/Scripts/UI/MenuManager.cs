@@ -50,7 +50,6 @@ public class MenuManager : MonoBehaviour
 
     public void OnTextChange(TMP_InputField input)
     {
-        UnityEngine.Debug.Log("JoinRoom: changes to text");
         if (input.text.EndsWith("\n"))
             PhotonLauncher.Instance.JoinRoom(input.text.Remove(input.text.Length - 1));
     }
