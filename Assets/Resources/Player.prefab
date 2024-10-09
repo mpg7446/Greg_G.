@@ -163,10 +163,7 @@ MonoBehaviour:
   jumpHeight: 4.75
   layerMask:
     serializedVersion: 2
-    m_Bits: 384
-  passableMask:
-    serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 136
 --- !u!50 &2969266834194631221
 Rigidbody2D:
   serializedVersion: 4

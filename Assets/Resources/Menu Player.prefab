@@ -140,7 +140,7 @@ MonoBehaviour:
   inStack: 0
   stackParent: {fileID: 0}
   stackChild: {fileID: 0}
-  boxCollider: {fileID: 0}
+  boxCollider: {fileID: 3027323443380457144}
   colliderMaxDelay: 15
   weight: 100
   weightMultiplier: 5
@@ -149,10 +149,7 @@ MonoBehaviour:
   jumpHeight: 4.75
   layerMask:
     serializedVersion: 2
-    m_Bits: 128
-  passableMask:
-    serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 136
 --- !u!50 &2969266834194631221
 Rigidbody2D:
   serializedVersion: 4

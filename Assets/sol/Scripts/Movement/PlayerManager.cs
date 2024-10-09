@@ -35,8 +35,6 @@ public class PlayerManager : MonoBehaviour
         protected set { }
     }
 
-    private GameObject passableObject = null;
-
     // action settings
     private bool holdingAction = false;
 
@@ -68,7 +66,6 @@ public class PlayerManager : MonoBehaviour
     //public bool isGrounded;
     //public bool isAgainstWall;
     public LayerMask layerMask;
-    public LayerMask passableMask;
 
     private void Awake()
     {
@@ -297,25 +294,48 @@ public class PlayerManager : MonoBehaviour
     #region Position Checks
     protected bool IsGrounded()
     {
+        boxCollider.enabled = false;
+        // Check middle of player
         Debug.DrawRay(transform.position, Vector2.down * groundDistance, Color.yellow);
-
-        if (rb.velocity.y <= 0 && Physics2D.Raycast(transform.position, Vector2.down, groundDistance, layerMask) || 
-            (passableObject != null && Physics2D.Raycast(transform.position, Vector2.down, groundDistance, passableMask)))
+        if (rb.velocity.y <= 0 && Physics2D.Raycast(transform.position, Vector2.down, groundDistance, layerMask))
         {
+            boxCollider.enabled = true;
             return true;
         }
-        
+
+        // Check left of player
+        Vector3 side = new Vector3(boxCollider.bounds.size.x / 2, 0, 0);
+        Debug.DrawRay(transform.position - side, Vector2.down * groundDistance, Color.yellow);
+        if (rb.velocity.y <= 0 && Physics2D.Raycast(transform.position - side, Vector2.down, groundDistance, layerMask))
+        {
+            boxCollider.enabled = true;
+            return true;
+        }
+
+        // Check right of player
+        Debug.DrawRay(transform.position + side, Vector2.down * groundDistance, Color.yellow);
+        if (rb.velocity.y <= 0 && Physics2D.Raycast(transform.position + side, Vector2.down, groundDistance, layerMask))
+        {
+            boxCollider.enabled = true;
+            return true;
+        }
+
+        // False
+        boxCollider.enabled = true;
         return false;
     }
 
     protected bool IsAgainstWall()
     {
+        boxCollider.enabled = false;
         Debug.DrawRay(transform.position, (Vector2.right * input.movement.x) * wallDistance, Color.red);
         if (Physics2D.Raycast(transform.position, Vector2.right * input.movement.x, wallDistance, layerMask))
         {
+            boxCollider.enabled = true;
             return true;
         }
 
+        boxCollider.enabled = true;
         return false;
     }
     #endregion

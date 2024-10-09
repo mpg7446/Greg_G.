@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour
 
     // Item Management
     [SerializeField] private int maxItems;
+    [SerializeField] private int itemsPerPlayer;
     public int currentItems { get; private set; }
     public bool PassedMaxItems { get { return currentItems >= maxItems; } }
     //public int currentItems { get { return items.Count; } }
@@ -102,6 +103,14 @@ public class GameManager : MonoBehaviour
 
     private void SpawnItems()
     {
+        // Set items per player if enabled
+        if (itemsPerPlayer > 0)
+            maxItems = itemsPerPlayer * PhotonNetwork.CurrentRoom.PlayerCount;
+
+        // Cap item count to count of itemspawners
+        if (maxItems > itemSpawners.Count)
+            maxItems = itemSpawners.Count;
+
         // Spawn items over network (PhotonNetwork.Instantiate())
         List<GameObject> randomizedSpawners = new List<GameObject>();
         foreach (GameObject spawner in itemSpawners)
@@ -177,7 +186,6 @@ public class GameManager : MonoBehaviour
             }
 
             // Check if player won
-            Debug.Log($"Score check: {ScoreCounter.Instance.winner.playerID} == {PlayerManager.Instance.ID} = {ScoreCounter.Instance.winner.playerID == PlayerManager.Instance.ID}");
             if (ScoreCounter.Instance.winner.playerID == PlayerManager.Instance.ID)
                 MenuManager.Instance.OpenMenu("win");
             else
@@ -191,7 +199,7 @@ public class GameManager : MonoBehaviour
             IsRunning = false;
 
             // Call timer event to close win/lose screen
-            StartCoroutine(closeStateScreen(3f));
+            StartCoroutine(closeStateScreen(4.2f));
         }
 
         // Destroy all existing items in case of errors rejoining game

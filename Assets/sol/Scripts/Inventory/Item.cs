@@ -223,17 +223,20 @@ public class Item : MonoBehaviour
 
     private void PickupItem()
     {
+        GameManager.Instance.IncreaseItems(score);
+        if (GameManager.Instance.PassedMaxItems)
+        {
+            GameManager.Instance.EndGame(true);
+            return;
+        }
+
         PlayerInventory inv = players[0].GetComponent<PlayerInventory>();
         ScoreCounter.Instance.IncreaseCounter(inv.gameObject, score);
 
         PlayerManager.Instance.UpdateWeight(-score);
         inv.itemCount += score;
+
         photonView.RPC("PickupItem", RpcTarget.Others, inv.gameObject.GetComponent<PlayerID>().GetID());
-
-        GameManager.Instance.IncreaseItems(score);
-        if (GameManager.Instance.PassedMaxItems)
-            GameManager.Instance.EndGame(true);
-
         Destroy(gameObject);
     }
     [PunRPC]
