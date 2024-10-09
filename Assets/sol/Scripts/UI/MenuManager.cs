@@ -46,4 +46,10 @@ public class MenuManager : MonoBehaviour
     {
         menu.Close();
     }
+
+    public void OnTextChange(string text)
+    {
+        if (text.EndsWith("\n"))
+            PhotonLauncher.Instance.JoinRoom(text.Remove(text.Length - 1));
+    }
 }
