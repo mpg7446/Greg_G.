@@ -51,6 +51,9 @@ public class MenuManager : MonoBehaviour
     public void OnTextChange(TMP_InputField input)
     {
         if (input.text.EndsWith("\n"))
-            PhotonLauncher.Instance.JoinRoom(input.text.Remove(input.text.Length - 1));
+        {
+            input.text.Remove(input.text.Length - 1);
+            PhotonLauncher.Instance.JoinRoom();
+        }
     }
 }

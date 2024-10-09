@@ -7,6 +7,7 @@ using Photon.Realtime;
 using System.Linq;
 using UnityEngine.Rendering;
 using WebSocketSharp;
+using System.Text.RegularExpressions;
 
 public class PhotonLauncher : MonoBehaviourPunCallbacks
 {
@@ -29,7 +30,7 @@ public class PhotonLauncher : MonoBehaviourPunCallbacks
 
     public override void OnConnectedToMaster() // On Connected to Master Network
     {
-        Debug.Log("Photon: Successfully Joined Master!");
+        Debug.Log($"Photon: Successfully Joined Master in region {PhotonNetwork.CloudRegion}");
         PhotonNetwork.JoinLobby(TypedLobby.Default);
     }
 
@@ -57,15 +58,20 @@ public class PhotonLauncher : MonoBehaviourPunCallbacks
 
     public void JoinRoom()
     {
-        if (roomNameInput != null && roomNameInput.text != "")
+        if (roomNameInput != null && !roomNameInput.text.IsNullOrEmpty())
         {
-            string input = roomNameInput.text.ToUpper();
-            Debug.Log("Attempting to join room " + input);
-            JoinRoom(input);
+            string roomName = roomNameInput.text.ToUpper();
+            roomName = Regex.Replace(roomName, @"\s+", string.Empty);
+            Debug.Log("Attempting to join room " + roomName);
+            PhotonNetwork.JoinRoom(roomName);
+            MenuManager.Instance.OpenMenu("loading");
+            GameManager.Instance.DestroyItems();
         }
+        else
+            Debug.Log("Failed to join room, either no inputfield selected or inputfield is empty");
     }
 
-    public void JoinRoom(string roomName) // Join room with room name
+    private void JoinRoom(string roomName) // Join room with room name
     {
         if (!roomName.IsNullOrEmpty())
         {
