@@ -177,6 +177,7 @@ public class GameManager : MonoBehaviour
             }
 
             // Check if player won
+            Debug.Log($"Score check: {ScoreCounter.Instance.winner.playerID} == {PlayerManager.Instance.ID} = {ScoreCounter.Instance.winner.playerID == PlayerManager.Instance.ID}");
             if (ScoreCounter.Instance.winner.playerID == PlayerManager.Instance.ID)
                 MenuManager.Instance.OpenMenu("win");
             else

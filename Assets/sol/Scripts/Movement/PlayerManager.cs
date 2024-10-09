@@ -73,7 +73,8 @@ public class PlayerManager : MonoBehaviour
     private void Awake()
     {
         ClientManager.Instance.AddCameraTracker(gameObject);
-        ID = GetComponent<PlayerID>().GetID();
+        if (GetComponent<PlayerID>() != null )
+            ID = GetComponent<PlayerID>().GetID();
         photonView = GetComponent<PhotonView>();
         if (photonView.IsMine)
         {
@@ -106,14 +107,12 @@ public class PlayerManager : MonoBehaviour
     // movement - on physics update
     public void FixedUpdate()
     {
-        //if (!inStack)
-        //{
-            StandardMovement();
-            UpdateVisualDirection();
-        //} else
-        //{
-        //    StackMovement();
-        //}
+        if (ID == -1 && GetComponent<PlayerID>() != null)
+            ID = GetComponent<PlayerID>().GetID();
+
+        StandardMovement();
+        UpdateVisualDirection();
+        UpdateAnimations();
 
         if (input.action && !holdingAction)
         {
@@ -475,7 +474,8 @@ public class PlayerManager : MonoBehaviour
     #endregion
 
     #region Visuals 
-    private void UpdateVisualDirection() // TODO - MOVE THIS TO PlayerModelManager!!!
+    // TODO - MOVE THIS TO PlayerModelManager!!!
+    private void UpdateVisualDirection() 
     {
         if (input.movement.x > 0)
         {
@@ -485,6 +485,19 @@ public class PlayerManager : MonoBehaviour
         {
             spriteRenderer.flipX = false;
         }
+    }
+
+    private void UpdateAnimations()
+    {
+        if (IsMoving && IsGrounded())
+            playerModel.SetAnimation("Walking", true);
+        else
+            playerModel.SetAnimation("Walking", false);
+
+        if (!IsGrounded())
+            playerModel.SetAnimation("InAir", true);
+        else
+            playerModel.SetAnimation("InAir", false);
     }
     #endregion
 

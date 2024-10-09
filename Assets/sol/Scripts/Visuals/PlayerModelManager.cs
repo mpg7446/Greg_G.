@@ -55,6 +55,8 @@ public class PlayerModelManager : MonoBehaviour
         sprite.sprite = matches[playerVariation].sprite;
         sprite.transform.localPosition += matches[playerVariation].offset;
         sprite.transform.localScale = new Vector3(matches[playerVariation].scale.x * sprite.transform.localScale.x, matches[playerVariation].scale.y * sprite.transform.localScale.y, sprite.transform.localScale.z);
+
+        sprite.GetComponent<Animator>().runtimeAnimatorController = matches[playerVariation].animator;
     }
 
     public void SetPlayerVisual()
@@ -113,5 +115,13 @@ public class PlayerModelManager : MonoBehaviour
         {
             photonView.RPC("UnSquish", RpcTarget.Others, false);
         }
+    }
+
+    [PunRPC]
+    public void SetAnimation(string animation, bool state)
+    {
+        sprite.GetComponent<Animator>().SetBool(animation, state);
+        if (photonView.IsMine)
+            photonView.RPC("SetAnimation", RpcTarget.Others, animation, state);
     }
 }
