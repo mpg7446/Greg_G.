@@ -75,7 +75,7 @@ public class PhotonLauncher : MonoBehaviourPunCallbacks
         }
         else // Room name incorrectly entered
         {
-            MenuManager.Instance.OpenMenu("joinRooms");
+            MenuManager.Instance.OpenMenu("main");
             roomNameInput.text = null;
         }
     }
@@ -107,7 +107,7 @@ public class PhotonLauncher : MonoBehaviourPunCallbacks
 
     public override void OnJoinRoomFailed(short returnCode, string message) // Failed to connect to room, probably doesnt exist
     {
-        MenuManager.Instance.OpenMenu("joinRooms");
+        MenuManager.Instance.OpenMenu("main");
         roomNameInput.text = "lobby not dounf";
     }
     public override void OnLeftRoom() // Return to menus when leaving room

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Diagnostics;
+using TMPro;
 
 public class MenuManager : MonoBehaviour
 {
@@ -47,9 +48,10 @@ public class MenuManager : MonoBehaviour
         menu.Close();
     }
 
-    public void OnTextChange(string text)
+    public void OnTextChange(TMP_InputField input)
     {
-        if (text.EndsWith("\n"))
-            PhotonLauncher.Instance.JoinRoom(text.Remove(text.Length - 1));
+        UnityEngine.Debug.Log("JoinRoom: changes to text");
+        if (input.text.EndsWith("\n"))
+            PhotonLauncher.Instance.JoinRoom(input.text.Remove(input.text.Length - 1));
     }
 }
