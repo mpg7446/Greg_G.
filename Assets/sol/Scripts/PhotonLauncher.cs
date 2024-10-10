@@ -60,8 +60,8 @@ public class PhotonLauncher : MonoBehaviourPunCallbacks
     {
         if (roomNameInput != null && !roomNameInput.text.IsNullOrEmpty())
         {
+            roomNameInput.text = Regex.Replace(roomNameInput.text, @"\s+", string.Empty);
             string roomName = roomNameInput.text.ToUpper();
-            roomName = Regex.Replace(roomName, @"\s+", string.Empty);
             Debug.Log("Attempting to join room " + roomName);
             PhotonNetwork.JoinRoom(roomName);
             MenuManager.Instance.OpenMenu("loading");

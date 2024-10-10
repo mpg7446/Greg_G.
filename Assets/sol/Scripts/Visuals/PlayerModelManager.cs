@@ -53,10 +53,21 @@ public class PlayerModelManager : MonoBehaviour
         Debug.Log($"PlayerModelManager: Player variable {playerVariation} selected");
 
         sprite.sprite = matches[playerVariation].sprite;
-        sprite.transform.localPosition += matches[playerVariation].offset;
-        sprite.transform.localScale = new Vector3(matches[playerVariation].scale.x * sprite.transform.localScale.x, matches[playerVariation].scale.y * sprite.transform.localScale.y, sprite.transform.localScale.z);
-
         sprite.GetComponent<Animator>().runtimeAnimatorController = matches[playerVariation].animator;
+
+        if (photonView.IsMine)
+        {
+            sprite.transform.localPosition += matches[playerVariation].offset;
+            sprite.transform.localScale = new Vector3(matches[playerVariation].scale.x * sprite.transform.localScale.x, matches[playerVariation].scale.y * sprite.transform.localScale.y, sprite.transform.localScale.z);
+
+            photonView.RPC("SetOffsets", RpcTarget.Others, sprite.transform.localPosition,  sprite.transform.localScale);
+        }
+    }
+    [PunRPC]
+    private void SetOffsets(Vector3 pos, Vector3 scale)
+    {
+        sprite.transform.localPosition = pos;
+        sprite.transform.localScale = scale;
     }
 
     public void SetPlayerVisual()
