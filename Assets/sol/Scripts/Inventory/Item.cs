@@ -55,7 +55,7 @@ public class Item : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         origin = transform.position;
-        gameManager = GameObject.FindWithTag("GameController").GetComponent<GameManager>();
+        gameManager = GameManager.Instance;
         photonView = GetComponent<PhotonView>();
 
         runFromPlayers = gameManager.itemsRunAway;
@@ -154,9 +154,13 @@ public class Item : MonoBehaviour
         {
             countdown -= 2;
 
-            if (countdown <= 0 && players[0].GetComponent<PlayerInventory>().IsMine)
+            if (countdown <= 0)
             {
-                PickupItem();
+                PhotonView playerView = players[0].GetComponent<PhotonView>();
+                if (playerView.IsMine)
+                    PickupItem();
+                else
+                    photonView.RPC("RemotePickupItem", RpcTarget.Others, playerView.GetComponent<PlayerID>().GetID());
             }
 
             UpdateSlider();
@@ -228,16 +232,12 @@ public class Item : MonoBehaviour
 
         PlayerManager.Instance.UpdateWeight(-score);
         inv.itemCount += score;
-        
+        photonView.RPC("PickupItem", RpcTarget.Others, inv.gameObject.GetComponent<PlayerID>().GetID());
+
         GameManager.Instance.IncreaseItems(score);
         if (GameManager.Instance.PassedMaxItems)
-        {
-            GameManager.Instance.EndGame(true);
-            Destroy(gameObject);
-            return;
-        }
+            GameManager.Instance.EndGame(true); 
 
-        photonView.RPC("PickupItem", RpcTarget.Others, inv.gameObject.GetComponent<PlayerID>().GetID());
         Destroy(gameObject);
     }
     [PunRPC]
@@ -248,6 +248,12 @@ public class Item : MonoBehaviour
         GameManager.Instance.IncreaseItems(score);
 
         Destroy(gameObject);
+    }
+    [PunRPC]
+    private void RemotePickupItem(int playerID)
+    {
+        if (PlayerManager.Instance.ID == playerID)
+            PickupItem();
     }
 
     private void RunFromPlayers()

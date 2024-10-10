@@ -70,7 +70,7 @@ public class GameManager : MonoBehaviour
     }*/
 
     [PunRPC]
-    public void StartGame(bool rpc = false)
+    public void StartGame(bool rpc = false) // Called by Start button in menu
     {
         DestroyItems();
         Debug.Log("GameManager: Game Started");
