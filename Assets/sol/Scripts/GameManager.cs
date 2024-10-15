@@ -187,9 +187,15 @@ public class GameManager : MonoBehaviour
 
             // Check if player won
             if (ScoreCounter.Instance.winner.playerID == PlayerManager.Instance.ID)
+            {
                 MenuManager.Instance.OpenMenu("win");
+                ClientManager.Instance.wonLastRound = true;
+            }
             else
+            {
                 MenuManager.Instance.OpenMenu("lose");
+                ClientManager.Instance.wonLastRound = false;
+            }
 
             // Reset counters and scores and players and more scores :3
             ClientManager.Instance.CloseScene(map);

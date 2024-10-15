@@ -25,6 +25,7 @@ public class ClientManager : MonoBehaviour
     // Player visuals
     public PlayerVisual playerVisual;
     public int playerVariation = -1;
+    public bool wonLastRound = false;
     public enum PlayerVisual
     {
         None,

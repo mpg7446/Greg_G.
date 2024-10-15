@@ -69,6 +69,7 @@ public class PlayerManager : MonoBehaviour
 
     private void Awake()
     {
+        DisableCrown();
         ClientManager.Instance.AddCameraTracker(gameObject);
         if (GetComponent<PlayerID>() != null )
             ID = GetComponent<PlayerID>().GetID();
@@ -518,6 +519,11 @@ public class PlayerManager : MonoBehaviour
             playerModel.SetAnimation("InAir", true);
         else
             playerModel.SetAnimation("InAir", false);
+    }
+
+    protected virtual void DisableCrown()
+    {
+        ClientManager.Instance.wonLastRound = false;
     }
     #endregion
 

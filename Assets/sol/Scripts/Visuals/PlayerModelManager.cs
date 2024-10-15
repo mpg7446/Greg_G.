@@ -16,6 +16,7 @@ public class PlayerModelManager : MonoBehaviour
     // Objects
     [SerializeField] private GameObject cardboard;
     public GameObject stickers;
+    [SerializeField] private GameObject crown;
     private SpriteRenderer sprite;
 
     public bool Squished {  get; private set; }
@@ -61,7 +62,16 @@ public class PlayerModelManager : MonoBehaviour
             sprite.transform.localScale = new Vector3(matches[playerVariation].scale.x * sprite.transform.localScale.x, matches[playerVariation].scale.y * sprite.transform.localScale.y, sprite.transform.localScale.z);
 
             photonView.RPC("SetOffsets", RpcTarget.Others, sprite.transform.localPosition,  sprite.transform.localScale);
+
+            SetCrown(ClientManager.Instance.wonLastRound);
         }
+    }
+    [PunRPC]
+    private void SetCrown(bool enabled = false)
+    {
+        if (photonView.IsMine)
+            photonView.RPC("SetCrown", RpcTarget.Others, enabled);
+        crown.SetActive(enabled);
     }
     [PunRPC]
     private void SetOffsets(Vector3 pos, Vector3 scale)

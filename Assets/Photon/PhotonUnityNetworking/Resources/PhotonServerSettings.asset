@@ -59,6 +59,7 @@ MonoBehaviour:
   - SetAnimation
   - RemotePickupItem
   - SetOffsets
+  - SetCrown
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 0

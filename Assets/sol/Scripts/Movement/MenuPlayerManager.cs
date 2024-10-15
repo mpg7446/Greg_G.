@@ -18,6 +18,8 @@ public class MenuPlayerManager : PlayerManager
         gameObject.GetComponent<PlayerModelManager>().SetPlayerVisual();
     }
 
+    protected override void DisableCrown() { }
+
     //public override void CollisionEnter(Collision2D collision) { }
     //public override void CollisionExit(Collision2D collision) { }
     //protected override void SwitchCollider(bool enabled) { }
