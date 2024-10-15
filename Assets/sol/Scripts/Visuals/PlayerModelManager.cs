@@ -78,7 +78,7 @@ public class PlayerModelManager : MonoBehaviour
             playerVariation = ClientManager.Instance.playerVariation;
             LoadModel();
             photonView.RPC("SetPlayerVisual", RpcTarget.Others, (int)playerVisual, playerVariation);
-            Debug.Log("PlayerModelManager: Set Players Visuals and called RPC");
+            Debug.Log($"PlayerModelManager: Set Players Visuals ({playerVisual} | {playerVariation}) and called RPC");
         }
         else
         {

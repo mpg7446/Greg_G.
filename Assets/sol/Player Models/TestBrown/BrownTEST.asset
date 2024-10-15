@@ -14,4 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerVisual: 2
   sprite: {fileID: 21300000, guid: aa11b4fd5d1ad1d48bcb597486e8ed62, type: 3}
-  offset: {x: 0, y: 0}
+  animator: {fileID: 9100000, guid: e5a37470489c7084390ca6d7ae662533, type: 2}
+  offset: {x: 0, y: 0, z: 0}
+  scale: {x: 1, y: 1, z: 0}
+  Credits: 

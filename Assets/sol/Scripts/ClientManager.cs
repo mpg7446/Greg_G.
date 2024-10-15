@@ -104,6 +104,7 @@ public class ClientManager : MonoBehaviour
             }
 
             playerVisual = (PlayerVisual)id;
+            Debug.Log($"ClientManager: Set Random Player Visual ({playerVisual})");
         }
         if (playerVariation <= 0)
         {
@@ -126,6 +127,7 @@ public class ClientManager : MonoBehaviour
         }
 
         playerVariation = UnityEngine.Random.Range(0, matches.Count - 1);
+        Debug.Log($"ClientManager: Set Random Player Varation ({playerVariation})");
     }
 
     public void SetNextPlayerVariation()
