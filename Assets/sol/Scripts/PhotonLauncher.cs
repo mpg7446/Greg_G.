@@ -114,7 +114,7 @@ public class PhotonLauncher : MonoBehaviourPunCallbacks
     public override void OnJoinRoomFailed(short returnCode, string message) // Failed to connect to room, probably doesnt exist
     {
         MenuManager.Instance.OpenMenu("main");
-        roomNameInput.text = "lobby not dounf";
+        roomNameInput.text = "Lobby not found!";
     }
     public override void OnLeftRoom() // Return to menus when leaving room
     {
